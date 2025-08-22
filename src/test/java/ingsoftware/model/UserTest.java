@@ -34,7 +34,7 @@ class UserTest {
         String passwordHash = "hashedpassword";
 
         // Act
-        User newUser = new User(username, email, passwordHash);
+        User newUser = new User();
 
         // Assert
         assertThat(newUser.getLevel()).isEqualTo(1);
