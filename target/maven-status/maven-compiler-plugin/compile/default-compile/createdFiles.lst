@@ -4,7 +4,6 @@ ingsoftware\repository\HabitCompletionRepository.class
 ingsoftware\service\EventService.class
 ingsoftware\service\HabitCompletionService.class
 ingsoftware\repository\HabitRepository.class
-ingsoftware\controller\EquipmentController$EquipmentRow.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
 ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell.class
@@ -31,6 +30,7 @@ ingsoftware\exception\StartupException.class
 ingsoftware\service\startup_handlers\DailySummaryHandler.class
 ingsoftware\service\strategy\BaseGamificationStrategy.class
 ingsoftware\service\strategy\EquipmentBoostedStrategy.class
+ingsoftware\controller\strictly_view\EquipmentRowManager.class
 ingsoftware\service\post_completion\DailySummaryService.class
 ingsoftware\service\strategy\EventBonusStrategy.class
 ingsoftware\model\HabitDifficulty.class

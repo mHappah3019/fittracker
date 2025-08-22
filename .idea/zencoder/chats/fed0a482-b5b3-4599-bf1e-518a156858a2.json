@@ -1,10 +1,10 @@
 {
-    "checksum": "3cdc1c681ffaa2b4ec6d8466e35cc2a7760db4e55694ad4ff6813e404a60e7e6",
+    "checksum": "eca05d7bac578573ce5d78269d8096f82d9641f0621c2306664250c0877dfc75",
     "data": {
     "id": "fed0a482-b5b3-4599-bf1e-518a156858a2",
     "createdAt": 1755856131870,
     "updatedAt": 1755857936120,
-    "title": "Mediator Pattern Analysis Insights",
+    "title": "Mediator Pattern Analysis Insights (ANALISI PATTERN MEDIATOR)",
     "messages": [
         {
             "id": "0b5861cc-ee2c-4bca-8117-a5e0cd2d3448",
@@ -504,7 +504,7 @@
         }
     ],
     "isAgent": false,
-    "isNameGenerated": true,
+    "isRenamedByUser": true,
     "isCustomAgent": true,
     "customAgent": {
         "id": "b5911d08-7110-4bbc-a223-24c15cf2b81c",
