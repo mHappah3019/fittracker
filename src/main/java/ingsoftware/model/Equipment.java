@@ -1,8 +1,8 @@
 package ingsoftware.model;
+import ingsoftware.model.enum_helpers.EquipmentType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 

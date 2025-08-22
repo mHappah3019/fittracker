@@ -1,7 +1,7 @@
 package ingsoftware.service;
 
 import ingsoftware.model.Equipment;
-import ingsoftware.model.EquipmentType;
+import ingsoftware.model.enum_helpers.EquipmentType;
 import ingsoftware.model.User;
 import ingsoftware.repository.EquipmentRepository;
 import ingsoftware.repository.UserRepository;

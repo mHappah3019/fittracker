@@ -3,7 +3,7 @@ package ingsoftware.controller;
 import ingsoftware.controller.strictly_view.EquipmentRowManager;
 import ingsoftware.exception.EquipmentNotFoundException;
 import ingsoftware.model.Equipment;
-import ingsoftware.model.EquipmentType;
+import ingsoftware.model.enum_helpers.EquipmentType;
 import ingsoftware.service.EquipmentService;
 import ingsoftware.util.AlertHelper;
 import javafx.collections.ObservableList;

@@ -1,7 +1,7 @@
 package ingsoftware.controller.strictly_view;
 
 import ingsoftware.model.Equipment;
-import ingsoftware.model.EquipmentType;
+import ingsoftware.model.enum_helpers.EquipmentType;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

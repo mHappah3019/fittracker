@@ -1,11 +1,12 @@
 package ingsoftware.model;
 
 import ingsoftware.model.builder.HabitBuilder;
+import ingsoftware.model.enum_helpers.HabitDifficulty;
+import ingsoftware.model.enum_helpers.HabitFrequencyType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

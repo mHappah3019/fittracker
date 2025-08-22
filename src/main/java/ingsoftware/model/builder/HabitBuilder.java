@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import ingsoftware.model.Habit;
-import ingsoftware.model.HabitDifficulty;
-import ingsoftware.model.HabitFrequencyType;
+import ingsoftware.model.enum_helpers.HabitDifficulty;
+import ingsoftware.model.enum_helpers.HabitFrequencyType;
 
 
 public class HabitBuilder {

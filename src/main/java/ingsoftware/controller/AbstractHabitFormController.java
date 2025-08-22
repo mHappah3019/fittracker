@@ -2,8 +2,8 @@ package ingsoftware.controller;
 
 import ingsoftware.exception.BusinessException;
 import ingsoftware.model.Habit;
-import ingsoftware.model.HabitDifficulty;
-import ingsoftware.model.HabitFrequencyType;
+import ingsoftware.model.enum_helpers.HabitDifficulty;
+import ingsoftware.model.enum_helpers.HabitFrequencyType;
 import ingsoftware.model.builder.HabitBuilder;
 import ingsoftware.service.HabitService;
 import javafx.fxml.FXML;

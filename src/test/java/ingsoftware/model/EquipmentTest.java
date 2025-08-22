@@ -1,5 +1,6 @@
 package ingsoftware.model;
 
+import ingsoftware.model.enum_helpers.EquipmentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,13 +1,10 @@
 package ingsoftware.model.builder;
 
 import ingsoftware.model.Habit;
-import ingsoftware.model.HabitDifficulty;
-import ingsoftware.model.HabitFrequencyType;
+import ingsoftware.model.enum_helpers.HabitDifficulty;
+import ingsoftware.model.enum_helpers.HabitFrequencyType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
