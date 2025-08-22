@@ -121,6 +121,3 @@ public class GamificationService {
     }
 
 }
-
-
-//TODO: debaggare strana assegnazione di esperienza quando si completa un habit

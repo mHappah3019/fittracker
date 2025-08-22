@@ -1,9 +1,7 @@
 package ingsoftware.controller;
 
 import ingsoftware.controller.strictly_view.EquipmentRowManager;
-import ingsoftware.exception.DatabaseException;
 import ingsoftware.exception.EquipmentNotFoundException;
-import ingsoftware.exception.HabitNotFoundException;
 import ingsoftware.model.Equipment;
 import ingsoftware.model.EquipmentType;
 import ingsoftware.service.EquipmentService;
@@ -11,7 +9,6 @@ import ingsoftware.util.AlertHelper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +33,7 @@ public class EquipmentController {
         this.equipmentService = equipmentService;
     }
 
-    @FXML
-    private VBox equipmentContainer;
-    @FXML private Button saveButton;
+    @FXML private VBox equipmentContainer;
 
     private final Map<EquipmentType, EquipmentRowManager> equipmentRows = new HashMap<>();
 
@@ -63,9 +58,7 @@ public class EquipmentController {
                 loadCurrentEquipment(rowManager, type);
             });
 
-        } catch (HabitNotFoundException e) {
-            showErrorMessage(e.getMessage());
-        } catch (DatabaseException e) {
+        } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
         } catch (Exception e) {
             logger.error("Errore durante l'inizializzazione del controller equipaggiamento", e);

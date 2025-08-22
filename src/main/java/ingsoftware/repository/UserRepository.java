@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Repository
@@ -19,11 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT u.id FROM User u WHERE u.lastAccessDate IS NOT NULL ORDER BY u.id")
     List<Long> findAllActiveUserIds(Pageable pageable);
-    
-    /**
-     * Count total number of active users
-     * @return count of active users
-     */
-    @Query("SELECT COUNT(u) FROM User u WHERE u.lastAccessDate IS NOT NULL")
-    long countActiveUsers();
+
 }
