@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ingsoftware.controller.MainDashboardController">
+
+    <top>
+        <VBox>
+            <fx:include fx:id="userStats" source="UserStatsView.fxml" />
+            
+            <!-- Equipment Button Section -->
+            <HBox styleClass="dashboard-toolbar" spacing="10">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20"/>
+                </padding>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="equipmentButton" text="⚔️ Equipaggiamento" 
+                        styleClass="secondary-button, equipment-button" 
+                        onAction="#handleOpenEquipment">
+                   <effect>
+                      <DropShadow color="#FF9800" radius="8"/>
+                   </effect>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <fx:include fx:id="habitList" source="HabitListView.fxml" />
+    </center>
+</BorderPane>
+

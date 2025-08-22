@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="ingsoftware.controller.EditHabitController"
+      styleClass="form-container" spacing="20">
+
+   <!-- Header -->
+   <HBox styleClass="form-header">
+      <VBox>
+         <Label fx:id="titleLabel" text="Modifica Abitudine" styleClass="form-title"/>
+         <Label text="Perfeziona il tuo percorso! 🎯" styleClass="form-subtitle"/>
+      </VBox>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Label text="✏️" styleClass="form-icon"/>
+   </HBox>
+
+   <ScrollPane styleClass="form-scroll" fitToWidth="true">
+      <VBox spacing="25">
+         
+         <!-- Stats Preview -->
+         <HBox styleClass="stats-preview">
+            <VBox styleClass="preview-stat">
+               <Label text="🔥" styleClass="preview-emoji"/>
+               <Label text="Streak Attuale" styleClass="preview-label"/>
+               <Label text="12 giorni" styleClass="preview-value"/>
+            </VBox>
+            <VBox styleClass="preview-stat">
+               <Label text="📊" styleClass="preview-emoji"/>
+               <Label text="Completamenti" styleClass="preview-label"/>
+               <Label text="45/50" styleClass="preview-value"/>
+            </VBox>
+            <VBox styleClass="preview-stat">
+               <Label text="🏆" styleClass="preview-emoji"/>
+               <Label text="Migliore Streak" styleClass="preview-label"/>
+               <Label text="28 giorni" styleClass="preview-value"/>
+            </VBox>
+         </HBox>
+         
+         <!-- Sezione Base -->
+         <VBox styleClass="form-section">
+            <Label text="📝 Informazioni Base" styleClass="section-header"/>
+            
+            <VBox styleClass="field-group" spacing="15">
+               <VBox styleClass="input-container">
+                  <Label text="Nome Abitudine *" styleClass="field-label"/>
+                  <TextField fx:id="nameField" styleClass="modern-textfield"/>
+               </VBox>
+               
+               <VBox styleClass="input-container">
+                  <Label text="Descrizione" styleClass="field-label"/>
+                  <TextArea fx:id="descriptionArea" styleClass="modern-textarea" prefRowCount="3"/>
+               </VBox>
+            </VBox>
+         </VBox>
+
+         <!-- Sezione Configurazione -->
+         <VBox styleClass="form-section">
+            <Label text="⚙️ Configurazione" styleClass="section-header"/>
+            
+            <GridPane styleClass="config-grid" hgap="15" vgap="15">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+               </columnConstraints>
+               
+<!--               <VBox styleClass="input-container" GridPane.columnIndex="0" GridPane.rowIndex="0">-->
+<!--                  <Label text="Tipo *" styleClass="field-label"/>-->
+<!--                  <ComboBox fx:id="typeComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>-->
+<!--               </VBox>-->
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                  <Label text="Difficoltà *" styleClass="field-label"/>
+                  <ComboBox fx:id="difficultyComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>
+               </VBox>
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                  <Label text="Frequenza *" styleClass="field-label"/>
+                  <ComboBox fx:id="frequencyComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>
+               </VBox>
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label text="Target Streak" styleClass="field-label"/>
+                  <TextField fx:id="targetStreakField" styleClass="modern-textfield"/>
+               </VBox>
+            </GridPane>
+         </VBox>
+
+         <!-- Sezione Avanzata -->
+         <VBox styleClass="form-section">
+            <Label text="🏷️ Personalizzazione" styleClass="section-header"/>
+            
+            <VBox styleClass="input-container">
+               <Label text="Tag (separati da virgola)" styleClass="field-label"/>
+               <TextField fx:id="tagsField" styleClass="modern-textfield"/>
+            </VBox>
+         </VBox>
+
+      </VBox>
+   </ScrollPane>
+
+   <!-- Error Label -->
+   <Label fx:id="errorLabel" styleClass="error-message" visible="false"/>
+
+   <!-- Action Buttons -->
+   <HBox styleClass="button-container" spacing="15">
+      <Button fx:id="deleteButton" text="🗑️ Elimina" 
+              styleClass="danger-button" onAction="#handleDelete">
+         <effect>
+            <DropShadow color="#F44336" radius="8"/>
+         </effect>
+      </Button>
+      <Button text="❌ Annulla" styleClass="secondary-button" onAction="#handleCancel"/>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Button fx:id="saveButton" text="💾 Salva Modifiche" 
+              styleClass="primary-button, save-button" onAction="#handleSave">
+         <effect>
+            <DropShadow color="#4CAF50" radius="10"/>
+         </effect>
+      </Button>
+   </HBox>
+
+</VBox>

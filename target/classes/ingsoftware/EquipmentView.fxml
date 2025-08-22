@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="ingsoftware.controller.EquipmentController"
+            styleClass="equipment-container">
+
+   <!-- Header -->
+   <top>
+      <VBox styleClass="equipment-header">
+         <HBox styleClass="header-content">
+            <VBox>
+               <Label text="⚔️ Guardaroba dell'Avventuriero" styleClass="equipment-title"/>
+               <Label text="Personalizza il tuo avatar per massimizzare i bonus!" styleClass="equipment-subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="🎮" styleClass="equipment-icon"/>
+         </HBox>
+         
+         <!-- Status Message -->
+         <Label fx:id="statusLabel" styleClass="status-message" visible="false"/>
+      </VBox>
+   </top>
+
+   <!-- Equipment Grid -->
+   <center>
+      <ScrollPane styleClass="equipment-scroll" fitToWidth="true">
+         <VBox spacing="30">
+            
+            <!-- Character Preview -->
+            <VBox styleClass="character-preview">
+               <Label text="👤 Anteprima Personaggio" styleClass="preview-title"/>
+               <HBox styleClass="character-display">
+                  <VBox styleClass="character-card">
+                     <Label text="🧙‍♂️" styleClass="character-avatar"/>
+                     <Label text="Avventuriero Livello 5" styleClass="character-name"/>
+                  </VBox>
+                  <VBox styleClass="total-stats">
+                     <Label text="Bonus Totali:" styleClass="stats-title"/>
+                     <HBox styleClass="stat-row">
+                        <Label text="⚡ Esperienza:" styleClass="stat-label"/>
+                        <Label text="+25%" styleClass="stat-value"/>
+                     </HBox>
+                     <HBox styleClass="stat-row">
+                        <Label text="❤️ Salute:" styleClass="stat-label"/>
+                        <Label text="+15%" styleClass="stat-value"/>
+                     </HBox>
+                     <HBox styleClass="stat-row">
+                        <Label text="🔥 Streak Protezione:" styleClass="stat-label"/>
+                        <Label text="+2 giorni" styleClass="stat-value"/>
+                     </HBox>
+                  </VBox>
+               </HBox>
+            </VBox>
+
+            <!-- Equipment Slots -->
+            <VBox styleClass="equipment-slots">
+               <Label text="🎯 Slot Equipaggiamento" styleClass="slots-title"/>
+               
+               <VBox fx:id="equipmentContainer" styleClass="equipment-rows" spacing="15">
+                  <!-- EquipmentRow items will be added here dynamically by the controller -->
+               </VBox>
+            </VBox>
+
+            <!-- Equipment Tips -->
+            <VBox styleClass="equipment-tips">
+               <Label text="💡 Consigli Pro" styleClass="tips-title"/>
+               <VBox styleClass="tips-content" spacing="10">
+                  <HBox styleClass="tip-row">
+                     <Label text="🛡️" styleClass="tip-icon"/>
+                     <Label text="L'armatura riduce la perdita di salute per abitudini non completate" 
+                            styleClass="tip-text" wrapText="true"/>
+                  </HBox>
+                  <HBox styleClass="tip-row">
+                     <Label text="⚔️" styleClass="tip-icon"/>
+                     <Label text="Le armi aumentano l'esperienza guadagnata dai completamenti" 
+                            styleClass="tip-text" wrapText="true"/>
+                  </HBox>
+                  <HBox styleClass="tip-row">
+                     <Label text="🔮" styleClass="tip-icon"/>
+                     <Label text="Gli oggetti vari offrono bonus speciali come protezione streak" 
+                            styleClass="tip-text" wrapText="true"/>
+                  </HBox>
+               </VBox>
+            </VBox>
+
+         </VBox>
+      </ScrollPane>
+   </center>
+
+   <!-- Action Buttons -->
+   <bottom>
+      <HBox styleClass="equipment-actions" spacing="15">
+         <Button fx:id="cancelButton" text="❌ Annulla" 
+                 styleClass="secondary-button" onAction="#close"/>
+         <Region HBox.hgrow="ALWAYS"/>
+         <Button text="🔄 Reset Tutto" styleClass="warning-button">
+            <effect>
+               <DropShadow color="#FF9800" radius="8"/>
+            </effect>
+         </Button>
+         <Button fx:id="saveButton" text="💾 Salva Equipaggiamento" 
+                 styleClass="primary-button, save-equipment-button" onAction="#onSaveEquipment">
+            <effect>
+               <DropShadow color="#4CAF50" radius="10"/>
+            </effect>
+         </Button>
+      </HBox>
+   </bottom>
+
+</BorderPane>

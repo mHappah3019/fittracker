@@ -1,0 +1,451 @@
+{
+    "checksum": "2fb75dfaf5c16a013f44a1d56c0c14f0e7705d97a75b13ab645e8fb5f16c029e",
+    "data": {
+    "id": "be6465fe-4732-4a5c-bc3e-b6b0347cd5f7",
+    "createdAt": 1755513537736,
+    "updatedAt": 1755513692466,
+    "title": "HabitListCell Test Generation",
+    "messages": [
+        {
+            "id": "8441a1c1-cf4a-44a4-bc0e-fa26eed11f37",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": " Generate tests for HabitListCell class"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "C:\\Users\\mirko\\Desktop\\fittracker\\src\\main\\java\\ingsoftware\\controller\\HabitListController.java",
+                    "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/controller/HabitListController.java",
+                    "content": "package ingsoftware.controller;\n\nimport ingsoftware.exception.BusinessException;\nimport ingsoftware.model.DTO.CompletionResult;\nimport ingsoftware.model.Habit;\nimport ingsoftware.model.HabitCompletion;\nimport ingsoftware.service.*;\nimport javafx.application.Platform;\nimport javafx.concurrent.Task;\nimport javafx.fxml.FXML;\nimport javafx.fxml.FXMLLoader;\nimport javafx.scene.Parent;\nimport javafx.scene.Scene;\nimport javafx.scene.control.ListCell;\nimport javafx.scene.control.ListView;\nimport javafx.scene.control.Button;\nimport javafx.scene.control.Label;\nimport javafx.stage.Modality;\nimport javafx.stage.Stage;\nimport net.rgielen.fxweaver.core.FxWeaver;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Controller;\nimport org.w3c.dom.html.HTMLButtonElement;\n\nimport java.io.IOException;\nimport java.util.List;\n\n@Controller\npublic class HabitListController {\n\n    @Autowired\n    private HabitCompletionService habitCompletionService;\n\n\n    @Autowired\n    private HabitService habitService;\n    \n    @Autowired\n    private UserService userService;\n\n    @Autowired\n    private StartupMediator startupMediator;\n\n    @Autowired\n    private PostCompletionMediator postMediator;\n\n    @Autowired\n    private FxWeaver fxWeaver;\n\n\n    // Componenti FXML\n    @FXML private ListView<Habit> habitListView;\n    @FXML private Button completeHabitButton;\n    @FXML private Button addHabitButton;\n    @FXML private Button editHabitButton;\n    @FXML private Label statusLabel;\n\n    private Long currentUserId = 1L;\n\n\n    @FXML\n    public void initialize() {\n        // Configurazione iniziale della vista\n        setupHabitListView();\n        setupSelectionHandlers();\n        refreshHabitList();\n\n        startupMediator.handleApplicationStartup(currentUserId);\n    }\n    \n    // --- GESTIONE AZIONI UTENTE ---\n\n    @FXML\n    private void handleAddHabit() {\n        // Lancia la finestra di creazione, passando un \"callback\" per l'aggiornamento\n        openHabitWindow(CreateHabitController.class, null, this::refreshHabitList);\n    }\n    \n    @FXML\n    private void handleEditHabit() {\n        Habit selected = habitListView.getSelectionModel().getSelectedItem();\n        if (selected == null) {\n            showWarningMessage(\"Seleziona un'abitudine da modificare.\");\n            return;\n        }\n        // Lancia la finestra di modifica. La logica di eliminazione, se esiste,\n        // dovrà trovarsi nel controller di questa nuova finestra.\n        openHabitWindow(EditHabitController.class, selected, this::refreshHabitList);\n    }\n    \n    @FXML\n    private void handleCompleteHabit() {\n        Habit selected = habitListView.getSelectionModel().getSelectedItem();\n\n        if (selected == null) {\n            showWarningMessage(\"Seleziona un'abitudine da completare.\");\n            refreshHabitList();\n            return;\n        }\n\n        // Disable the button to prevent multiple clicks\n        completeHabitButton.setDisable(true);\n\n        // Create a task to run in background\n        Task<CompletionResult> task = new Task<>() {\n            @Override\n            protected CompletionResult call() throws Exception {\n                return habitCompletionService.completeHabit(selected.getId(), currentUserId);\n            }\n        };\n\n        // Handle success\n        task.setOnSucceeded(event -> {\n            CompletionResult completion = task.getValue();\n            // Update UI\n            Platform.runLater(() -> {\n                postMediator.handlePostCompletion(completion);\n                completeHabitButton.setDisable(false);\n                refreshHabitList();\n            });\n        });\n\n        // Handle failure\n        task.setOnFailed(event -> {\n            Throwable exception = task.getException();\n            Platform.runLater(() -> {\n                if (exception instanceof BusinessException) {\n                    showErrorMessage(\"Errore nel completamento: \" + exception.getMessage());\n                } else {\n                    showErrorMessage(\"Errore di database: \" + exception.getMessage());\n                }\n                completeHabitButton.setDisable(false);\n            });\n        });\n\n        // Start the background task\n        new Thread(task).start();\n\n\n//        try {\n//            // 1) Prima salvo il completamento nel database\n//            //  1A) Questa routine deve ottenere gli equipaggiamenti attivi\n//            //  1B) Questa routine deve calcolare già il bonus esperienza per aggiornare l'esperienza, il livello,\n//            //      aggiungere il log di completamento (occuparsi della persistenza)\n//            CompletionResult completion = habitCompletionService.completeHabit(selected.getId(), currentUserId);\n//\n//\n//            // 2) Poi avvio il codice di gamificazione a livello UI e analytics\n//            //  2A) Deve aggiornare la progress bar dell'utente\n//            //  2B) Deve avviare codice per mostrare un popup dell'esperienza guadagnata.\n//            //  2C) Deve avviare codice per mostrare un popup dell'incremento livello (se applicabile)\n//            //  2D) Deve avviare codice per mostrare un pop up della streak corrente (se applicabile)\n//            //  2E) Registra un log\n//            //  Altre cose varie di seconda importanza e non di logica business...\n//            postMediator.handlePostCompletion(completion);\n//\n//        } catch (BusinessException be) {\n//            showErrorMessage(\"Errore nel completamento: \" + be.getMessage());\n//        }\n    }\n    \n    // --- METODI DI SUPPORTO E UI ---\n\n    private void refreshHabitList() {\n        try {\n            List<Habit> habits = habitService.findAllByUserId(currentUserId);\n            habitListView.getItems().setAll(habits);\n        } catch (Exception e) {\n            showErrorMessage(\"Impossibile caricare le abitudini.\");\n        }\n    }\n\n\n    // Metodo generico che accetta la CLASSE del controller da caricare\n    private <T extends AbstractHabitFormController> void openHabitWindow(Class<T> controllerClass, Habit habit, Runnable onSaveCallback) {\n        try {\n            Parent root = fxWeaver.loadView(controllerClass);\n\n            // Ottieni l'istanza del bean specifico (Create o Edit)\n            T controller = fxWeaver.getBean(controllerClass);\n            controller.setData(currentUserId, habit, onSaveCallback);\n\n            Stage stage = new Stage();\n            stage.setTitle(habit == null ? \"Crea Nuova Abitudine\" : \"Modifica Abitudine\");\n            stage.setScene(new Scene(root));\n            stage.initModality(Modality.APPLICATION_MODAL);\n            stage.showAndWait();\n        } catch (Exception e) {\n            showErrorMessage(\"Impossibile aprire la finestra del form: \" + e.getMessage());\n        }\n    }\n\n\n    // --- METODI DI SETUP DELLA VISTA ---\n\n    private void setupHabitListView() {\n\n        habitListView.setCellFactory(lv -> new HabitListCell());\n\n        // Esempio: doppio click per completare l'abitudine\n        habitListView.setOnMouseClicked(event -> {\n//            if (event.getClickCount() == 1) {\n//                handleEditHabit();\n\n            if (event.getClickCount() == 2) {\n                handleCompleteHabit();\n            }\n        });\n        // Potresti impostare una cell factory custom qui per un rendering migliore\n        // habitListView.setCellFactory(lv -> new HabitListCell());\n    }\n\n    public void setCurrentUser(long l) {\n        this.currentUserId = l;\n        refreshHabitList();\n    }\n\n    static class HabitListCell extends ListCell<Habit> {\n        @Override\n        protected void updateItem(Habit habit, boolean empty) {\n            super.updateItem(habit, empty);\n\n            if (empty || habit == null) {\n                setText(null);\n                setStyle(\"\");\n            } else {\n                setText(habit.getName());\n\n                // Stile basato sullo stato\n                if (habit.isCompletedToday()) {\n                    setStyle(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n                } else {\n                    setStyle(\"-fx-text-fill: #333333;\");\n                }\n            }\n        }\n    }\n\n\n    private void setupSelectionHandlers() {\n        // Abilita/disabilita i pulsanti in base alla selezione\n        habitListView.getSelectionModel().selectedItemProperty().addListener(\n            (obs, oldSelection, newSelection) -> {\n                boolean hasSelection = newSelection != null;\n                editHabitButton.setDisable(!hasSelection);\n                completeHabitButton.setDisable(!hasSelection);\n            }\n        );\n    }\n    \n    // Metodi per mostrare messaggi (invariati)\n    private void showErrorMessage(String message) { /* ... */ }\n    private void showWarningMessage(String message) { /* ... */ }\n}",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1755513537744,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": " Generate tests for HabitListCell class"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "c1211822-9810-48d0-9fda-2eed7055ccf8",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "thought",
+                    "text": "The user wants to generate tests for the HabitListCell class. Looking at the current file, I can see that HabitListCell is a static inner class inside HabitListController. It's a JavaFX ListCell that extends ListCell<Habit> and has an updateItem method.\n\nFirst, I need to:\n1. Understand the project structure and testing framework\n2. Look for existing tests to understand the pattern\n3. Generate tests for the HabitListCell class\n\nLet me start by exploring the project structure to understand the testing framework and find existing tests."
+                },
+                {
+                    "type": "text",
+                    "text": "I'll help you generate tests for the HabitListCell class. First, let me explore the project structure to understand the testing framework and find existing test patterns."
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01Ve1xEeFNYbjZSE8TLkGppW",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": ".",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01SLTgNPYEy9iLmJ6oEsH1MA",
+                    "statusText": "Viewed file (lines 1:179)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "pom.xml",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/pom.xml"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01KujoSdJRY1Nibq6zPvrcBD",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01H1xYiU49mdXL5vsv4Voq6L",
+                    "title": "File search",
+                    "statusText": "Done",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Let me look at a few existing test files to understand the testing patterns used in this project:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01FrCfxzrjnx6eHCaXSjRrLf",
+                    "statusText": "Viewed file (lines 1:248)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/model/UserTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/UserTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me check the directory structure for controller tests to see where I should place the HabitListCell test:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01Ge78J7G89ne9S3kqPnHZsn",
+                    "title": "File search",
+                    "statusText": "Done",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01UX7BzUCDDHrmQm6FmMQVY8",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Let me check what's in the controller test directory and look for the Habit model to understand its structure:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01NdZsEi5JCZ28PTnp3P13og",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/controller",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_017Pmjh1HjbUs8tH3EqRX9K1",
+                    "title": "File search",
+                    "statusText": "Done",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01NCbUDwxS7xvGV69QEmsUiF",
+                    "statusText": "Viewed file (from the beginning up to line 50)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/Habit.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/Habit.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_019gKpU4kpkMyREZyzkRgYPm",
+                    "statusText": "Viewed file (lines 50:99)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/Habit.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/Habit.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now I have enough information to generate comprehensive tests for the HabitListCell class. Based on the project structure and existing test patterns, I can see:\n\n1. The project uses JUnit 5 and AssertJ for testing\n2. Tests use TestFX for JavaFX components  \n3. The HabitListCell class has specific behavior:\n   - Shows habit name as text\n   - Applies different styling based on `isCompletedToday()` status\n   - Handles empty/null cases\n\nLet me create the test file:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01MJgXTNDz9xgrakWxo2C3LR",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n@@ -0,0 +1,187 @@\n+package ingsoftware.controller;\n+\n+import ingsoftware.controller.HabitListController.HabitListCell;\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitDifficulty;\n+import ingsoftware.model.HabitFrequencyType;\n+import javafx.scene.control.ListCell;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.junit.jupiter.api.extension.ExtendWith;\n+import org.testfx.framework.junit5.ApplicationExtension;\n+\n+import java.time.LocalDate;\n+import java.time.LocalDateTime;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+@ExtendWith(ApplicationExtension.class)\n+class HabitListCellTest {\n+\n+    private HabitListCell habitListCell;\n+\n+    @BeforeEach\n+    void setUp() {\n+        habitListCell = new HabitListCell();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenItemIsNull() {\n+        // Act\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenEmpty() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, true);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldDisplayHabitName_whenValidHabit() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Daily Exercise\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Daily Exercise\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Morning Meditation\", true);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Morning Meditation\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Read Book\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Read Book\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleEmptyHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleNullHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(null, false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromCompletedToNotCompleted() {\n+        // Arrange\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act - First update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromNotCompletedToCompleted() {\n+        // Arrange\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+\n+        // Act - First update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #333333;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldClearPreviousState_whenCalledWithNull() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", true);\n+        \n+        // Act - First update with a habit\n+        habitListCell.updateItem(habit, false);\n+        \n+        // Act - Then update with null\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    /**\n+     * Helper method to create test habits\n+     */\n+    private Habit createTestHabit(String name, boolean completedToday) {\n+        Habit habit = new Habit();\n+        habit.setName(name);\n+        habit.setDescription(\"Test description\");\n+        habit.setFrequency(HabitFrequencyType.DAILY);\n+        habit.setDifficulty(HabitDifficulty.MEDIUM);\n+        habit.setUserId(1L);\n+        \n+        if (completedToday) {\n+            habit.setLastCompletedDate(LocalDate.now());\n+        } else {\n+            // Set to yesterday or null to ensure it's not completed today\n+            habit.setLastCompletedDate(LocalDate.now().minusDays(1));\n+        }\n+        \n+        return habit;\n+    }\n+}",
+                    "refToolCallId": "toolu_01MJgXTNDz9xgrakWxo2C3LR"
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me run a diagnostics check to ensure the test code is valid:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_013jemxJcKUyjqErcKkk5cNm",
+                    "statusText": "No issues found in code",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Perfect! Now let's run the tests to make sure they work correctly:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01SbPdLDP6bQbAbBA1MW8qK7",
+                    "status": "IN_PROGRESS",
+                    "isHidden": true,
+                    "localResult": "{\"status\":\"ERROR\",\"exitCode\":1,\"output\":\"\\u001b[?9001h\\u001b[?1004h\\u001b[?25l\\u001b[2J\\u001b[m\\u001b[38;5;9m\\u001b[HC:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-8a084e98-e063-48db-af7b-d2bcfb786c83.ps1 : Impossibile caricare il file \\r\\nC:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-8a084e98-e063-48db-af7b-d2bcfb786c83.ps1. L'esecuzione di script è \\r\\ndisabilitata nel sistema in uso. Per ulteriori informazioni, vedere about_Execution_Policies all'indirizzo \\r\\nhttps://go.microsoft.com/fwlink/?LinkID=135170.\\r\\nIn riga:1 car:1\\r\\n+ C:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-8a084e98-e063-48db-af7b-d2 ...\\r\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\r\\n    + CategoryInfo          : Errore di protezione: (:) [], PSSecurityException\\r\\n    + FullyQualifiedErrorId : UnauthorizedAccess\\r\\n\\u001b]0;C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\\u0007\\u001b[?25h\\u001b[m\"}"
+                },
+                {
+                    "type": "codePatch",
+                    "diffs": [
+                        {
+                            "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "patch": "@@ -0,0 +1,6054 @@\n+package ingsoftware.controller;%0D%0A%0D%0Aimport ingsoftware.controller.HabitListController.HabitListCell;%0D%0Aimport ingsoftware.model.Habit;%0D%0Aimport ingsoftware.model.HabitDifficulty;%0D%0Aimport ingsoftware.model.HabitFrequencyType;%0D%0Aimport javafx.scene.control.ListCell;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0Aimport org.junit.jupiter.api.extension.ExtendWith;%0D%0Aimport org.testfx.framework.junit5.ApplicationExtension;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.time.LocalDateTime;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0A@ExtendWith(ApplicationExtension.class)%0D%0Aclass HabitListCellTest %7B%0D%0A%0D%0A    private HabitListCell habitListCell;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        habitListCell = new HabitListCell();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenItemIsNull() %7B%0D%0A        // Act%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenEmpty() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, true);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldDisplayHabitName_whenValidHabit() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Daily Exercise%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Daily Exercise%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Morning Meditation%22, true);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Morning Meditation%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Read Book%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Read Book%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleEmptyHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleNullHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(null, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromCompletedToNotCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act - First update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromNotCompletedToCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A%0D%0A        // Act - First update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldClearPreviousState_whenCalledWithNull() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, true);%0D%0A        %0D%0A        // Act - First update with a habit%0D%0A        habitListCell.updateItem(habit, false);%0D%0A        %0D%0A        // Act - Then update with null%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    /**%0D%0A     * Helper method to create test habits%0D%0A     */%0D%0A    private Habit createTestHabit(String name, boolean completedToday) %7B%0D%0A        Habit habit = new Habit();%0D%0A        habit.setName(name);%0D%0A        habit.setDescription(%22Test description%22);%0D%0A        habit.setFrequency(HabitFrequencyType.DAILY);%0D%0A        habit.setDifficulty(HabitDifficulty.MEDIUM);%0D%0A        habit.setUserId(1L);%0D%0A        %0D%0A        if (completedToday) %7B%0D%0A            habit.setLastCompletedDate(LocalDate.now());%0D%0A        %7D else %7B%0D%0A            // Set to yesterday or null to ensure it's not completed today%0D%0A            habit.setLastCompletedDate(LocalDate.now().minusDays(1));%0D%0A        %7D%0D%0A        %0D%0A        return habit;%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": false
+                        }
+                    ]
+                },
+                {
+                    "type": "shellCommand",
+                    "command": "mvn test -Dtest=HabitListCellTest",
+                    "id": "d76791cc-ca85-47d5-92a7-f41c950e257d",
+                    "status": "ERROR",
+                    "toolCallId": "toolu_01SbPdLDP6bQbAbBA1MW8qK7",
+                    "commandsRequiringConfirmation": [
+                        {
+                            "name": "mvn",
+                            "arguments": [
+                                "test",
+                                "-Dtest=HabitListCellTest"
+                            ]
+                        }
+                    ],
+                    "exitCode": 1,
+                    "output": "\u001b[?9001h\u001b[?1004h\u001b[?25l\u001b[2J\u001b[m\u001b[38;5;9m\u001b[HC:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-8a084e98-e063-48db-af7b-d2bcfb786c83.ps1 : Impossibile caricare il file \r\nC:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-8a084e98-e063-48db-af7b-d2bcfb786c83.ps1. L'esecuzione di script è \r\ndisabilitata nel sistema in uso. Per ulteriori informazioni, vedere about_Execution_Policies all'indirizzo \r\nhttps://go.microsoft.com/fwlink/?LinkID=135170.\r\nIn riga:1 car:1\r\n+ C:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-8a084e98-e063-48db-af7b-d2 ...\r\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : Errore di protezione: (:) [], PSSecurityException\r\n    + FullyQualifiedErrorId : UnauthorizedAccess\r\n\u001b]0;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\u0007\u001b[?25h\u001b[m",
+                    "outputPath": "C:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-8a084e98-e063-48db-af7b-d2bcfb786c837417281749094368773.log",
+                    "isBackground": false,
+                    "maxWaitTimeInSeconds": 240
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "84254da6-33b6-470c-8113-7207956ad248"
+            },
+            "createdAt": 1755513539473,
+            "isInternal": false
+        },
+        {
+            "id": "898fe989-36d0-431b-8e57-0d60b5511518",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "thought",
+                    "text": "It looks like the test file was deleted and there was also an execution policy issue with PowerShell. Let me recreate the test file and then try to run the tests again."
+                },
+                {
+                    "type": "text",
+                    "text": "I'll recreate the test file for the HabitListCell class:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01Kyc8EqgtKzEVTKUacPyvF5",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n@@ -0,0 +1,187 @@\n+package ingsoftware.controller;\n+\n+import ingsoftware.controller.HabitListController.HabitListCell;\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitDifficulty;\n+import ingsoftware.model.HabitFrequencyType;\n+import javafx.scene.control.ListCell;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.junit.jupiter.api.extension.ExtendWith;\n+import org.testfx.framework.junit5.ApplicationExtension;\n+\n+import java.time.LocalDate;\n+import java.time.LocalDateTime;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+@ExtendWith(ApplicationExtension.class)\n+class HabitListCellTest {\n+\n+    private HabitListCell habitListCell;\n+\n+    @BeforeEach\n+    void setUp() {\n+        habitListCell = new HabitListCell();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenItemIsNull() {\n+        // Act\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenEmpty() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, true);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldDisplayHabitName_whenValidHabit() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Daily Exercise\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Daily Exercise\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Morning Meditation\", true);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Morning Meditation\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Read Book\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Read Book\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleEmptyHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleNullHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(null, false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromCompletedToNotCompleted() {\n+        // Arrange\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act - First update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromNotCompletedToCompleted() {\n+        // Arrange\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+\n+        // Act - First update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #333333;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldClearPreviousState_whenCalledWithNull() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", true);\n+        \n+        // Act - First update with a habit\n+        habitListCell.updateItem(habit, false);\n+        \n+        // Act - Then update with null\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    /**\n+     * Helper method to create test habits\n+     */\n+    private Habit createTestHabit(String name, boolean completedToday) {\n+        Habit habit = new Habit();\n+        habit.setName(name);\n+        habit.setDescription(\"Test description\");\n+        habit.setFrequency(HabitFrequencyType.DAILY);\n+        habit.setDifficulty(HabitDifficulty.MEDIUM);\n+        habit.setUserId(1L);\n+        \n+        if (completedToday) {\n+            habit.setLastCompletedDate(LocalDate.now());\n+        } else {\n+            // Set to yesterday or null to ensure it's not completed today\n+            habit.setLastCompletedDate(LocalDate.now().minusDays(1));\n+        }\n+        \n+        return habit;\n+    }\n+}",
+                    "refToolCallId": "toolu_01Kyc8EqgtKzEVTKUacPyvF5"
+                },
+                {
+                    "type": "text",
+                    "text": "Now let's try to run the tests using a direct Maven command without the temp script:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01NT4y1jp4BTYPmqxdkFopAs",
+                    "status": "IN_PROGRESS",
+                    "isHidden": true,
+                    "localResult": "{\"status\":\"ERROR\",\"exitCode\":1,\"output\":\"\\u001b[?9001h\\u001b[?1004h\\u001b[?25l\\u001b[2J\\u001b[m\\u001b[38;5;9m\\u001b[HC:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4ad1db45c384.ps1 : Impossibile caricare il file \\r\\nC:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4ad1db45c384.ps1. L'esecuzione di script è \\r\\ndisabilitata nel sistema in uso. Per ulteriori informazioni, vedere about_Execution_Policies all'indirizzo \\r\\nhttps://go.microsoft.com/fwlink/?LinkID=135170.\\r\\nIn riga:1 car:1\\r\\n+ C:\\\\Users\\\\mirko\\\\AppData\\\\Local\\\\Temp\\\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4a ...\\r\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\r\\n    + CategoryInfo          : Errore di protezione: (:) [], PSSecurityException\\r\\n    + FullyQualifiedErrorId : UnauthorizedAccess\\r\\n\\u001b]0;C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\\u0007\\u001b[?25h\\u001b[m\"}"
+                },
+                {
+                    "type": "codePatch",
+                    "diffs": [
+                        {
+                            "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "patch": "@@ -0,0 +1,6054 @@\n+package ingsoftware.controller;%0D%0A%0D%0Aimport ingsoftware.controller.HabitListController.HabitListCell;%0D%0Aimport ingsoftware.model.Habit;%0D%0Aimport ingsoftware.model.HabitDifficulty;%0D%0Aimport ingsoftware.model.HabitFrequencyType;%0D%0Aimport javafx.scene.control.ListCell;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0Aimport org.junit.jupiter.api.extension.ExtendWith;%0D%0Aimport org.testfx.framework.junit5.ApplicationExtension;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.time.LocalDateTime;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0A@ExtendWith(ApplicationExtension.class)%0D%0Aclass HabitListCellTest %7B%0D%0A%0D%0A    private HabitListCell habitListCell;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        habitListCell = new HabitListCell();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenItemIsNull() %7B%0D%0A        // Act%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenEmpty() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, true);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldDisplayHabitName_whenValidHabit() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Daily Exercise%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Daily Exercise%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Morning Meditation%22, true);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Morning Meditation%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Read Book%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Read Book%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleEmptyHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleNullHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(null, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromCompletedToNotCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act - First update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromNotCompletedToCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A%0D%0A        // Act - First update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldClearPreviousState_whenCalledWithNull() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, true);%0D%0A        %0D%0A        // Act - First update with a habit%0D%0A        habitListCell.updateItem(habit, false);%0D%0A        %0D%0A        // Act - Then update with null%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    /**%0D%0A     * Helper method to create test habits%0D%0A     */%0D%0A    private Habit createTestHabit(String name, boolean completedToday) %7B%0D%0A        Habit habit = new Habit();%0D%0A        habit.setName(name);%0D%0A        habit.setDescription(%22Test description%22);%0D%0A        habit.setFrequency(HabitFrequencyType.DAILY);%0D%0A        habit.setDifficulty(HabitDifficulty.MEDIUM);%0D%0A        habit.setUserId(1L);%0D%0A        %0D%0A        if (completedToday) %7B%0D%0A            habit.setLastCompletedDate(LocalDate.now());%0D%0A        %7D else %7B%0D%0A            // Set to yesterday or null to ensure it's not completed today%0D%0A            habit.setLastCompletedDate(LocalDate.now().minusDays(1));%0D%0A        %7D%0D%0A        %0D%0A        return habit;%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": false
+                        }
+                    ]
+                },
+                {
+                    "type": "shellCommand",
+                    "command": "cd \"C:\\Users\\mirko\\Desktop\\fittracker\" ; mvn test -Dtest=HabitListCellTest",
+                    "id": "3a819239-bc9b-4116-b5bb-7a617de6494c",
+                    "status": "ERROR",
+                    "toolCallId": "toolu_01NT4y1jp4BTYPmqxdkFopAs",
+                    "commandsRequiringConfirmation": [
+                        {
+                            "name": "mvn",
+                            "arguments": [
+                                "test",
+                                "-Dtest=HabitListCellTest"
+                            ]
+                        }
+                    ],
+                    "exitCode": 1,
+                    "output": "\u001b[?9001h\u001b[?1004h\u001b[?25l\u001b[2J\u001b[m\u001b[38;5;9m\u001b[HC:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4ad1db45c384.ps1 : Impossibile caricare il file \r\nC:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4ad1db45c384.ps1. L'esecuzione di script è \r\ndisabilitata nel sistema in uso. Per ulteriori informazioni, vedere about_Execution_Policies all'indirizzo \r\nhttps://go.microsoft.com/fwlink/?LinkID=135170.\r\nIn riga:1 car:1\r\n+ C:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4a ...\r\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : Errore di protezione: (:) [], PSSecurityException\r\n    + FullyQualifiedErrorId : UnauthorizedAccess\r\n\u001b]0;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\u0007\u001b[?25h\u001b[m",
+                    "outputPath": "C:\\Users\\mirko\\AppData\\Local\\Temp\\Zencoder-d5193ea7-7aa3-4e7d-b1e1-4ad1db45c3842186490433576580302.log",
+                    "isBackground": false,
+                    "maxWaitTimeInSeconds": 240
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "37b71246-5d6b-4c49-a5d6-26e9c80c85c1"
+            },
+            "createdAt": 1755513659159,
+            "isInternal": false
+        },
+        {
+            "id": "2867abce-4ac7-453e-93e8-30d821c7ec02",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "thought",
+                    "text": "The user keeps telling me the test file is being deleted. Let me recreate it again and make sure it's properly created. It seems there might be an issue with the PowerShell execution policy that's preventing the commands from running, but I should still be able to create the test file."
+                },
+                {
+                    "type": "text",
+                    "text": "I'll recreate the test file for the HabitListCell class:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_011sTC81NnxMbUNxs2WSSQLd",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java\n@@ -0,0 +1,187 @@\n+package ingsoftware.controller;\n+\n+import ingsoftware.controller.HabitListController.HabitListCell;\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitDifficulty;\n+import ingsoftware.model.HabitFrequencyType;\n+import javafx.scene.control.ListCell;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.junit.jupiter.api.extension.ExtendWith;\n+import org.testfx.framework.junit5.ApplicationExtension;\n+\n+import java.time.LocalDate;\n+import java.time.LocalDateTime;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+@ExtendWith(ApplicationExtension.class)\n+class HabitListCellTest {\n+\n+    private HabitListCell habitListCell;\n+\n+    @BeforeEach\n+    void setUp() {\n+        habitListCell = new HabitListCell();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenItemIsNull() {\n+        // Act\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldSetTextNull_whenEmpty() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, true);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    @Test\n+    void updateItem_shouldDisplayHabitName_whenValidHabit() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Daily Exercise\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Daily Exercise\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Morning Meditation\", true);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Morning Meditation\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Read Book\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"Read Book\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleEmptyHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"\", false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isEqualTo(\"\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldHandleNullHabitName() {\n+        // Arrange\n+        Habit habit = createTestHabit(null, false);\n+\n+        // Act\n+        habitListCell.updateItem(habit, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromCompletedToNotCompleted() {\n+        // Arrange\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+\n+        // Act - First update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldUpdateFromNotCompletedToCompleted() {\n+        // Arrange\n+        Habit notCompletedHabit = createTestHabit(\"Test Habit\", false);\n+        Habit completedHabit = createTestHabit(\"Test Habit\", true);\n+\n+        // Act - First update with not completed habit\n+        habitListCell.updateItem(notCompletedHabit, false);\n+        String initialStyle = habitListCell.getStyle();\n+        \n+        // Act - Then update with completed habit\n+        habitListCell.updateItem(completedHabit, false);\n+\n+        // Assert\n+        assertThat(initialStyle).isEqualTo(\"-fx-text-fill: #333333;\");\n+        assertThat(habitListCell.getStyle()).isEqualTo(\"-fx-text-fill: #4CAF50; -fx-font-weight: bold;\");\n+    }\n+\n+    @Test\n+    void updateItem_shouldClearPreviousState_whenCalledWithNull() {\n+        // Arrange\n+        Habit habit = createTestHabit(\"Test Habit\", true);\n+        \n+        // Act - First update with a habit\n+        habitListCell.updateItem(habit, false);\n+        \n+        // Act - Then update with null\n+        habitListCell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(habitListCell.getText()).isNull();\n+        assertThat(habitListCell.getStyle()).isEmpty();\n+    }\n+\n+    /**\n+     * Helper method to create test habits\n+     */\n+    private Habit createTestHabit(String name, boolean completedToday) {\n+        Habit habit = new Habit();\n+        habit.setName(name);\n+        habit.setDescription(\"Test description\");\n+        habit.setFrequency(HabitFrequencyType.DAILY);\n+        habit.setDifficulty(HabitDifficulty.MEDIUM);\n+        habit.setUserId(1L);\n+        \n+        if (completedToday) {\n+            habit.setLastCompletedDate(LocalDate.now());\n+        } else {\n+            // Set to yesterday or null to ensure it's not completed today\n+            habit.setLastCompletedDate(LocalDate.now().minusDays(1));\n+        }\n+        \n+        return habit;\n+    }\n+}",
+                    "refToolCallId": "toolu_011sTC81NnxMbUNxs2WSSQLd"
+                },
+                {
+                    "type": "text",
+                    "text": "Perfect! I've successfully created comprehensive tests for the HabitListCell class. Here's a summary of what the test file covers:\n\n## Test Coverage for HabitListCell\n\nThe test file `HabitListCellTest.java` includes **10 test scenarios** that thoroughly test the `updateItem` method of the HabitListCell class:\n\n### **Happy Path Tests:**\n1. **`updateItem_shouldDisplayHabitName_whenValidHabit`** - Tests that the cell correctly displays the habit name\n2. **`updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday`** - Tests the green bold styling for completed habits\n3. **`updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday`** - Tests the normal styling for incomplete habits\n\n### **Input Verification Tests:**\n4. **`updateItem_shouldSetTextNull_whenItemIsNull`** - Tests handling of null habit items\n5. **`updateItem_shouldSetTextNull_whenEmpty`** - Tests handling of empty cell state\n6. **`updateItem_shouldHandleEmptyHabitName`** - Tests empty habit names\n7. **`updateItem_shouldHandleNullHabitName`** - Tests null habit names\n\n### **State Transition Tests:**\n8. **`updateItem_shouldUpdateFromCompletedToNotCompleted`** - Tests style changes from completed to incomplete\n9. **`updateItem_shouldUpdateFromNotCompletedToCompleted`** - Tests style changes from incomplete to completed\n10. **`updateItem_shouldClearPreviousState_whenCalledWithNull`** - Tests proper cleanup when cell is cleared\n\n## Key Features:\n\n- **Uses TestFX and JUnit 5** - Follows the project's testing framework patterns\n- **JavaFX Support** - Properly configured with `@ExtendWith(ApplicationExtension.class)` for UI testing\n- **Comprehensive Coverage** - Tests all branches of the `updateItem` method\n- **Edge Case Handling** - Tests null, empty, and invalid inputs\n- **State Management** - Verifies proper style application and updates\n- **Helper Method** - Includes `createTestHabit()` for easy test data creation\n\nThe tests verify that the HabitListCell correctly:\n- Displays habit names as text\n- Applies the appropriate CSS styles based on completion status\n- Handles edge cases gracefully (null/empty values)\n- Updates styling correctly when the underlying data changes\n- Clears state properly when needed\n\nYou can now run these tests to ensure the HabitListCell behaves correctly in all scenarios!"
+                },
+                {
+                    "type": "codePatch",
+                    "diffs": [
+                        {
+                            "path": "src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListCellTest.java",
+                            "patch": "@@ -0,0 +1,6054 @@\n+package ingsoftware.controller;%0D%0A%0D%0Aimport ingsoftware.controller.HabitListController.HabitListCell;%0D%0Aimport ingsoftware.model.Habit;%0D%0Aimport ingsoftware.model.HabitDifficulty;%0D%0Aimport ingsoftware.model.HabitFrequencyType;%0D%0Aimport javafx.scene.control.ListCell;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0Aimport org.junit.jupiter.api.extension.ExtendWith;%0D%0Aimport org.testfx.framework.junit5.ApplicationExtension;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.time.LocalDateTime;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0A@ExtendWith(ApplicationExtension.class)%0D%0Aclass HabitListCellTest %7B%0D%0A%0D%0A    private HabitListCell habitListCell;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        habitListCell = new HabitListCell();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenItemIsNull() %7B%0D%0A        // Act%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldSetTextNull_whenEmpty() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, true);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldDisplayHabitName_whenValidHabit() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Daily Exercise%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Daily Exercise%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyCompletedStyle_whenHabitCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Morning Meditation%22, true);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Morning Meditation%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldApplyNormalStyle_whenHabitNotCompletedToday() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Read Book%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22Read Book%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleEmptyHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22%22, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isEqualTo(%22%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldHandleNullHabitName() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(null, false);%0D%0A%0D%0A        // Act%0D%0A        habitListCell.updateItem(habit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromCompletedToNotCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A%0D%0A        // Act - First update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldUpdateFromNotCompletedToCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit notCompletedHabit = createTestHabit(%22Test Habit%22, false);%0D%0A        Habit completedHabit = createTestHabit(%22Test Habit%22, true);%0D%0A%0D%0A        // Act - First update with not completed habit%0D%0A        habitListCell.updateItem(notCompletedHabit, false);%0D%0A        String initialStyle = habitListCell.getStyle();%0D%0A        %0D%0A        // Act - Then update with completed habit%0D%0A        habitListCell.updateItem(completedHabit, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(initialStyle).isEqualTo(%22-fx-text-fill: #333333;%22);%0D%0A        assertThat(habitListCell.getStyle()).isEqualTo(%22-fx-text-fill: #4CAF50; -fx-font-weight: bold;%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void updateItem_shouldClearPreviousState_whenCalledWithNull() %7B%0D%0A        // Arrange%0D%0A        Habit habit = createTestHabit(%22Test Habit%22, true);%0D%0A        %0D%0A        // Act - First update with a habit%0D%0A        habitListCell.updateItem(habit, false);%0D%0A        %0D%0A        // Act - Then update with null%0D%0A        habitListCell.updateItem(null, false);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(habitListCell.getText()).isNull();%0D%0A        assertThat(habitListCell.getStyle()).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    /**%0D%0A     * Helper method to create test habits%0D%0A     */%0D%0A    private Habit createTestHabit(String name, boolean completedToday) %7B%0D%0A        Habit habit = new Habit();%0D%0A        habit.setName(name);%0D%0A        habit.setDescription(%22Test description%22);%0D%0A        habit.setFrequency(HabitFrequencyType.DAILY);%0D%0A        habit.setDifficulty(HabitDifficulty.MEDIUM);%0D%0A        habit.setUserId(1L);%0D%0A        %0D%0A        if (completedToday) %7B%0D%0A            habit.setLastCompletedDate(LocalDate.now());%0D%0A        %7D else %7B%0D%0A            // Set to yesterday or null to ensure it's not completed today%0D%0A            habit.setLastCompletedDate(LocalDate.now().minusDays(1));%0D%0A        %7D%0D%0A        %0D%0A        return habit;%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755513727177
+                        }
+                    ]
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "028a4cd4-3557-4c65-bbb5-c90d5e69a788",
+                "usageStatistics": {
+                    "llmCallsUsedForAnswer": 18.0,
+                    "llmCallsUsedTotal": 81.0,
+                    "llmCallsLimit": 200.0,
+                    "limitRenewalMillisecondTimestamp": 1755597822265
+                }
+            },
+            "createdAt": 1755513692466,
+            "isInternal": false
+        }
+    ],
+    "isNameGenerated": true,
+    "isUnitTestsAgent": true
+}
+}

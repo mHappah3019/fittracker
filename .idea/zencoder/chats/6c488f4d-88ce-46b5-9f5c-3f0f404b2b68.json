@@ -1,0 +1,781 @@
+{
+    "checksum": "0d3bded47da70e74c3b390c75cb770b270176915c934ed2a8cae9bfeb75100c9",
+    "data": {
+    "id": "6c488f4d-88ce-46b5-9f5c-3f0f404b2b68",
+    "createdAt": 1755512318125,
+    "updatedAt": 1755513314502,
+    "title": "Unit Test Generation Strategy",
+    "messages": [
+        {
+            "id": "c0c24281-aaf1-4852-abd3-9913b4b3bf3e",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Write some detailed unit tests for our project wherever these do not exist"
+                }
+            ],
+            "createdAt": 1755512318133,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Write some detailed unit tests for our project wherever these do not exist"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "0a8f1985-078c-4c40-a082-1ef3d3b0a565",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "thought",
+                    "text": "The user wants me to write detailed unit tests for their project wherever they don't exist. This is a general request for test generation, so I should:\n\n1. First understand the project structure and what testing framework is being used\n2. Find existing tests to understand the pattern and avoid duplicates\n3. Identify areas that need testing\n4. Generate comprehensive unit tests\n\nLet me start by exploring the project structure to understand what we're working with."
+                },
+                {
+                    "type": "text",
+                    "text": "I'll help you write comprehensive unit tests for your project. Let me first explore the project structure to understand the codebase and identify existing tests."
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01XEXNnuH5tMQkDZgsc8R67k",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": ".",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "This looks like a Java project with Maven structure. Let me explore the main source code and existing tests:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_012srbhrHxiqvJWv9o3iM1Lr",
+                    "statusText": "Viewed file (lines 1:179)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "pom.xml",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/pom.xml"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Great! This is a Spring Boot project with JavaFX and uses JUnit 5 for testing. Let me explore the main source code:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01YBzQmg351RCPBHB64Z6AiJ",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01UJqKjF7Ek5PFHu3p1v3NJ9",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me check existing tests to see what's already covered:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01F7oxsubfRioqaDFFJiqtjY",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01W5yUr4UjpCmXqMXQVnmbzU",
+                    "statusText": "Viewed directory",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Great! I can see there are some existing tests. Let me examine them to understand the testing patterns and what's already covered:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_015Q7Xac2Mz5P81HAZ9CZ4mS",
+                    "statusText": "Viewed file (lines 1:144)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/HabitServiceTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/HabitServiceTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01UWkr8qJ7cEVtcMRdEZd7LC",
+                    "statusText": "Viewed file (lines 1:111)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/GamificationServiceTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/GamificationServiceTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_013Qg1ouFtC4sHpkzEDgSUPF",
+                    "statusText": "Viewed file (lines 1:150)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/HabitCompletionServiceTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/HabitCompletionServiceTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me examine some key model classes to understand the structure:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01TVHRxyyTcJmF9J2UCz47pJ",
+                    "statusText": "Viewed file (lines 1:103)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/User.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/User.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01Y3rsQ48F667vmjYThSEhRe",
+                    "statusText": "Viewed file (lines 1:191)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/Habit.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/Habit.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_013U8WSQka7MEwnfDb1n1RcM",
+                    "statusText": "Viewed file (lines 1:45)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/service/UserService.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/service/UserService.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now, let me look at some key service classes to understand what needs testing:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01NVV83QY9VzhCJxnzjLcJaP",
+                    "statusText": "Viewed file (lines 1:106)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/service/EquipmentService.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/service/EquipmentService.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Let me also examine some model builders and additional service classes:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01TtRp1qjoNRL8yqP5eTAffT",
+                    "statusText": "Viewed file (lines 1:105)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/builder/HabitBuilder.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/builder/HabitBuilder.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01N8GvwNfEem6SAZpbJE6cSU",
+                    "statusText": "Viewed file (lines 1:32)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/service/LifePointCalculator.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/service/LifePointCalculator.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me examine some exceptions to understand the error handling patterns:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01Cohcbbh38rfhcSD9CMqT1i",
+                    "title": "File search",
+                    "statusText": "Done",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Based on my analysis of the codebase, I can see there are several areas that need comprehensive unit tests. The existing tests only cover 3 service classes. Let me create a comprehensive test suite for the missing classes. \n\nI'll start by creating tests for the most critical untested components:\n\n1. **UserService** - No tests exist\n2. **EquipmentService** - No tests exist  \n3. **LifePointCalculator** - No tests exist\n4. **HabitBuilder** - No tests exist\n5. **User Model** - No tests exist\n6. **Equipment Model** - No tests exist\n\nLet me create comprehensive unit tests for these components:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_0147bCk5bucDYvr2vnvyPuNv",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/UserServiceTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/UserServiceTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/UserServiceTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/UserServiceTest.java\n@@ -0,0 +1,157 @@\n+package ingsoftware.service;\n+\n+import ingsoftware.exception.UserNotFoundException;\n+import ingsoftware.model.User;\n+import ingsoftware.repository.UserRepository;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.mockito.InjectMocks;\n+import org.mockito.Mock;\n+import org.mockito.MockitoAnnotations;\n+\n+import java.time.LocalDate;\n+import java.util.Optional;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+import static org.assertj.core.api.Assertions.assertThatThrownBy;\n+import static org.mockito.Mockito.*;\n+\n+class UserServiceTest {\n+\n+    @Mock\n+    private UserRepository userRepository;\n+\n+    @InjectMocks\n+    private UserService userService;\n+\n+    @BeforeEach\n+    void setUp() {\n+        MockitoAnnotations.openMocks(this);\n+    }\n+\n+    @Test\n+    void isFirstAccessOfDay_shouldReturnTrue_whenLastAccessDateIsNull() {\n+        // Arrange\n+        User user = new User();\n+        // lastAccessDate is null by default\n+        LocalDate currentDate = LocalDate.now();\n+\n+        // Act\n+        boolean result = userService.isFirstAccessOfDay(user, currentDate);\n+\n+        // Assert\n+        assertThat(result).isTrue();\n+    }\n+\n+    @Test\n+    void isFirstAccessOfDay_shouldReturnTrue_whenLastAccessDateIsBeforeCurrentDate() {\n+        // Arrange\n+        User user = new User();\n+        LocalDate currentDate = LocalDate.now();\n+        LocalDate lastAccessDate = currentDate.minusDays(1);\n+        user.setLastAccessDate(lastAccessDate);\n+\n+        // Act\n+        boolean result = userService.isFirstAccessOfDay(user, currentDate);\n+\n+        // Assert\n+        assertThat(result).isTrue();\n+    }\n+\n+    @Test\n+    void isFirstAccessOfDay_shouldReturnFalse_whenLastAccessDateIsSameAsCurrentDate() {\n+        // Arrange\n+        User user = new User();\n+        LocalDate currentDate = LocalDate.now();\n+        user.setLastAccessDate(currentDate);\n+\n+        // Act\n+        boolean result = userService.isFirstAccessOfDay(user, currentDate);\n+\n+        // Assert\n+        assertThat(result).isFalse();\n+    }\n+\n+    @Test\n+    void isFirstAccessOfDay_shouldReturnFalse_whenLastAccessDateIsAfterCurrentDate() {\n+        // Arrange\n+        User user = new User();\n+        LocalDate currentDate = LocalDate.now();\n+        LocalDate lastAccessDate = currentDate.plusDays(1);\n+        user.setLastAccessDate(lastAccessDate);\n+\n+        // Act\n+        boolean result = userService.isFirstAccessOfDay(user, currentDate);\n+\n+        // Assert\n+        assertThat(result).isFalse();\n+    }\n+\n+    @Test\n+    void saveUser_shouldCallRepositorySave() {\n+        // Arrange\n+        User user = new User();\n+        user.setId(1L);\n+\n+        // Act\n+        userService.saveUser(user);\n+\n+        // Assert\n+        verify(userRepository, times(1)).save(user);\n+    }\n+\n+    @Test\n+    void findUserOrThrow_shouldReturnUser_whenUserExists() {\n+        // Arrange\n+        Long userId = 1L;\n+        User expectedUser = new User();\n+        expectedUser.setId(userId);\n+        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));\n+\n+        // Act\n+        User result = userService.findUserOrThrow(userId);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(expectedUser);\n+        verify(userRepository, times(1)).findById(userId);\n+    }\n+\n+    @Test\n+    void findUserOrThrow_shouldThrowUserNotFoundException_whenUserDoesNotExist() {\n+        // Arrange\n+        Long userId = 999L;\n+        when(userRepository.findById(userId)).thenReturn(Optional.empty());\n+\n+        // Act & Assert\n+        assertThatThrownBy(() -> userService.findUserOrThrow(userId))\n+                .isInstanceOf(UserNotFoundException.class);\n+        \n+        verify(userRepository, times(1)).findById(userId);\n+    }\n+\n+    @Test\n+    void checkDefaultUser_shouldReturnTrue_whenNoUsersExist() {\n+        // Arrange\n+        when(userRepository.count()).thenReturn(0L);\n+\n+        // Act\n+        boolean result = userService.checkDefaultUser();\n+\n+        // Assert\n+        assertThat(result).isTrue();\n+        verify(userRepository, times(1)).count();\n+    }\n+\n+    @Test\n+    void checkDefaultUser_shouldReturnFalse_whenUsersExist() {\n+        // Arrange\n+        when(userRepository.count()).thenReturn(5L);\n+\n+        // Act\n+        boolean result = userService.checkDefaultUser();\n+\n+        // Assert\n+        assertThat(result).isFalse();\n+        verify(userRepository, times(1)).count();\n+    }\n+}",
+                    "refToolCallId": "toolu_0147bCk5bucDYvr2vnvyPuNv"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01BRN5vN9pgQaFx1CFgfR9qr",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/EquipmentServiceTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/EquipmentServiceTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/EquipmentServiceTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/EquipmentServiceTest.java\n@@ -0,0 +1,317 @@\n+package ingsoftware.service;\n+\n+import ingsoftware.model.Equipment;\n+import ingsoftware.model.EquipmentType;\n+import ingsoftware.model.User;\n+import ingsoftware.repository.EquipmentRepository;\n+import ingsoftware.repository.UserRepository;\n+import javafx.collections.ObservableList;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.mockito.InjectMocks;\n+import org.mockito.Mock;\n+import org.mockito.MockitoAnnotations;\n+\n+import java.util.*;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+import static org.assertj.core.api.Assertions.assertThatThrownBy;\n+import static org.mockito.ArgumentMatchers.any;\n+import static org.mockito.ArgumentMatchers.eq;\n+import static org.mockito.Mockito.*;\n+\n+class EquipmentServiceTest {\n+\n+    @Mock\n+    private EquipmentRepository equipmentRepository;\n+\n+    @Mock\n+    private UserRepository userRepository;\n+\n+    @InjectMocks\n+    private EquipmentService equipmentService;\n+\n+    private Equipment testEquipment;\n+    private User testUser;\n+\n+    @BeforeEach\n+    void setUp() {\n+        MockitoAnnotations.openMocks(this);\n+        \n+        testEquipment = new Equipment();\n+        testEquipment.setId(1L);\n+        testEquipment.setName(\"Test Equipment\");\n+        testEquipment.setType(EquipmentType.WEAPON);\n+        testEquipment.setState(Equipment.EquipmentState.INACTIVE);\n+        \n+        testUser = new User();\n+        testUser.setId(1L);\n+    }\n+\n+    @Test\n+    void getAllEquipmentGroupedByType_shouldReturnEquipmentGroupedByType_includingNoneOptions() {\n+        // Arrange\n+        Equipment weapon = new Equipment();\n+        weapon.setId(1L);\n+        weapon.setName(\"Sword\");\n+        weapon.setType(EquipmentType.WEAPON);\n+\n+        Equipment armor = new Equipment();\n+        armor.setId(2L);\n+        armor.setName(\"Shield\");\n+        armor.setType(EquipmentType.ARMOR);\n+\n+        when(equipmentRepository.findAll()).thenReturn(Arrays.asList(weapon, armor));\n+\n+        // Act\n+        Map<EquipmentType, ObservableList<Equipment>> result = equipmentService.getAllEquipmentGroupedByType();\n+\n+        // Assert\n+        assertThat(result).isNotNull();\n+        assertThat(result).hasSize(EquipmentType.values().length);\n+        \n+        // Check that each type has at least the \"None\" option\n+        for (EquipmentType type : EquipmentType.values()) {\n+            assertThat(result.get(type)).isNotNull();\n+            assertThat(result.get(type)).isNotEmpty();\n+            \n+            // Check for \"None\" option\n+            boolean hasNoneOption = result.get(type).stream()\n+                    .anyMatch(eq -> eq.getName().startsWith(\"Nessun\"));\n+            assertThat(hasNoneOption).isTrue();\n+        }\n+    }\n+\n+    @Test\n+    void findAllEquippedByUser_shouldReturnActiveEquipmentByType() {\n+        // Arrange\n+        Long userId = 1L;\n+        \n+        Equipment activeWeapon = new Equipment();\n+        activeWeapon.setId(1L);\n+        activeWeapon.setType(EquipmentType.WEAPON);\n+        activeWeapon.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        Equipment activeArmor = new Equipment();\n+        activeArmor.setId(2L);\n+        activeArmor.setType(EquipmentType.ARMOR);\n+        activeArmor.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Arrays.asList(activeWeapon, activeArmor));\n+\n+        // Act\n+        Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(userId);\n+\n+        // Assert\n+        assertThat(result).hasSize(2);\n+        assertThat(result.get(EquipmentType.WEAPON)).isEqualTo(activeWeapon);\n+        assertThat(result.get(EquipmentType.ARMOR)).isEqualTo(activeArmor);\n+    }\n+\n+    @Test\n+    void findAllEquippedByUser_shouldHandleEmptyResult() {\n+        // Arrange\n+        Long userId = 1L;\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Collections.emptyList());\n+\n+        // Act\n+        Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(userId);\n+\n+        // Assert\n+        assertThat(result).isEmpty();\n+    }\n+\n+    @Test\n+    void findAllEquippedByUser_shouldFilterEquipmentWithoutType() {\n+        // Arrange\n+        Long userId = 1L;\n+        \n+        Equipment equipmentWithType = new Equipment();\n+        equipmentWithType.setId(1L);\n+        equipmentWithType.setType(EquipmentType.WEAPON);\n+        equipmentWithType.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        Equipment equipmentWithoutType = new Equipment();\n+        equipmentWithoutType.setId(2L);\n+        equipmentWithoutType.setState(Equipment.EquipmentState.ACTIVE);\n+        // type is not set (Optional.empty())\n+\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Arrays.asList(equipmentWithType, equipmentWithoutType));\n+\n+        // Act\n+        Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(userId);\n+\n+        // Assert\n+        assertThat(result).hasSize(1);\n+        assertThat(result.get(EquipmentType.WEAPON)).isEqualTo(equipmentWithType);\n+    }\n+\n+    @Test\n+    void equip_shouldEquipItem_andUnequipSameType() {\n+        // Arrange\n+        Long userId = 1L;\n+        Long equipmentId = 1L;\n+        \n+        Equipment newEquipment = new Equipment();\n+        newEquipment.setId(equipmentId);\n+        newEquipment.setType(EquipmentType.WEAPON);\n+        newEquipment.setState(Equipment.EquipmentState.INACTIVE);\n+\n+        Equipment oldEquipment = new Equipment();\n+        oldEquipment.setId(2L);\n+        oldEquipment.setType(EquipmentType.WEAPON);\n+        oldEquipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(newEquipment));\n+        when(equipmentRepository.findByTypeAndState(EquipmentType.WEAPON, Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Optional.of(oldEquipment));\n+        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -> invocation.getArgument(0));\n+\n+        // Act\n+        Equipment result = equipmentService.equip(userId, equipmentId);\n+\n+        // Assert\n+        assertThat(result.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);\n+        verify(equipmentRepository).save(oldEquipment); // Should save unequipped item\n+        verify(equipmentRepository).save(newEquipment); // Should save equipped item\n+        assertThat(oldEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);\n+    }\n+\n+    @Test\n+    void equip_shouldThrowException_whenEquipmentNotFound() {\n+        // Arrange\n+        Long userId = 1L;\n+        Long equipmentId = 999L;\n+        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.empty());\n+\n+        // Act & Assert\n+        assertThatThrownBy(() -> equipmentService.equip(userId, equipmentId))\n+                .isInstanceOf(RuntimeException.class)\n+                .hasMessage(\"Equipaggiamento non trovato\");\n+    }\n+\n+    @Test\n+    void equip_shouldThrowException_whenEquipmentHasNoType() {\n+        // Arrange\n+        Long userId = 1L;\n+        Long equipmentId = 1L;\n+        \n+        Equipment equipmentWithoutType = new Equipment();\n+        equipmentWithoutType.setId(equipmentId);\n+        equipmentWithoutType.setState(Equipment.EquipmentState.INACTIVE);\n+        // type is not set\n+\n+        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(equipmentWithoutType));\n+\n+        // Act & Assert\n+        assertThatThrownBy(() -> equipmentService.equip(userId, equipmentId))\n+                .isInstanceOf(IllegalStateException.class)\n+                .hasMessage(\"L'equipaggiamento deve avere un tipo per essere equipaggiato\");\n+    }\n+\n+    @Test\n+    void unequip_shouldUnequipActiveEquipment() {\n+        // Arrange\n+        Long userId = 1L;\n+        EquipmentType type = EquipmentType.WEAPON;\n+        \n+        Equipment activeEquipment = new Equipment();\n+        activeEquipment.setId(1L);\n+        activeEquipment.setType(type);\n+        activeEquipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Optional.of(activeEquipment));\n+        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -> invocation.getArgument(0));\n+\n+        // Act\n+        equipmentService.unequip(userId, type);\n+\n+        // Assert\n+        assertThat(activeEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);\n+        verify(equipmentRepository).save(activeEquipment);\n+    }\n+\n+    @Test\n+    void unequip_shouldDoNothing_whenNoActiveEquipmentOfType() {\n+        // Arrange\n+        Long userId = 1L;\n+        EquipmentType type = EquipmentType.WEAPON;\n+        \n+        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Optional.empty());\n+\n+        // Act\n+        equipmentService.unequip(userId, type);\n+\n+        // Assert\n+        verify(equipmentRepository, never()).save(any(Equipment.class));\n+    }\n+\n+    @Test\n+    void refreshCache_shouldClearCacheAndReloadFromRepository() {\n+        // Arrange\n+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Collections.emptyList());\n+\n+        // Act\n+        equipmentService.refreshCache();\n+\n+        // Assert\n+        verify(userRepository).findById(1L);\n+        verify(equipmentRepository).findByStateEquals(Equipment.EquipmentState.ACTIVE);\n+    }\n+\n+    @Test\n+    void findEquippedByUserAndType_shouldReturnEquipmentFromCache() {\n+        // This test verifies the cache functionality, but since the cache is private,\n+        // we need to setup the cache first through refreshCache\n+        \n+        // Arrange\n+        Long userId = 1L;\n+        EquipmentType type = EquipmentType.WEAPON;\n+        \n+        Equipment cachedEquipment = new Equipment();\n+        cachedEquipment.setId(1L);\n+        cachedEquipment.setType(type);\n+        cachedEquipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Arrays.asList(cachedEquipment));\n+\n+        // Setup cache\n+        equipmentService.refreshCache();\n+        \n+        // Act\n+        Optional<Equipment> result = equipmentService.findEquippedByUserAndType(userId, type);\n+\n+        // Assert\n+        assertThat(result).isPresent();\n+        assertThat(result.get()).isEqualTo(cachedEquipment);\n+    }\n+\n+    @Test\n+    void findEquippedByUserAndType_shouldReturnEmpty_whenNotInCache() {\n+        // Arrange\n+        Long userId = 1L;\n+        EquipmentType type = EquipmentType.WEAPON;\n+        \n+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));\n+        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))\n+                .thenReturn(Collections.emptyList());\n+\n+        // Setup empty cache\n+        equipmentService.refreshCache();\n+        \n+        // Act\n+        Optional<Equipment> result = equipmentService.findEquippedByUserAndType(userId, type);\n+\n+        // Assert\n+        assertThat(result).isEmpty();\n+    }\n+}",
+                    "refToolCallId": "toolu_01BRN5vN9pgQaFx1CFgfR9qr"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01MUC41pJzepPeZWtA3T1vJJ",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/service/LifePointCalculatorTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/LifePointCalculatorTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/LifePointCalculatorTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/LifePointCalculatorTest.java\n@@ -0,0 +1,211 @@\n+package ingsoftware.service;\n+\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitDifficulty;\n+import ingsoftware.model.HabitFrequencyType;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+\n+import java.time.LocalDate;\n+import java.util.ArrayList;\n+import java.util.Arrays;\n+import java.util.Collections;\n+import java.util.List;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+class LifePointCalculatorTest {\n+\n+    private LifePointCalculator lifePointCalculator;\n+    private List<Habit> habits;\n+\n+    @BeforeEach\n+    void setUp() {\n+        lifePointCalculator = new LifePointCalculator();\n+        habits = new ArrayList<>();\n+    }\n+\n+    @Test\n+    void compute_shouldReturnZero_whenHabitsListIsEmpty() {\n+        // Arrange\n+        double thresholdPercent = 80.0;\n+\n+        // Act\n+        int result = lifePointCalculator.compute(Collections.emptyList(), thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(0);\n+    }\n+\n+    @Test\n+    void compute_shouldReturnBonus_whenCompletionRateAboveThreshold() {\n+        // Arrange\n+        Habit completedHabit1 = createCompletedHabit(\"Habit 1\");\n+        Habit completedHabit2 = createCompletedHabit(\"Habit 2\");\n+        Habit incompleteHabit = createIncompleteHabit(\"Habit 3\");\n+        \n+        habits = Arrays.asList(completedHabit1, completedHabit2, incompleteHabit);\n+        double thresholdPercent = 60.0; // 2/3 = 66.67% > 60%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(10); // default bonus\n+    }\n+\n+    @Test\n+    void compute_shouldReturnMalus_whenCompletionRateBelowThreshold() {\n+        // Arrange\n+        Habit completedHabit = createCompletedHabit(\"Habit 1\");\n+        Habit incompleteHabit1 = createIncompleteHabit(\"Habit 2\");\n+        Habit incompleteHabit2 = createIncompleteHabit(\"Habit 3\");\n+        \n+        habits = Arrays.asList(completedHabit, incompleteHabit1, incompleteHabit2);\n+        double thresholdPercent = 50.0; // 1/3 = 33.33% < 50%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(-5); // default malus\n+    }\n+\n+    @Test\n+    void compute_shouldReturnBonus_whenCompletionRateEqualsThreshold() {\n+        // Arrange\n+        Habit completedHabit = createCompletedHabit(\"Habit 1\");\n+        Habit incompleteHabit = createIncompleteHabit(\"Habit 2\");\n+        \n+        habits = Arrays.asList(completedHabit, incompleteHabit);\n+        double thresholdPercent = 50.0; // 1/2 = 50% == 50%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(10); // should return bonus when equal\n+    }\n+\n+    @Test\n+    void compute_shouldReturnBonus_whenAllHabitsCompleted() {\n+        // Arrange\n+        Habit completedHabit1 = createCompletedHabit(\"Habit 1\");\n+        Habit completedHabit2 = createCompletedHabit(\"Habit 2\");\n+        Habit completedHabit3 = createCompletedHabit(\"Habit 3\");\n+        \n+        habits = Arrays.asList(completedHabit1, completedHabit2, completedHabit3);\n+        double thresholdPercent = 80.0; // 3/3 = 100% > 80%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(10);\n+    }\n+\n+    @Test\n+    void compute_shouldReturnMalus_whenNoHabitsCompleted() {\n+        // Arrange\n+        Habit incompleteHabit1 = createIncompleteHabit(\"Habit 1\");\n+        Habit incompleteHabit2 = createIncompleteHabit(\"Habit 2\");\n+        \n+        habits = Arrays.asList(incompleteHabit1, incompleteHabit2);\n+        double thresholdPercent = 10.0; // 0/2 = 0% < 10%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(-5);\n+    }\n+\n+    @Test\n+    void compute_shouldUseCustomBonusAndMalus() {\n+        // Arrange\n+        Habit completedHabit = createCompletedHabit(\"Habit 1\");\n+        Habit incompleteHabit = createIncompleteHabit(\"Habit 2\");\n+        \n+        habits = Arrays.asList(completedHabit, incompleteHabit);\n+        double thresholdPercent = 60.0; // 1/2 = 50% < 60%\n+        int customBonus = 20;\n+        int customMalus = -10;\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent, customBonus, customMalus);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(customMalus);\n+    }\n+\n+    @Test\n+    void compute_shouldReturnCustomBonus_whenThresholdMet() {\n+        // Arrange\n+        Habit completedHabit = createCompletedHabit(\"Habit 1\");\n+        Habit incompleteHabit = createIncompleteHabit(\"Habit 2\");\n+        \n+        habits = Arrays.asList(completedHabit, incompleteHabit);\n+        double thresholdPercent = 40.0; // 1/2 = 50% > 40%\n+        int customBonus = 15;\n+        int customMalus = -8;\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent, customBonus, customMalus);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(customBonus);\n+    }\n+\n+    @Test\n+    void compute_shouldHandleHighThreshold() {\n+        // Arrange\n+        Habit completedHabit1 = createCompletedHabit(\"Habit 1\");\n+        Habit completedHabit2 = createCompletedHabit(\"Habit 2\");\n+        Habit incompleteHabit = createIncompleteHabit(\"Habit 3\");\n+        \n+        habits = Arrays.asList(completedHabit1, completedHabit2, incompleteHabit);\n+        double thresholdPercent = 70.0; // 2/3 = 66.67% < 70%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(-5); // should return malus\n+    }\n+\n+    @Test\n+    void compute_shouldHandleLowThreshold() {\n+        // Arrange\n+        Habit completedHabit = createCompletedHabit(\"Habit 1\");\n+        Habit incompleteHabit1 = createIncompleteHabit(\"Habit 2\");\n+        Habit incompleteHabit2 = createIncompleteHabit(\"Habit 3\");\n+        Habit incompleteHabit3 = createIncompleteHabit(\"Habit 4\");\n+        \n+        habits = Arrays.asList(completedHabit, incompleteHabit1, incompleteHabit2, incompleteHabit3);\n+        double thresholdPercent = 20.0; // 1/4 = 25% > 20%\n+\n+        // Act\n+        int result = lifePointCalculator.compute(habits, thresholdPercent);\n+\n+        // Assert\n+        assertThat(result).isEqualTo(10); // should return bonus\n+    }\n+\n+    private Habit createCompletedHabit(String name) {\n+        Habit habit = new Habit();\n+        habit.setName(name);\n+        habit.setFrequency(HabitFrequencyType.DAILY);\n+        habit.setDifficulty(HabitDifficulty.MEDIUM);\n+        habit.setLastCompletedDate(LocalDate.now()); // completed today\n+        return habit;\n+    }\n+\n+    private Habit createIncompleteHabit(String name) {\n+        Habit habit = new Habit();\n+        habit.setName(name);\n+        habit.setFrequency(HabitFrequencyType.DAILY);\n+        habit.setDifficulty(HabitDifficulty.MEDIUM);\n+        habit.setLastCompletedDate(LocalDate.now().minusDays(1)); // not completed today\n+        return habit;\n+    }\n+}",
+                    "refToolCallId": "toolu_01MUC41pJzepPeZWtA3T1vJJ"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_014xzPdQxAq7bikjQK77n2Sf",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/model/builder/HabitBuilderTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/builder/HabitBuilderTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/builder/HabitBuilderTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/builder/HabitBuilderTest.java\n@@ -0,0 +1,284 @@\n+package ingsoftware.model.builder;\n+\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitDifficulty;\n+import ingsoftware.model.HabitFrequencyType;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+\n+import java.util.Arrays;\n+import java.util.List;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+import static org.assertj.core.api.Assertions.assertThatThrownBy;\n+\n+class HabitBuilderTest {\n+\n+    private HabitBuilder habitBuilder;\n+\n+    @BeforeEach\n+    void setUp() {\n+        habitBuilder = new HabitBuilder();\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithRequiredFields() {\n+        // Arrange\n+        Long userId = 1L;\n+        String name = \"Test Habit\";\n+        String description = \"Test Description\";\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withUserId(userId)\n+                .withName(name)\n+                .withDescription(description)\n+                .build();\n+\n+        // Assert\n+        assertThat(result).isNotNull();\n+        assertThat(result.getUserId()).isEqualTo(userId);\n+        assertThat(result.getName()).isEqualTo(name);\n+        assertThat(result.getDescription()).isEqualTo(description);\n+        assertThat(result.getFrequency()).isEqualTo(HabitFrequencyType.DAILY); // default\n+        assertThat(result.getDifficulty()).isEqualTo(HabitDifficulty.MEDIUM); // default\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithCustomFrequency() {\n+        // Arrange\n+        HabitFrequencyType frequency = HabitFrequencyType.WEEKLY;\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withName(\"Test Habit\")\n+                .withFrequency(frequency)\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getFrequency()).isEqualTo(frequency);\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithCustomDifficulty() {\n+        // Arrange\n+        HabitDifficulty difficulty = HabitDifficulty.HARD;\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withName(\"Test Habit\")\n+                .withDifficulty(difficulty)\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getDifficulty()).isEqualTo(difficulty);\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithId_whenProvided() {\n+        // Arrange\n+        Long id = 123L;\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withId(id)\n+                .withName(\"Test Habit\")\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getId()).isEqualTo(id);\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithSingleTag() {\n+        // Arrange\n+        String tag = \"fitness\";\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withName(\"Test Habit\")\n+                .withTag(tag)\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getTags()).contains(tag);\n+        assertThat(result.getTags()).hasSize(1);\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithMultipleTags() {\n+        // Arrange\n+        List<String> tags = Arrays.asList(\"fitness\", \"health\", \"daily\");\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withName(\"Test Habit\")\n+                .withTags(tags)\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getTags()).containsAll(tags);\n+        assertThat(result.getTags()).hasSize(3);\n+    }\n+\n+    @Test\n+    void build_shouldCreateHabitWithMixedTags() {\n+        // Arrange\n+        String singleTag = \"fitness\";\n+        List<String> multipleTags = Arrays.asList(\"health\", \"daily\");\n+\n+        // Act\n+        Habit result = habitBuilder\n+                .withName(\"Test Habit\")\n+                .withTag(singleTag)\n+                .withTags(multipleTags)\n+                .build();\n+\n+        // Assert\n+        assertThat(result.getTags()).contains(singleTag);\n+        assertThat(result.getTags()).containsAll(multipleTags);\n+        assertThat(result.getTags()).hasSize(3);\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenNameIsNull() {\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder.build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"Il nome dell'abitudine è obbligatorio\");\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenNameIsEmpty() {\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder.withName(\"\").build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"Il nome dell'abitudine è obbligatorio\");\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenNameIsWhitespace() {\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder.withName(\"   \").build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"Il nome dell'abitudine è obbligatorio\");\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenNameIsTooLong() {\n+        // Arrange\n+        String longName = \"a\".repeat(101); // 101 characters\n+\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder.withName(longName).build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"Il nome non può superare i 100 caratteri\");\n+    }\n+\n+    @Test\n+    void build_shouldAcceptMaxLengthName() {\n+        // Arrange\n+        String maxLengthName = \"a\".repeat(100); // exactly 100 characters\n+\n+        // Act\n+        Habit result = habitBuilder.withName(maxLengthName).build();\n+\n+        // Assert\n+        assertThat(result.getName()).isEqualTo(maxLengthName);\n+        assertThat(result.getName()).hasSize(100);\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenFrequencyIsNull() {\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder\n+                .withName(\"Test Habit\")\n+                .withFrequency(null)\n+                .build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"La frequenza è obbligatoria\");\n+    }\n+\n+    @Test\n+    void build_shouldThrowException_whenDifficultyIsNull() {\n+        // Act & Assert\n+        assertThatThrownBy(() -> habitBuilder\n+                .withName(\"Test Habit\")\n+                .withDifficulty(null)\n+                .build())\n+                .isInstanceOf(IllegalArgumentException.class)\n+                .hasMessage(\"La difficoltà è obbligatoria\");\n+    }\n+\n+    @Test\n+    void withId_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withId(1L);\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withUserId_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withUserId(1L);\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withName_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withName(\"Test\");\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withDescription_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withDescription(\"Test Description\");\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withFrequency_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withFrequency(HabitFrequencyType.WEEKLY);\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withDifficulty_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withDifficulty(HabitDifficulty.EASY);\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withTag_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withTag(\"fitness\");\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+\n+    @Test\n+    void withTags_shouldReturnSameBuilder() {\n+        // Act\n+        HabitBuilder result = habitBuilder.withTags(Arrays.asList(\"tag1\", \"tag2\"));\n+\n+        // Assert\n+        assertThat(result).isSameAs(habitBuilder);\n+    }\n+}",
+                    "refToolCallId": "toolu_014xzPdQxAq7bikjQK77n2Sf"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_019UyVWJNEizgdSdyQZJok4p",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/model/UserTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/UserTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/UserTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/UserTest.java\n@@ -0,0 +1,248 @@\n+package ingsoftware.model;\n+\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+\n+import java.time.LocalDate;\n+import java.util.ArrayList;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+class UserTest {\n+\n+    private User user;\n+\n+    @BeforeEach\n+    void setUp() {\n+        user = new User();\n+    }\n+\n+    @Test\n+    void constructor_shouldCreateUserWithDefaults() {\n+        // Act\n+        User newUser = new User();\n+\n+        // Assert\n+        assertThat(newUser.getLifePoints()).isEqualTo(100);\n+    }\n+\n+    @Test\n+    void constructor_shouldCreateUserWithParameters() {\n+        // Arrange\n+        String username = \"testuser\";\n+        String email = \"test@example.com\";\n+        String passwordHash = \"hashedpassword\";\n+\n+        // Act\n+        User newUser = new User(username, email, passwordHash);\n+\n+        // Assert\n+        assertThat(newUser.getLevel()).isEqualTo(1);\n+        assertThat(newUser.getTotalXp()).isEqualTo(0);\n+        assertThat(newUser.getLastAccessDate()).isEqualTo(LocalDate.now());\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldIncreaseLifePoints_whenPositiveDelta() {\n+        // Arrange\n+        user.addLifePoints(0); // Start at 100\n+        int initialPoints = user.getLifePoints();\n+\n+        // Act\n+        user.addLifePoints(20);\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(initialPoints + 20);\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldDecreaseLifePoints_whenNegativeDelta() {\n+        // Arrange\n+        user.addLifePoints(0); // Start at 100\n+        int initialPoints = user.getLifePoints();\n+\n+        // Act\n+        user.addLifePoints(-30);\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(initialPoints - 30);\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldNotGoBelowZero_whenNegativeDeltaExceedsPoints() {\n+        // Arrange\n+        user.addLifePoints(0); // Start at 100\n+\n+        // Act\n+        user.addLifePoints(-150); // Try to go below zero\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(0);\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldSetToZero_whenExactlyZero() {\n+        // Arrange\n+        user.addLifePoints(0); // Start at 100\n+\n+        // Act\n+        user.addLifePoints(-100); // Exactly zero\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(0);\n+    }\n+\n+    @Test\n+    void addTotalXp_shouldIncreaseXp_whenPositiveXp() {\n+        // Arrange\n+        user.setTotalXp(50);\n+\n+        // Act\n+        user.addTotalXp(25.5);\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(75.5);\n+    }\n+\n+    @Test\n+    void addTotalXp_shouldDecreaseXp_whenNegativeXp() {\n+        // Arrange\n+        user.setTotalXp(100);\n+\n+        // Act\n+        user.addTotalXp(-30.0);\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(70.0);\n+    }\n+\n+    @Test\n+    void addTotalXp_shouldNotGoBelowZero_whenNegativeXpExceedsTotal() {\n+        // Arrange\n+        user.setTotalXp(50);\n+\n+        // Act\n+        user.addTotalXp(-100.0); // Try to go below zero\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(0.0);\n+    }\n+\n+    @Test\n+    void setLevel_shouldUpdateLevel() {\n+        // Act\n+        user.setLevel(5);\n+\n+        // Assert\n+        assertThat(user.getLevel()).isEqualTo(5);\n+    }\n+\n+    @Test\n+    void setLastAccessDate_shouldUpdateLastAccessDate() {\n+        // Arrange\n+        LocalDate testDate = LocalDate.of(2023, 12, 25);\n+\n+        // Act\n+        user.setLastAccessDate(testDate);\n+\n+        // Assert\n+        assertThat(user.getLastAccessDate()).isEqualTo(testDate);\n+    }\n+\n+    @Test\n+    void setId_shouldUpdateId() {\n+        // Arrange\n+        Long testId = 123L;\n+\n+        // Act\n+        user.setId(testId);\n+\n+        // Assert\n+        assertThat(user.getID()).isEqualTo(testId);\n+    }\n+\n+    @Test\n+    void setTotalXp_shouldUpdateXpWithIntegerValue() {\n+        // Act\n+        user.setTotalXp(150);\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(150.0);\n+    }\n+\n+    @Test\n+    void getHabitCompletions_shouldReturnEmptyListByDefault() {\n+        // Act\n+        var completions = user.getHabitCompletions();\n+\n+        // Assert\n+        assertThat(completions).isNotNull();\n+        assertThat(completions).isEmpty();\n+    }\n+\n+    @Test\n+    void setHabitCompletions_shouldUpdateCompletionsList() {\n+        // Arrange\n+        var completions = new ArrayList<HabitCompletion>();\n+        var completion = new HabitCompletion();\n+        completions.add(completion);\n+\n+        // Act\n+        user.setHabitCompletions(completions);\n+\n+        // Assert\n+        assertThat(user.getHabitCompletions()).hasSize(1);\n+        assertThat(user.getHabitCompletions()).contains(completion);\n+    }\n+\n+    @Test\n+    void addTotalXp_shouldHandleDecimalValues() {\n+        // Arrange\n+        user.setTotalXp(0);\n+\n+        // Act\n+        user.addTotalXp(12.75);\n+        user.addTotalXp(7.25);\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(20.0);\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldHandleMultipleOperations() {\n+        // Arrange\n+        int initialPoints = user.getLifePoints(); // 100\n+\n+        // Act\n+        user.addLifePoints(50);  // 150\n+        user.addLifePoints(-20); // 130\n+        user.addLifePoints(10);  // 140\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(140);\n+    }\n+\n+    @Test\n+    void addLifePoints_shouldHandleZeroChange() {\n+        // Arrange\n+        int initialPoints = user.getLifePoints();\n+\n+        // Act\n+        user.addLifePoints(0);\n+\n+        // Assert\n+        assertThat(user.getLifePoints()).isEqualTo(initialPoints);\n+    }\n+\n+    @Test\n+    void addTotalXp_shouldHandleZeroChange() {\n+        // Arrange\n+        user.setTotalXp(50);\n+\n+        // Act\n+        user.addTotalXp(0.0);\n+\n+        // Assert\n+        assertThat(user.getTotalXp()).isEqualTo(50.0);\n+    }\n+}",
+                    "refToolCallId": "toolu_019UyVWJNEizgdSdyQZJok4p"
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me look at the Equipment model to write tests for it:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01GLUMXJLzqpqByGJHPuAQsy",
+                    "statusText": "Viewed file (lines 1:162)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/model/Equipment.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/model/Equipment.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_011VvPm9Pjt56YkXEkydsnNC",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/model/EquipmentTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/EquipmentTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/EquipmentTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/EquipmentTest.java\n@@ -0,0 +1,293 @@\n+package ingsoftware.model;\n+\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+\n+import java.util.Optional;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+class EquipmentTest {\n+\n+    private Equipment equipment;\n+\n+    @BeforeEach\n+    void setUp() {\n+        equipment = new Equipment();\n+    }\n+\n+    @Test\n+    void constructor_shouldCreateEquipmentWithDefaults() {\n+        // Act\n+        Equipment newEquipment = new Equipment();\n+\n+        // Assert\n+        assertThat(newEquipment.getExperienceMultiplier()).isEqualTo(1.0);\n+        assertThat(newEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);\n+        assertThat(newEquipment.isNoneOption()).isFalse();\n+    }\n+\n+    @Test\n+    void createNoneOption_shouldCreateNoneEquipment() {\n+        // Act\n+        Equipment noneEquipment = Equipment.createNoneOption();\n+\n+        // Assert\n+        assertThat(noneEquipment.getName()).isEqualTo(\"Nessuno\");\n+        assertThat(noneEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);\n+        assertThat(noneEquipment.isNoneOption()).isTrue();\n+    }\n+\n+    @Test\n+    void isNoneEquipment_shouldReturnTrue_whenStateIsNone() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.NONE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isNoneEquipment()).isTrue();\n+    }\n+\n+    @Test\n+    void isNoneEquipment_shouldReturnFalse_whenStateIsActive() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isNoneEquipment()).isFalse();\n+    }\n+\n+    @Test\n+    void isNoneEquipment_shouldReturnFalse_whenStateIsInactive() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.INACTIVE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isNoneEquipment()).isFalse();\n+    }\n+\n+    @Test\n+    void isActive_shouldReturnTrue_whenStateIsActive() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isActive()).isTrue();\n+    }\n+\n+    @Test\n+    void isActive_shouldReturnFalse_whenStateIsNone() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.NONE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isActive()).isFalse();\n+    }\n+\n+    @Test\n+    void isActive_shouldReturnFalse_whenStateIsInactive() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.INACTIVE);\n+\n+        // Act & Assert\n+        assertThat(equipment.isActive()).isFalse();\n+    }\n+\n+    @Test\n+    void getStatusDisplay_shouldReturnCorrectDisplay_forEachState() {\n+        // Test NONE state\n+        equipment.setState(Equipment.EquipmentState.NONE);\n+        assertThat(equipment.getStatusDisplay()).isEqualTo(\"➖ Non equipaggiato\");\n+\n+        // Test ACTIVE state\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+        assertThat(equipment.getStatusDisplay()).isEqualTo(\"🟢 Attivo\");\n+\n+        // Test INACTIVE state\n+        equipment.setState(Equipment.EquipmentState.INACTIVE);\n+        assertThat(equipment.getStatusDisplay()).isEqualTo(\"🔴 Disattivato\");\n+    }\n+\n+    @Test\n+    void getMultiplierDisplay_shouldReturn1_0x_whenNoneEquipment() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.NONE);\n+\n+        // Act & Assert\n+        assertThat(equipment.getMultiplierDisplay()).isEqualTo(\"1.0x\");\n+    }\n+\n+    @Test\n+    void getMultiplierDisplay_shouldReturnFormattedMultiplier_whenNotNoneEquipment() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+        equipment.setExperienceMultiplier(1.5);\n+\n+        // Act & Assert\n+        assertThat(equipment.getMultiplierDisplay()).isEqualTo(\"1.5x\");\n+    }\n+\n+    @Test\n+    void getMultiplierDisplay_shouldHandleDecimalValues() {\n+        // Arrange\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+        equipment.setExperienceMultiplier(2.75);\n+\n+        // Act & Assert\n+        assertThat(equipment.getMultiplierDisplay()).isEqualTo(\"2.8x\"); // Rounded to 1 decimal place\n+    }\n+\n+    @Test\n+    void getType_shouldReturnOptionalEmpty_whenTypeIsNull() {\n+        // Act\n+        Optional<EquipmentType> result = equipment.getType();\n+\n+        // Assert\n+        assertThat(result).isEmpty();\n+    }\n+\n+    @Test\n+    void getType_shouldReturnOptionalWithType_whenTypeIsSet() {\n+        // Arrange\n+        equipment.setType(EquipmentType.WEAPON);\n+\n+        // Act\n+        Optional<EquipmentType> result = equipment.getType();\n+\n+        // Assert\n+        assertThat(result).isPresent();\n+        assertThat(result.get()).isEqualTo(EquipmentType.WEAPON);\n+    }\n+\n+    @Test\n+    void setState_shouldHandleNullState() {\n+        // Act\n+        equipment.setState(null);\n+\n+        // Assert\n+        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);\n+    }\n+\n+    @Test\n+    void setState_shouldSetStateCorrectly() {\n+        // Act\n+        equipment.setState(Equipment.EquipmentState.ACTIVE);\n+\n+        // Assert\n+        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);\n+    }\n+\n+    @Test\n+    void settersAndGetters_shouldWorkCorrectly() {\n+        // Arrange\n+        Long id = 123L;\n+        String name = \"Test Equipment\";\n+        String description = \"Test Description\";\n+        double multiplier = 1.5;\n+\n+        // Act\n+        equipment.setId(id);\n+        equipment.setName(name);\n+        equipment.setDescription(description);\n+        equipment.setExperienceMultiplier(multiplier);\n+\n+        // Assert\n+        assertThat(equipment.getId()).isEqualTo(id);\n+        assertThat(equipment.getName()).isEqualTo(name);\n+        assertThat(equipment.getDescription()).isEqualTo(description);\n+        assertThat(equipment.getExperienceMultiplier()).isEqualTo(multiplier);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnTrue_whenSameId() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        equipment1.setId(1L);\n+\n+        Equipment equipment2 = new Equipment();\n+        equipment2.setId(1L);\n+\n+        // Act & Assert\n+        assertThat(equipment1).isEqualTo(equipment2);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnFalse_whenDifferentId() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        equipment1.setId(1L);\n+\n+        Equipment equipment2 = new Equipment();\n+        equipment2.setId(2L);\n+\n+        // Act & Assert\n+        assertThat(equipment1).isNotEqualTo(equipment2);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnFalse_whenOneIdIsNull() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        equipment1.setId(1L);\n+\n+        Equipment equipment2 = new Equipment();\n+        // id is null\n+\n+        // Act & Assert\n+        assertThat(equipment1).isNotEqualTo(equipment2);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnTrue_whenBothIdsAreNull() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        Equipment equipment2 = new Equipment();\n+        // both ids are null\n+\n+        // Act & Assert\n+        assertThat(equipment1).isEqualTo(equipment2);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnTrue_whenSameObject() {\n+        // Act & Assert\n+        assertThat(equipment).isEqualTo(equipment);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnFalse_whenComparedToNull() {\n+        // Act & Assert\n+        assertThat(equipment).isNotEqualTo(null);\n+    }\n+\n+    @Test\n+    void equals_shouldReturnFalse_whenComparedToDifferentClass() {\n+        // Act & Assert\n+        assertThat(equipment).isNotEqualTo(\"not an equipment\");\n+    }\n+\n+    @Test\n+    void hashCode_shouldBeSame_whenSameId() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        equipment1.setId(1L);\n+\n+        Equipment equipment2 = new Equipment();\n+        equipment2.setId(1L);\n+\n+        // Act & Assert\n+        assertThat(equipment1.hashCode()).isEqualTo(equipment2.hashCode());\n+    }\n+\n+    @Test\n+    void hashCode_shouldBeDifferent_whenDifferentId() {\n+        // Arrange\n+        Equipment equipment1 = new Equipment();\n+        equipment1.setId(1L);\n+\n+        Equipment equipment2 = new Equipment();\n+        equipment2.setId(2L);\n+\n+        // Act & Assert\n+        assertThat(equipment1.hashCode()).isNotEqualTo(equipment2.hashCode());\n+    }\n+}",
+                    "refToolCallId": "toolu_011VvPm9Pjt56YkXEkydsnNC"
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me create tests for some exceptions to ensure proper error handling:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_014S774BJWnqBMRgbQceAWhD",
+                    "statusText": "Viewed file (lines 1:8)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/exception/UserNotFoundException.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/exception/UserNotFoundException.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01AvnaUAVci3hjuU5JLDdwLH",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java\n@@ -0,0 +1,53 @@\n+package ingsoftware.exception;\n+\n+import org.junit.jupiter.api.Test;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+\n+class UserNotFoundExceptionTest {\n+\n+    @Test\n+    void constructor_shouldCreateExceptionWithFormattedMessage() {\n+        // Arrange\n+        Long userId = 123L;\n+\n+        // Act\n+        UserNotFoundException exception = new UserNotFoundException(userId);\n+\n+        // Assert\n+        assertThat(exception.getMessage()).isEqualTo(\"User with id 123 not found\");\n+    }\n+\n+    @Test\n+    void constructor_shouldHandleLargeUserId() {\n+        // Arrange\n+        Long userId = 999999999L;\n+\n+        // Act\n+        UserNotFoundException exception = new UserNotFoundException(userId);\n+\n+        // Assert\n+        assertThat(exception.getMessage()).isEqualTo(\"User with id 999999999 not found\");\n+    }\n+\n+    @Test\n+    void constructor_shouldHandleZeroUserId() {\n+        // Arrange\n+        Long userId = 0L;\n+\n+        // Act\n+        UserNotFoundException exception = new UserNotFoundException(userId);\n+\n+        // Assert\n+        assertThat(exception.getMessage()).isEqualTo(\"User with id 0 not found\");\n+    }\n+\n+    @Test\n+    void exception_shouldBeInstanceOfRuntimeException() {\n+        // Arrange & Act\n+        UserNotFoundException exception = new UserNotFoundException(1L);\n+\n+        // Assert\n+        assertThat(exception).isInstanceOf(RuntimeException.class);\n+    }\n+}",
+                    "refToolCallId": "toolu_01AvnaUAVci3hjuU5JLDdwLH"
+                },
+                {
+                    "type": "codePatch",
+                    "diffs": [
+                        {
+                            "path": "src/test/java/ingsoftware/service/UserServiceTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/UserServiceTest.java",
+                            "patch": "@@ -0,0 +1,4493 @@\n+package ingsoftware.service;%0D%0A%0D%0Aimport ingsoftware.exception.UserNotFoundException;%0D%0Aimport ingsoftware.model.User;%0D%0Aimport ingsoftware.repository.UserRepository;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0Aimport org.mockito.InjectMocks;%0D%0Aimport org.mockito.Mock;%0D%0Aimport org.mockito.MockitoAnnotations;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.util.Optional;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0Aimport static org.assertj.core.api.Assertions.assertThatThrownBy;%0D%0Aimport static org.mockito.Mockito.*;%0D%0A%0D%0Aclass UserServiceTest %7B%0D%0A%0D%0A    @Mock%0D%0A    private UserRepository userRepository;%0D%0A%0D%0A    @InjectMocks%0D%0A    private UserService userService;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        MockitoAnnotations.openMocks(this);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isFirstAccessOfDay_shouldReturnTrue_whenLastAccessDateIsNull() %7B%0D%0A        // Arrange%0D%0A        User user = new User();%0D%0A        // lastAccessDate is null by default%0D%0A        LocalDate currentDate = LocalDate.now();%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.isFirstAccessOfDay(user, currentDate);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isTrue();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isFirstAccessOfDay_shouldReturnTrue_whenLastAccessDateIsBeforeCurrentDate() %7B%0D%0A        // Arrange%0D%0A        User user = new User();%0D%0A        LocalDate currentDate = LocalDate.now();%0D%0A        LocalDate lastAccessDate = currentDate.minusDays(1);%0D%0A        user.setLastAccessDate(lastAccessDate);%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.isFirstAccessOfDay(user, currentDate);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isTrue();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isFirstAccessOfDay_shouldReturnFalse_whenLastAccessDateIsSameAsCurrentDate() %7B%0D%0A        // Arrange%0D%0A        User user = new User();%0D%0A        LocalDate currentDate = LocalDate.now();%0D%0A        user.setLastAccessDate(currentDate);%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.isFirstAccessOfDay(user, currentDate);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isFirstAccessOfDay_shouldReturnFalse_whenLastAccessDateIsAfterCurrentDate() %7B%0D%0A        // Arrange%0D%0A        User user = new User();%0D%0A        LocalDate currentDate = LocalDate.now();%0D%0A        LocalDate lastAccessDate = currentDate.plusDays(1);%0D%0A        user.setLastAccessDate(lastAccessDate);%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.isFirstAccessOfDay(user, currentDate);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void saveUser_shouldCallRepositorySave() %7B%0D%0A        // Arrange%0D%0A        User user = new User();%0D%0A        user.setId(1L);%0D%0A%0D%0A        // Act%0D%0A        userService.saveUser(user);%0D%0A%0D%0A        // Assert%0D%0A        verify(userRepository, times(1)).save(user);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findUserOrThrow_shouldReturnUser_whenUserExists() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        User expectedUser = new User();%0D%0A        expectedUser.setId(userId);%0D%0A        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));%0D%0A%0D%0A        // Act%0D%0A        User result = userService.findUserOrThrow(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(expectedUser);%0D%0A        verify(userRepository, times(1)).findById(userId);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findUserOrThrow_shouldThrowUserNotFoundException_whenUserDoesNotExist() %7B%0D%0A        // Arrange%0D%0A        Long userId = 999L;%0D%0A        when(userRepository.findById(userId)).thenReturn(Optional.empty());%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E userService.findUserOrThrow(userId))%0D%0A                .isInstanceOf(UserNotFoundException.class);%0D%0A        %0D%0A        verify(userRepository, times(1)).findById(userId);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void checkDefaultUser_shouldReturnTrue_whenNoUsersExist() %7B%0D%0A        // Arrange%0D%0A        when(userRepository.count()).thenReturn(0L);%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.checkDefaultUser();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isTrue();%0D%0A        verify(userRepository, times(1)).count();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void checkDefaultUser_shouldReturnFalse_whenUsersExist() %7B%0D%0A        // Arrange%0D%0A        when(userRepository.count()).thenReturn(5L);%0D%0A%0D%0A        // Act%0D%0A        boolean result = userService.checkDefaultUser();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isFalse();%0D%0A        verify(userRepository, times(1)).count();%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630061
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/model/UserTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/UserTest.java",
+                            "patch": "@@ -0,0 +1,6035 @@\n+package ingsoftware.model;%0D%0A%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.util.ArrayList;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0Aclass UserTest %7B%0D%0A%0D%0A    private User user;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        user = new User();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldCreateUserWithDefaults() %7B%0D%0A        // Act%0D%0A        User newUser = new User();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(newUser.getLifePoints()).isEqualTo(100);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldCreateUserWithParameters() %7B%0D%0A        // Arrange%0D%0A        String username = %22testuser%22;%0D%0A        String email = %22test@example.com%22;%0D%0A        String passwordHash = %22hashedpassword%22;%0D%0A%0D%0A        // Act%0D%0A        User newUser = new User(username, email, passwordHash);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(newUser.getLevel()).isEqualTo(1);%0D%0A        assertThat(newUser.getTotalXp()).isEqualTo(0);%0D%0A        assertThat(newUser.getLastAccessDate()).isEqualTo(LocalDate.now());%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldIncreaseLifePoints_whenPositiveDelta() %7B%0D%0A        // Arrange%0D%0A        user.addLifePoints(0); // Start at 100%0D%0A        int initialPoints = user.getLifePoints();%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(20);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(initialPoints + 20);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldDecreaseLifePoints_whenNegativeDelta() %7B%0D%0A        // Arrange%0D%0A        user.addLifePoints(0); // Start at 100%0D%0A        int initialPoints = user.getLifePoints();%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(-30);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(initialPoints - 30);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldNotGoBelowZero_whenNegativeDeltaExceedsPoints() %7B%0D%0A        // Arrange%0D%0A        user.addLifePoints(0); // Start at 100%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(-150); // Try to go below zero%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldSetToZero_whenExactlyZero() %7B%0D%0A        // Arrange%0D%0A        user.addLifePoints(0); // Start at 100%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(-100); // Exactly zero%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addTotalXp_shouldIncreaseXp_whenPositiveXp() %7B%0D%0A        // Arrange%0D%0A        user.setTotalXp(50);%0D%0A%0D%0A        // Act%0D%0A        user.addTotalXp(25.5);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(75.5);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addTotalXp_shouldDecreaseXp_whenNegativeXp() %7B%0D%0A        // Arrange%0D%0A        user.setTotalXp(100);%0D%0A%0D%0A        // Act%0D%0A        user.addTotalXp(-30.0);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(70.0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addTotalXp_shouldNotGoBelowZero_whenNegativeXpExceedsTotal() %7B%0D%0A        // Arrange%0D%0A        user.setTotalXp(50);%0D%0A%0D%0A        // Act%0D%0A        user.addTotalXp(-100.0); // Try to go below zero%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(0.0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setLevel_shouldUpdateLevel() %7B%0D%0A        // Act%0D%0A        user.setLevel(5);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLevel()).isEqualTo(5);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setLastAccessDate_shouldUpdateLastAccessDate() %7B%0D%0A        // Arrange%0D%0A        LocalDate testDate = LocalDate.of(2023, 12, 25);%0D%0A%0D%0A        // Act%0D%0A        user.setLastAccessDate(testDate);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLastAccessDate()).isEqualTo(testDate);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setId_shouldUpdateId() %7B%0D%0A        // Arrange%0D%0A        Long testId = 123L;%0D%0A%0D%0A        // Act%0D%0A        user.setId(testId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getID()).isEqualTo(testId);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setTotalXp_shouldUpdateXpWithIntegerValue() %7B%0D%0A        // Act%0D%0A        user.setTotalXp(150);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(150.0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getHabitCompletions_shouldReturnEmptyListByDefault() %7B%0D%0A        // Act%0D%0A        var completions = user.getHabitCompletions();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(completions).isNotNull();%0D%0A        assertThat(completions).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setHabitCompletions_shouldUpdateCompletionsList() %7B%0D%0A        // Arrange%0D%0A        var completions = new ArrayList%3CHabitCompletion%3E();%0D%0A        var completion = new HabitCompletion();%0D%0A        completions.add(completion);%0D%0A%0D%0A        // Act%0D%0A        user.setHabitCompletions(completions);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getHabitCompletions()).hasSize(1);%0D%0A        assertThat(user.getHabitCompletions()).contains(completion);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addTotalXp_shouldHandleDecimalValues() %7B%0D%0A        // Arrange%0D%0A        user.setTotalXp(0);%0D%0A%0D%0A        // Act%0D%0A        user.addTotalXp(12.75);%0D%0A        user.addTotalXp(7.25);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(20.0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldHandleMultipleOperations() %7B%0D%0A        // Arrange%0D%0A        int initialPoints = user.getLifePoints(); // 100%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(50);  // 150%0D%0A        user.addLifePoints(-20); // 130%0D%0A        user.addLifePoints(10);  // 140%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(140);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addLifePoints_shouldHandleZeroChange() %7B%0D%0A        // Arrange%0D%0A        int initialPoints = user.getLifePoints();%0D%0A%0D%0A        // Act%0D%0A        user.addLifePoints(0);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getLifePoints()).isEqualTo(initialPoints);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void addTotalXp_shouldHandleZeroChange() %7B%0D%0A        // Arrange%0D%0A        user.setTotalXp(50);%0D%0A%0D%0A        // Act%0D%0A        user.addTotalXp(0.0);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(user.getTotalXp()).isEqualTo(50.0);%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630124
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/service/LifePointCalculatorTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/LifePointCalculatorTest.java",
+                            "patch": "@@ -0,0 +1,7304 @@\n+package ingsoftware.service;%0D%0A%0D%0Aimport ingsoftware.model.Habit;%0D%0Aimport ingsoftware.model.HabitDifficulty;%0D%0Aimport ingsoftware.model.HabitFrequencyType;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0A%0D%0Aimport java.time.LocalDate;%0D%0Aimport java.util.ArrayList;%0D%0Aimport java.util.Arrays;%0D%0Aimport java.util.Collections;%0D%0Aimport java.util.List;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0Aclass LifePointCalculatorTest %7B%0D%0A%0D%0A    private LifePointCalculator lifePointCalculator;%0D%0A    private List%3CHabit%3E habits;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        lifePointCalculator = new LifePointCalculator();%0D%0A        habits = new ArrayList%3C%3E();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnZero_whenHabitsListIsEmpty() %7B%0D%0A        // Arrange%0D%0A        double thresholdPercent = 80.0;%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(Collections.emptyList(), thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(0);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnBonus_whenCompletionRateAboveThreshold() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit1 = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit completedHabit2 = createCompletedHabit(%22Habit 2%22);%0D%0A        Habit incompleteHabit = createIncompleteHabit(%22Habit 3%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit1, completedHabit2, incompleteHabit);%0D%0A        double thresholdPercent = 60.0; // 2/3 = 66.67%25 %3E 60%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(10); // default bonus%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnMalus_whenCompletionRateBelowThreshold() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit1 = createIncompleteHabit(%22Habit 2%22);%0D%0A        Habit incompleteHabit2 = createIncompleteHabit(%22Habit 3%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit, incompleteHabit1, incompleteHabit2);%0D%0A        double thresholdPercent = 50.0; // 1/3 = 33.33%25 %3C 50%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(-5); // default malus%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnBonus_whenCompletionRateEqualsThreshold() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit = createIncompleteHabit(%22Habit 2%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit, incompleteHabit);%0D%0A        double thresholdPercent = 50.0; // 1/2 = 50%25 == 50%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(10); // should return bonus when equal%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnBonus_whenAllHabitsCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit1 = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit completedHabit2 = createCompletedHabit(%22Habit 2%22);%0D%0A        Habit completedHabit3 = createCompletedHabit(%22Habit 3%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit1, completedHabit2, completedHabit3);%0D%0A        double thresholdPercent = 80.0; // 3/3 = 100%25 %3E 80%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(10);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnMalus_whenNoHabitsCompleted() %7B%0D%0A        // Arrange%0D%0A        Habit incompleteHabit1 = createIncompleteHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit2 = createIncompleteHabit(%22Habit 2%22);%0D%0A        %0D%0A        habits = Arrays.asList(incompleteHabit1, incompleteHabit2);%0D%0A        double thresholdPercent = 10.0; // 0/2 = 0%25 %3C 10%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(-5);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldUseCustomBonusAndMalus() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit = createIncompleteHabit(%22Habit 2%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit, incompleteHabit);%0D%0A        double thresholdPercent = 60.0; // 1/2 = 50%25 %3C 60%25%0D%0A        int customBonus = 20;%0D%0A        int customMalus = -10;%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent, customBonus, customMalus);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(customMalus);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldReturnCustomBonus_whenThresholdMet() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit = createIncompleteHabit(%22Habit 2%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit, incompleteHabit);%0D%0A        double thresholdPercent = 40.0; // 1/2 = 50%25 %3E 40%25%0D%0A        int customBonus = 15;%0D%0A        int customMalus = -8;%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent, customBonus, customMalus);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(customBonus);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldHandleHighThreshold() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit1 = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit completedHabit2 = createCompletedHabit(%22Habit 2%22);%0D%0A        Habit incompleteHabit = createIncompleteHabit(%22Habit 3%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit1, completedHabit2, incompleteHabit);%0D%0A        double thresholdPercent = 70.0; // 2/3 = 66.67%25 %3C 70%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(-5); // should return malus%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void compute_shouldHandleLowThreshold() %7B%0D%0A        // Arrange%0D%0A        Habit completedHabit = createCompletedHabit(%22Habit 1%22);%0D%0A        Habit incompleteHabit1 = createIncompleteHabit(%22Habit 2%22);%0D%0A        Habit incompleteHabit2 = createIncompleteHabit(%22Habit 3%22);%0D%0A        Habit incompleteHabit3 = createIncompleteHabit(%22Habit 4%22);%0D%0A        %0D%0A        habits = Arrays.asList(completedHabit, incompleteHabit1, incompleteHabit2, incompleteHabit3);%0D%0A        double thresholdPercent = 20.0; // 1/4 = 25%25 %3E 20%25%0D%0A%0D%0A        // Act%0D%0A        int result = lifePointCalculator.compute(habits, thresholdPercent);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEqualTo(10); // should return bonus%0D%0A    %7D%0D%0A%0D%0A    private Habit createCompletedHabit(String name) %7B%0D%0A        Habit habit = new Habit();%0D%0A        habit.setName(name);%0D%0A        habit.setFrequency(HabitFrequencyType.DAILY);%0D%0A        habit.setDifficulty(HabitDifficulty.MEDIUM);%0D%0A        habit.setLastCompletedDate(LocalDate.now()); // completed today%0D%0A        return habit;%0D%0A    %7D%0D%0A%0D%0A    private Habit createIncompleteHabit(String name) %7B%0D%0A        Habit habit = new Habit();%0D%0A        habit.setName(name);%0D%0A        habit.setFrequency(HabitFrequencyType.DAILY);%0D%0A        habit.setDifficulty(HabitDifficulty.MEDIUM);%0D%0A        habit.setLastCompletedDate(LocalDate.now().minusDays(1)); // not completed today%0D%0A        return habit;%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630184
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/service/EquipmentServiceTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/service/EquipmentServiceTest.java",
+                            "patch": "@@ -0,0 +1,11608 @@\n+package ingsoftware.service;%0D%0A%0D%0Aimport ingsoftware.model.Equipment;%0D%0Aimport ingsoftware.model.EquipmentType;%0D%0Aimport ingsoftware.model.User;%0D%0Aimport ingsoftware.repository.EquipmentRepository;%0D%0Aimport ingsoftware.repository.UserRepository;%0D%0Aimport javafx.collections.ObservableList;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0Aimport org.mockito.InjectMocks;%0D%0Aimport org.mockito.Mock;%0D%0Aimport org.mockito.MockitoAnnotations;%0D%0A%0D%0Aimport java.util.*;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0Aimport static org.assertj.core.api.Assertions.assertThatThrownBy;%0D%0Aimport static org.mockito.ArgumentMatchers.any;%0D%0Aimport static org.mockito.ArgumentMatchers.eq;%0D%0Aimport static org.mockito.Mockito.*;%0D%0A%0D%0Aclass EquipmentServiceTest %7B%0D%0A%0D%0A    @Mock%0D%0A    private EquipmentRepository equipmentRepository;%0D%0A%0D%0A    @Mock%0D%0A    private UserRepository userRepository;%0D%0A%0D%0A    @InjectMocks%0D%0A    private EquipmentService equipmentService;%0D%0A%0D%0A    private Equipment testEquipment;%0D%0A    private User testUser;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        MockitoAnnotations.openMocks(this);%0D%0A        %0D%0A        testEquipment = new Equipment();%0D%0A        testEquipment.setId(1L);%0D%0A        testEquipment.setName(%22Test Equipment%22);%0D%0A        testEquipment.setType(EquipmentType.WEAPON);%0D%0A        testEquipment.setState(Equipment.EquipmentState.INACTIVE);%0D%0A        %0D%0A        testUser = new User();%0D%0A        testUser.setId(1L);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getAllEquipmentGroupedByType_shouldReturnEquipmentGroupedByType_includingNoneOptions() %7B%0D%0A        // Arrange%0D%0A        Equipment weapon = new Equipment();%0D%0A        weapon.setId(1L);%0D%0A        weapon.setName(%22Sword%22);%0D%0A        weapon.setType(EquipmentType.WEAPON);%0D%0A%0D%0A        Equipment armor = new Equipment();%0D%0A        armor.setId(2L);%0D%0A        armor.setName(%22Shield%22);%0D%0A        armor.setType(EquipmentType.ARMOR);%0D%0A%0D%0A        when(equipmentRepository.findAll()).thenReturn(Arrays.asList(weapon, armor));%0D%0A%0D%0A        // Act%0D%0A        Map%3CEquipmentType, ObservableList%3CEquipment%3E%3E result = equipmentService.getAllEquipmentGroupedByType();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isNotNull();%0D%0A        assertThat(result).hasSize(EquipmentType.values().length);%0D%0A        %0D%0A        // Check that each type has at least the %22None%22 option%0D%0A        for (EquipmentType type : EquipmentType.values()) %7B%0D%0A            assertThat(result.get(type)).isNotNull();%0D%0A            assertThat(result.get(type)).isNotEmpty();%0D%0A            %0D%0A            // Check for %22None%22 option%0D%0A            boolean hasNoneOption = result.get(type).stream()%0D%0A                    .anyMatch(eq -%3E eq.getName().startsWith(%22Nessun%22));%0D%0A            assertThat(hasNoneOption).isTrue();%0D%0A        %7D%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findAllEquippedByUser_shouldReturnActiveEquipmentByType() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        %0D%0A        Equipment activeWeapon = new Equipment();%0D%0A        activeWeapon.setId(1L);%0D%0A        activeWeapon.setType(EquipmentType.WEAPON);%0D%0A        activeWeapon.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        Equipment activeArmor = new Equipment();%0D%0A        activeArmor.setId(2L);%0D%0A        activeArmor.setType(EquipmentType.ARMOR);%0D%0A        activeArmor.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Arrays.asList(activeWeapon, activeArmor));%0D%0A%0D%0A        // Act%0D%0A        Map%3CEquipmentType, Equipment%3E result = equipmentService.findAllEquippedByUser(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).hasSize(2);%0D%0A        assertThat(result.get(EquipmentType.WEAPON)).isEqualTo(activeWeapon);%0D%0A        assertThat(result.get(EquipmentType.ARMOR)).isEqualTo(activeArmor);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findAllEquippedByUser_shouldHandleEmptyResult() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Collections.emptyList());%0D%0A%0D%0A        // Act%0D%0A        Map%3CEquipmentType, Equipment%3E result = equipmentService.findAllEquippedByUser(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findAllEquippedByUser_shouldFilterEquipmentWithoutType() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        %0D%0A        Equipment equipmentWithType = new Equipment();%0D%0A        equipmentWithType.setId(1L);%0D%0A        equipmentWithType.setType(EquipmentType.WEAPON);%0D%0A        equipmentWithType.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        Equipment equipmentWithoutType = new Equipment();%0D%0A        equipmentWithoutType.setId(2L);%0D%0A        equipmentWithoutType.setState(Equipment.EquipmentState.ACTIVE);%0D%0A        // type is not set (Optional.empty())%0D%0A%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Arrays.asList(equipmentWithType, equipmentWithoutType));%0D%0A%0D%0A        // Act%0D%0A        Map%3CEquipmentType, Equipment%3E result = equipmentService.findAllEquippedByUser(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).hasSize(1);%0D%0A        assertThat(result.get(EquipmentType.WEAPON)).isEqualTo(equipmentWithType);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equip_shouldEquipItem_andUnequipSameType() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        Long equipmentId = 1L;%0D%0A        %0D%0A        Equipment newEquipment = new Equipment();%0D%0A        newEquipment.setId(equipmentId);%0D%0A        newEquipment.setType(EquipmentType.WEAPON);%0D%0A        newEquipment.setState(Equipment.EquipmentState.INACTIVE);%0D%0A%0D%0A        Equipment oldEquipment = new Equipment();%0D%0A        oldEquipment.setId(2L);%0D%0A        oldEquipment.setType(EquipmentType.WEAPON);%0D%0A        oldEquipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(newEquipment));%0D%0A        when(equipmentRepository.findByTypeAndState(EquipmentType.WEAPON, Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Optional.of(oldEquipment));%0D%0A        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -%3E invocation.getArgument(0));%0D%0A%0D%0A        // Act%0D%0A        Equipment result = equipmentService.equip(userId, equipmentId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);%0D%0A        verify(equipmentRepository).save(oldEquipment); // Should save unequipped item%0D%0A        verify(equipmentRepository).save(newEquipment); // Should save equipped item%0D%0A        assertThat(oldEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equip_shouldThrowException_whenEquipmentNotFound() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        Long equipmentId = 999L;%0D%0A        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.empty());%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E equipmentService.equip(userId, equipmentId))%0D%0A                .isInstanceOf(RuntimeException.class)%0D%0A                .hasMessage(%22Equipaggiamento non trovato%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equip_shouldThrowException_whenEquipmentHasNoType() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        Long equipmentId = 1L;%0D%0A        %0D%0A        Equipment equipmentWithoutType = new Equipment();%0D%0A        equipmentWithoutType.setId(equipmentId);%0D%0A        equipmentWithoutType.setState(Equipment.EquipmentState.INACTIVE);%0D%0A        // type is not set%0D%0A%0D%0A        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(equipmentWithoutType));%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E equipmentService.equip(userId, equipmentId))%0D%0A                .isInstanceOf(IllegalStateException.class)%0D%0A                .hasMessage(%22L'equipaggiamento deve avere un tipo per essere equipaggiato%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void unequip_shouldUnequipActiveEquipment() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        EquipmentType type = EquipmentType.WEAPON;%0D%0A        %0D%0A        Equipment activeEquipment = new Equipment();%0D%0A        activeEquipment.setId(1L);%0D%0A        activeEquipment.setType(type);%0D%0A        activeEquipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Optional.of(activeEquipment));%0D%0A        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -%3E invocation.getArgument(0));%0D%0A%0D%0A        // Act%0D%0A        equipmentService.unequip(userId, type);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(activeEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);%0D%0A        verify(equipmentRepository).save(activeEquipment);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void unequip_shouldDoNothing_whenNoActiveEquipmentOfType() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        EquipmentType type = EquipmentType.WEAPON;%0D%0A        %0D%0A        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Optional.empty());%0D%0A%0D%0A        // Act%0D%0A        equipmentService.unequip(userId, type);%0D%0A%0D%0A        // Assert%0D%0A        verify(equipmentRepository, never()).save(any(Equipment.class));%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void refreshCache_shouldClearCacheAndReloadFromRepository() %7B%0D%0A        // Arrange%0D%0A        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Collections.emptyList());%0D%0A%0D%0A        // Act%0D%0A        equipmentService.refreshCache();%0D%0A%0D%0A        // Assert%0D%0A        verify(userRepository).findById(1L);%0D%0A        verify(equipmentRepository).findByStateEquals(Equipment.EquipmentState.ACTIVE);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findEquippedByUserAndType_shouldReturnEquipmentFromCache() %7B%0D%0A        // This test verifies the cache functionality, but since the cache is private,%0D%0A        // we need to setup the cache first through refreshCache%0D%0A        %0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        EquipmentType type = EquipmentType.WEAPON;%0D%0A        %0D%0A        Equipment cachedEquipment = new Equipment();%0D%0A        cachedEquipment.setId(1L);%0D%0A        cachedEquipment.setType(type);%0D%0A        cachedEquipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Arrays.asList(cachedEquipment));%0D%0A%0D%0A        // Setup cache%0D%0A        equipmentService.refreshCache();%0D%0A        %0D%0A        // Act%0D%0A        Optional%3CEquipment%3E result = equipmentService.findEquippedByUserAndType(userId, type);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isPresent();%0D%0A        assertThat(result.get()).isEqualTo(cachedEquipment);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void findEquippedByUserAndType_shouldReturnEmpty_whenNotInCache() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        EquipmentType type = EquipmentType.WEAPON;%0D%0A        %0D%0A        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));%0D%0A        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))%0D%0A                .thenReturn(Collections.emptyList());%0D%0A%0D%0A        // Setup empty cache%0D%0A        equipmentService.refreshCache();%0D%0A        %0D%0A        // Act%0D%0A        Optional%3CEquipment%3E result = equipmentService.findEquippedByUserAndType(userId, type);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEmpty();%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630220
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/exception/UserNotFoundExceptionTest.java",
+                            "patch": "@@ -0,0 +1,1426 @@\n+package ingsoftware.exception;%0D%0A%0D%0Aimport org.junit.jupiter.api.Test;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0Aclass UserNotFoundExceptionTest %7B%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldCreateExceptionWithFormattedMessage() %7B%0D%0A        // Arrange%0D%0A        Long userId = 123L;%0D%0A%0D%0A        // Act%0D%0A        UserNotFoundException exception = new UserNotFoundException(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(exception.getMessage()).isEqualTo(%22User with id 123 not found%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldHandleLargeUserId() %7B%0D%0A        // Arrange%0D%0A        Long userId = 999999999L;%0D%0A%0D%0A        // Act%0D%0A        UserNotFoundException exception = new UserNotFoundException(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(exception.getMessage()).isEqualTo(%22User with id 999999999 not found%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldHandleZeroUserId() %7B%0D%0A        // Arrange%0D%0A        Long userId = 0L;%0D%0A%0D%0A        // Act%0D%0A        UserNotFoundException exception = new UserNotFoundException(userId);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(exception.getMessage()).isEqualTo(%22User with id 0 not found%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void exception_shouldBeInstanceOfRuntimeException() %7B%0D%0A        // Arrange & Act%0D%0A        UserNotFoundException exception = new UserNotFoundException(1L);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(exception).isInstanceOf(RuntimeException.class);%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630265
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/model/builder/HabitBuilderTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/builder/HabitBuilderTest.java",
+                            "patch": "@@ -0,0 +1,8346 @@\n+package ingsoftware.model.builder;%0D%0A%0D%0Aimport ingsoftware.model.Habit;%0D%0Aimport ingsoftware.model.HabitDifficulty;%0D%0Aimport ingsoftware.model.HabitFrequencyType;%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0A%0D%0Aimport java.util.Arrays;%0D%0Aimport java.util.List;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0Aimport static org.assertj.core.api.Assertions.assertThatThrownBy;%0D%0A%0D%0Aclass HabitBuilderTest %7B%0D%0A%0D%0A    private HabitBuilder habitBuilder;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        habitBuilder = new HabitBuilder();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithRequiredFields() %7B%0D%0A        // Arrange%0D%0A        Long userId = 1L;%0D%0A        String name = %22Test Habit%22;%0D%0A        String description = %22Test Description%22;%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withUserId(userId)%0D%0A                .withName(name)%0D%0A                .withDescription(description)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isNotNull();%0D%0A        assertThat(result.getUserId()).isEqualTo(userId);%0D%0A        assertThat(result.getName()).isEqualTo(name);%0D%0A        assertThat(result.getDescription()).isEqualTo(description);%0D%0A        assertThat(result.getFrequency()).isEqualTo(HabitFrequencyType.DAILY); // default%0D%0A        assertThat(result.getDifficulty()).isEqualTo(HabitDifficulty.MEDIUM); // default%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithCustomFrequency() %7B%0D%0A        // Arrange%0D%0A        HabitFrequencyType frequency = HabitFrequencyType.WEEKLY;%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withFrequency(frequency)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getFrequency()).isEqualTo(frequency);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithCustomDifficulty() %7B%0D%0A        // Arrange%0D%0A        HabitDifficulty difficulty = HabitDifficulty.HARD;%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withDifficulty(difficulty)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getDifficulty()).isEqualTo(difficulty);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithId_whenProvided() %7B%0D%0A        // Arrange%0D%0A        Long id = 123L;%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withId(id)%0D%0A                .withName(%22Test Habit%22)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getId()).isEqualTo(id);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithSingleTag() %7B%0D%0A        // Arrange%0D%0A        String tag = %22fitness%22;%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withTag(tag)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getTags()).contains(tag);%0D%0A        assertThat(result.getTags()).hasSize(1);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithMultipleTags() %7B%0D%0A        // Arrange%0D%0A        List%3CString%3E tags = Arrays.asList(%22fitness%22, %22health%22, %22daily%22);%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withTags(tags)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getTags()).containsAll(tags);%0D%0A        assertThat(result.getTags()).hasSize(3);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldCreateHabitWithMixedTags() %7B%0D%0A        // Arrange%0D%0A        String singleTag = %22fitness%22;%0D%0A        List%3CString%3E multipleTags = Arrays.asList(%22health%22, %22daily%22);%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withTag(singleTag)%0D%0A                .withTags(multipleTags)%0D%0A                .build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getTags()).contains(singleTag);%0D%0A        assertThat(result.getTags()).containsAll(multipleTags);%0D%0A        assertThat(result.getTags()).hasSize(3);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenNameIsNull() %7B%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder.build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22Il nome dell'abitudine %C3%A8 obbligatorio%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenNameIsEmpty() %7B%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder.withName(%22%22).build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22Il nome dell'abitudine %C3%A8 obbligatorio%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenNameIsWhitespace() %7B%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder.withName(%22   %22).build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22Il nome dell'abitudine %C3%A8 obbligatorio%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenNameIsTooLong() %7B%0D%0A        // Arrange%0D%0A        String longName = %22a%22.repeat(101); // 101 characters%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder.withName(longName).build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22Il nome non pu%C3%B2 superare i 100 caratteri%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldAcceptMaxLengthName() %7B%0D%0A        // Arrange%0D%0A        String maxLengthName = %22a%22.repeat(100); // exactly 100 characters%0D%0A%0D%0A        // Act%0D%0A        Habit result = habitBuilder.withName(maxLengthName).build();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result.getName()).isEqualTo(maxLengthName);%0D%0A        assertThat(result.getName()).hasSize(100);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenFrequencyIsNull() %7B%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withFrequency(null)%0D%0A                .build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22La frequenza %C3%A8 obbligatoria%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void build_shouldThrowException_whenDifficultyIsNull() %7B%0D%0A        // Act & Assert%0D%0A        assertThatThrownBy(() -%3E habitBuilder%0D%0A                .withName(%22Test Habit%22)%0D%0A                .withDifficulty(null)%0D%0A                .build())%0D%0A                .isInstanceOf(IllegalArgumentException.class)%0D%0A                .hasMessage(%22La difficolt%C3%A0 %C3%A8 obbligatoria%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withId_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withId(1L);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withUserId_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withUserId(1L);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withName_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withName(%22Test%22);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withDescription_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withDescription(%22Test Description%22);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withFrequency_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withFrequency(HabitFrequencyType.WEEKLY);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withDifficulty_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withDifficulty(HabitDifficulty.EASY);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withTag_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withTag(%22fitness%22);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void withTags_shouldReturnSameBuilder() %7B%0D%0A        // Act%0D%0A        HabitBuilder result = habitBuilder.withTags(Arrays.asList(%22tag1%22, %22tag2%22));%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isSameAs(habitBuilder);%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630327
+                        },
+                        {
+                            "path": "src/test/java/ingsoftware/model/EquipmentTest.java",
+                            "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/model/EquipmentTest.java",
+                            "patch": "@@ -0,0 +1,8462 @@\n+package ingsoftware.model;%0D%0A%0D%0Aimport org.junit.jupiter.api.BeforeEach;%0D%0Aimport org.junit.jupiter.api.Test;%0D%0A%0D%0Aimport java.util.Optional;%0D%0A%0D%0Aimport static org.assertj.core.api.Assertions.assertThat;%0D%0A%0D%0Aclass EquipmentTest %7B%0D%0A%0D%0A    private Equipment equipment;%0D%0A%0D%0A    @BeforeEach%0D%0A    void setUp() %7B%0D%0A        equipment = new Equipment();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void constructor_shouldCreateEquipmentWithDefaults() %7B%0D%0A        // Act%0D%0A        Equipment newEquipment = new Equipment();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(newEquipment.getExperienceMultiplier()).isEqualTo(1.0);%0D%0A        assertThat(newEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);%0D%0A        assertThat(newEquipment.isNoneOption()).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void createNoneOption_shouldCreateNoneEquipment() %7B%0D%0A        // Act%0D%0A        Equipment noneEquipment = Equipment.createNoneOption();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(noneEquipment.getName()).isEqualTo(%22Nessuno%22);%0D%0A        assertThat(noneEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);%0D%0A        assertThat(noneEquipment.isNoneOption()).isTrue();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isNoneEquipment_shouldReturnTrue_whenStateIsNone() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.NONE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isNoneEquipment()).isTrue();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isNoneEquipment_shouldReturnFalse_whenStateIsActive() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isNoneEquipment()).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isNoneEquipment_shouldReturnFalse_whenStateIsInactive() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.INACTIVE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isNoneEquipment()).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isActive_shouldReturnTrue_whenStateIsActive() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isActive()).isTrue();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isActive_shouldReturnFalse_whenStateIsNone() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.NONE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isActive()).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void isActive_shouldReturnFalse_whenStateIsInactive() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.INACTIVE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.isActive()).isFalse();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getStatusDisplay_shouldReturnCorrectDisplay_forEachState() %7B%0D%0A        // Test NONE state%0D%0A        equipment.setState(Equipment.EquipmentState.NONE);%0D%0A        assertThat(equipment.getStatusDisplay()).isEqualTo(%22%E2%9E%96 Non equipaggiato%22);%0D%0A%0D%0A        // Test ACTIVE state%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A        assertThat(equipment.getStatusDisplay()).isEqualTo(%22%F0%9F%9F%A2 Attivo%22);%0D%0A%0D%0A        // Test INACTIVE state%0D%0A        equipment.setState(Equipment.EquipmentState.INACTIVE);%0D%0A        assertThat(equipment.getStatusDisplay()).isEqualTo(%22%F0%9F%94%B4 Disattivato%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getMultiplierDisplay_shouldReturn1_0x_whenNoneEquipment() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.NONE);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.getMultiplierDisplay()).isEqualTo(%221.0x%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getMultiplierDisplay_shouldReturnFormattedMultiplier_whenNotNoneEquipment() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A        equipment.setExperienceMultiplier(1.5);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.getMultiplierDisplay()).isEqualTo(%221.5x%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getMultiplierDisplay_shouldHandleDecimalValues() %7B%0D%0A        // Arrange%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A        equipment.setExperienceMultiplier(2.75);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment.getMultiplierDisplay()).isEqualTo(%222.8x%22); // Rounded to 1 decimal place%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getType_shouldReturnOptionalEmpty_whenTypeIsNull() %7B%0D%0A        // Act%0D%0A        Optional%3CEquipmentType%3E result = equipment.getType();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isEmpty();%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void getType_shouldReturnOptionalWithType_whenTypeIsSet() %7B%0D%0A        // Arrange%0D%0A        equipment.setType(EquipmentType.WEAPON);%0D%0A%0D%0A        // Act%0D%0A        Optional%3CEquipmentType%3E result = equipment.getType();%0D%0A%0D%0A        // Assert%0D%0A        assertThat(result).isPresent();%0D%0A        assertThat(result.get()).isEqualTo(EquipmentType.WEAPON);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setState_shouldHandleNullState() %7B%0D%0A        // Act%0D%0A        equipment.setState(null);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void setState_shouldSetStateCorrectly() %7B%0D%0A        // Act%0D%0A        equipment.setState(Equipment.EquipmentState.ACTIVE);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void settersAndGetters_shouldWorkCorrectly() %7B%0D%0A        // Arrange%0D%0A        Long id = 123L;%0D%0A        String name = %22Test Equipment%22;%0D%0A        String description = %22Test Description%22;%0D%0A        double multiplier = 1.5;%0D%0A%0D%0A        // Act%0D%0A        equipment.setId(id);%0D%0A        equipment.setName(name);%0D%0A        equipment.setDescription(description);%0D%0A        equipment.setExperienceMultiplier(multiplier);%0D%0A%0D%0A        // Assert%0D%0A        assertThat(equipment.getId()).isEqualTo(id);%0D%0A        assertThat(equipment.getName()).isEqualTo(name);%0D%0A        assertThat(equipment.getDescription()).isEqualTo(description);%0D%0A        assertThat(equipment.getExperienceMultiplier()).isEqualTo(multiplier);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnTrue_whenSameId() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        equipment1.setId(1L);%0D%0A%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        equipment2.setId(1L);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1).isEqualTo(equipment2);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnFalse_whenDifferentId() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        equipment1.setId(1L);%0D%0A%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        equipment2.setId(2L);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1).isNotEqualTo(equipment2);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnFalse_whenOneIdIsNull() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        equipment1.setId(1L);%0D%0A%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        // id is null%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1).isNotEqualTo(equipment2);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnTrue_whenBothIdsAreNull() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        // both ids are null%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1).isEqualTo(equipment2);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnTrue_whenSameObject() %7B%0D%0A        // Act & Assert%0D%0A        assertThat(equipment).isEqualTo(equipment);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnFalse_whenComparedToNull() %7B%0D%0A        // Act & Assert%0D%0A        assertThat(equipment).isNotEqualTo(null);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void equals_shouldReturnFalse_whenComparedToDifferentClass() %7B%0D%0A        // Act & Assert%0D%0A        assertThat(equipment).isNotEqualTo(%22not an equipment%22);%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void hashCode_shouldBeSame_whenSameId() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        equipment1.setId(1L);%0D%0A%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        equipment2.setId(1L);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1.hashCode()).isEqualTo(equipment2.hashCode());%0D%0A    %7D%0D%0A%0D%0A    @Test%0D%0A    void hashCode_shouldBeDifferent_whenDifferentId() %7B%0D%0A        // Arrange%0D%0A        Equipment equipment1 = new Equipment();%0D%0A        equipment1.setId(1L);%0D%0A%0D%0A        Equipment equipment2 = new Equipment();%0D%0A        equipment2.setId(2L);%0D%0A%0D%0A        // Act & Assert%0D%0A        assertThat(equipment1.hashCode()).isNotEqualTo(equipment2.hashCode());%0D%0A    %7D%0D%0A%7D\n",
+                            "isNew": true,
+                            "isApplied": true,
+                            "timestamp": 1755512630365
+                        }
+                    ]
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "545f2728-76ce-403b-a5b9-846234ef471b",
+                "usageStatistics": {
+                    "llmCallsUsedForAnswer": 25.0,
+                    "llmCallsUsedTotal": 40.0,
+                    "llmCallsLimit": 200.0,
+                    "limitRenewalMillisecondTimestamp": 1755597822262
+                }
+            },
+            "createdAt": 1755512319843,
+            "isInternal": false
+        },
+        {
+            "id": "5de8f0da-08ac-45fd-9624-69d33ff65021",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "can you create a test for HabitListController?"
+                }
+            ],
+            "context": {
+                "codebaseEnabled": true
+            },
+            "createdAt": 1755513215524,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "can you create a test for HabitListController?"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "02e912ed-2ba3-4f1e-a560-91a8fa02235c",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "thought",
+                    "text": "The user has made some changes to the HabitBuilderTest and deleted the UserNotFoundExceptionTest file. Now they're asking me to create a test for HabitListController. Let me first examine the HabitListController to understand its functionality and then create comprehensive tests for it."
+                },
+                {
+                    "type": "text",
+                    "text": "I'll create comprehensive unit tests for the HabitListController. Let me first examine the controller to understand its structure and functionality:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01CGn4X539TvpzLZBRNeFVZf",
+                    "statusText": "Viewed file (lines 1:254)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/controller/HabitListController.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/controller/HabitListController.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now I need to examine some related classes to understand the dependencies better:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01NaN1DQiEsKe11FrTm5YXXz",
+                    "statusText": "Viewed file (lines 1:107)",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/main/java/ingsoftware/controller/AbstractHabitFormController.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/main/java/ingsoftware/controller/AbstractHabitFormController.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me create comprehensive unit tests for the HabitListController:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_011TWQPxdiH7xpS9jMcfANRB",
+                    "statusText": "Change generated",
+                    "status": "SUCCESS",
+                    "context": {
+                        "files": [
+                            {
+                                "path": "src/test/java/ingsoftware/controller/HabitListControllerTest.java",
+                                "fsPath": "C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListControllerTest.java"
+                            }
+                        ]
+                    },
+                    "isHidden": false
+                },
+                {
+                    "type": "codeHunk",
+                    "lineBasedDiff": "--- C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListControllerTest.java\n+++ C:/Users/mirko/Desktop/fittracker/src/test/java/ingsoftware/controller/HabitListControllerTest.java\n@@ -0,0 +1,406 @@\n+package ingsoftware.controller;\n+\n+import ingsoftware.exception.BusinessException;\n+import ingsoftware.model.DTO.CompletionResult;\n+import ingsoftware.model.Habit;\n+import ingsoftware.model.HabitCompletion;\n+import ingsoftware.service.*;\n+import javafx.application.Platform;\n+import javafx.collections.FXCollections;\n+import javafx.collections.ObservableList;\n+import javafx.scene.control.Button;\n+import javafx.scene.control.Label;\n+import javafx.scene.control.ListView;\n+import javafx.scene.control.SelectionModel;\n+import net.rgielen.fxweaver.core.FxWeaver;\n+import org.junit.jupiter.api.BeforeEach;\n+import org.junit.jupiter.api.Test;\n+import org.junit.jupiter.api.extension.ExtendWith;\n+import org.mockito.ArgumentCaptor;\n+import org.mockito.InjectMocks;\n+import org.mockito.Mock;\n+import org.mockito.MockedStatic;\n+import org.mockito.junit.jupiter.MockitoExtension;\n+import org.testfx.framework.junit5.ApplicationExtension;\n+\n+import java.lang.reflect.Field;\n+import java.util.Arrays;\n+import java.util.Collections;\n+import java.util.List;\n+\n+import static org.assertj.core.api.Assertions.assertThat;\n+import static org.mockito.ArgumentMatchers.*;\n+import static org.mockito.Mockito.*;\n+\n+@ExtendWith({MockitoExtension.class, ApplicationExtension.class})\n+class HabitListControllerTest {\n+\n+    @Mock\n+    private HabitCompletionService habitCompletionService;\n+\n+    @Mock\n+    private HabitService habitService;\n+\n+    @Mock\n+    private UserService userService;\n+\n+    @Mock\n+    private StartupMediator startupMediator;\n+\n+    @Mock\n+    private PostCompletionMediator postMediator;\n+\n+    @Mock\n+    private FxWeaver fxWeaver;\n+\n+    @Mock\n+    private ListView<Habit> habitListView;\n+\n+    @Mock\n+    private Button completeHabitButton;\n+\n+    @Mock\n+    private Button addHabitButton;\n+\n+    @Mock\n+    private Button editHabitButton;\n+\n+    @Mock\n+    private Label statusLabel;\n+\n+    @Mock\n+    private SelectionModel<Habit> selectionModel;\n+\n+    @InjectMocks\n+    private HabitListController habitListController;\n+\n+    private Habit testHabit;\n+    private List<Habit> testHabits;\n+\n+    @BeforeEach\n+    void setUp() throws Exception {\n+        // Setup test data\n+        testHabit = new Habit();\n+        testHabit.setId(1L);\n+        testHabit.setName(\"Test Habit\");\n+        testHabit.setUserId(1L);\n+\n+        testHabits = Arrays.asList(testHabit);\n+\n+        // Setup FXML field mocks using reflection\n+        setField(habitListController, \"habitListView\", habitListView);\n+        setField(habitListController, \"completeHabitButton\", completeHabitButton);\n+        setField(habitListController, \"addHabitButton\", addHabitButton);\n+        setField(habitListController, \"editHabitButton\", editHabitButton);\n+        setField(habitListController, \"statusLabel\", statusLabel);\n+\n+        // Setup ListView mock behavior\n+        ObservableList<Habit> observableHabits = FXCollections.observableArrayList();\n+        when(habitListView.getItems()).thenReturn(observableHabits);\n+        when(habitListView.getSelectionModel()).thenReturn(selectionModel);\n+\n+        // Mock the habit service to return test habits\n+        when(habitService.findAllByUserId(1L)).thenReturn(testHabits);\n+    }\n+\n+    private void setField(Object target, String fieldName, Object value) throws Exception {\n+        Field field = target.getClass().getDeclaredField(fieldName);\n+        field.setAccessible(true);\n+        field.set(target, value);\n+    }\n+\n+    @Test\n+    void initialize_shouldSetupViewAndCallStartupMediator() {\n+        // Act\n+        habitListController.initialize();\n+\n+        // Assert\n+        verify(startupMediator).handleApplicationStartup(1L);\n+        verify(habitService).findAllByUserId(1L);\n+        verify(habitListView).getItems();\n+    }\n+\n+    @Test\n+    void refreshHabitList_shouldLoadAndDisplayHabits() throws Exception {\n+        // Arrange\n+        ObservableList<Habit> mockItems = mock(ObservableList.class);\n+        when(habitListView.getItems()).thenReturn(mockItems);\n+\n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"refreshHabitList\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(habitService).findAllByUserId(1L);\n+        verify(mockItems).setAll(testHabits);\n+    }\n+\n+    @Test\n+    void refreshHabitList_shouldHandleServiceException() throws Exception {\n+        // Arrange\n+        when(habitService.findAllByUserId(1L)).thenThrow(new RuntimeException(\"Database error\"));\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"refreshHabitList\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert - The method should catch the exception (we can verify by checking no exception is thrown)\n+        verify(habitService).findAllByUserId(1L);\n+    }\n+\n+    @Test\n+    void handleCompleteHabit_shouldShowWarning_whenNoHabitSelected() throws Exception {\n+        // Arrange\n+        when(selectionModel.getSelectedItem()).thenReturn(null);\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"handleCompleteHabit\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(selectionModel).getSelectedItem();\n+        verifyNoInteractions(habitCompletionService);\n+    }\n+\n+    @Test\n+    void handleCompleteHabit_shouldDisableButton_whenHabitSelected() throws Exception {\n+        // Arrange\n+        when(selectionModel.getSelectedItem()).thenReturn(testHabit);\n+        CompletionResult completionResult = new CompletionResult();\n+        completionResult.setCompletion(new HabitCompletion());\n+        completionResult.setGainedXP(50.0);\n+        \n+        when(habitCompletionService.completeHabit(1L, 1L)).thenReturn(completionResult);\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"handleCompleteHabit\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(completeHabitButton).setDisable(true);\n+        verify(selectionModel).getSelectedItem();\n+        \n+        // Give some time for the background task to potentially start\n+        Thread.sleep(100);\n+    }\n+\n+    @Test\n+    void handleAddHabit_shouldOpenCreateHabitWindow() throws Exception {\n+        // Arrange\n+        when(fxWeaver.loadView(CreateHabitController.class)).thenReturn(mock(javafx.scene.Parent.class));\n+        when(fxWeaver.getBean(CreateHabitController.class)).thenReturn(mock(CreateHabitController.class));\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"handleAddHabit\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(fxWeaver).loadView(CreateHabitController.class);\n+        verify(fxWeaver).getBean(CreateHabitController.class);\n+    }\n+\n+    @Test\n+    void handleEditHabit_shouldShowWarning_whenNoHabitSelected() throws Exception {\n+        // Arrange\n+        when(selectionModel.getSelectedItem()).thenReturn(null);\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"handleEditHabit\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(selectionModel).getSelectedItem();\n+        verifyNoInteractions(fxWeaver);\n+    }\n+\n+    @Test\n+    void handleEditHabit_shouldOpenEditWindow_whenHabitSelected() throws Exception {\n+        // Arrange\n+        when(selectionModel.getSelectedItem()).thenReturn(testHabit);\n+        when(fxWeaver.loadView(EditHabitController.class)).thenReturn(mock(javafx.scene.Parent.class));\n+        when(fxWeaver.getBean(EditHabitController.class)).thenReturn(mock(EditHabitController.class));\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"handleEditHabit\");\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController);\n+\n+        // Assert\n+        verify(selectionModel).getSelectedItem();\n+        verify(fxWeaver).loadView(EditHabitController.class);\n+        verify(fxWeaver).getBean(EditHabitController.class);\n+    }\n+\n+    @Test\n+    void setCurrentUser_shouldUpdateUserIdAndRefreshList() {\n+        // Arrange\n+        Long newUserId = 5L;\n+        List<Habit> newUserHabits = Collections.emptyList();\n+        when(habitService.findAllByUserId(newUserId)).thenReturn(newUserHabits);\n+\n+        // Act\n+        habitListController.setCurrentUser(newUserId);\n+\n+        // Assert\n+        verify(habitService).findAllByUserId(newUserId);\n+    }\n+\n+    @Test\n+    void openHabitWindow_shouldHandleCreateHabitController() throws Exception {\n+        // Arrange\n+        CreateHabitController mockController = mock(CreateHabitController.class);\n+        when(fxWeaver.loadView(CreateHabitController.class)).thenReturn(mock(javafx.scene.Parent.class));\n+        when(fxWeaver.getBean(CreateHabitController.class)).thenReturn(mockController);\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"openHabitWindow\", Class.class, Habit.class, Runnable.class);\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController, CreateHabitController.class, null, mock(Runnable.class));\n+\n+        // Assert\n+        verify(fxWeaver).loadView(CreateHabitController.class);\n+        verify(fxWeaver).getBean(CreateHabitController.class);\n+        verify(mockController).setData(eq(1L), eq(null), any(Runnable.class));\n+    }\n+\n+    @Test\n+    void openHabitWindow_shouldHandleEditHabitController() throws Exception {\n+        // Arrange\n+        EditHabitController mockController = mock(EditHabitController.class);\n+        when(fxWeaver.loadView(EditHabitController.class)).thenReturn(mock(javafx.scene.Parent.class));\n+        when(fxWeaver.getBean(EditHabitController.class)).thenReturn(mockController);\n+        \n+        // Use reflection to call the private method\n+        var method = HabitListController.class.getDeclaredMethod(\"openHabitWindow\", Class.class, Habit.class, Runnable.class);\n+        method.setAccessible(true);\n+\n+        // Act\n+        method.invoke(habitListController, EditHabitController.class, testHabit, mock(Runnable.class));\n+\n+        // Assert\n+        verify(fxWeaver).loadView(EditHabitController.class);\n+        verify(fxWeaver).getBean(EditHabitController.class);\n+        verify(mockController).setData(eq(1L), eq(testHabit), any(Runnable.class));\n+    }\n+\n+    @Test\n+    void habitListCell_shouldDisplayHabitName() {\n+        // Arrange\n+        HabitListController.HabitListCell cell = new HabitListController.HabitListCell();\n+\n+        // Act\n+        cell.updateItem(testHabit, false);\n+\n+        // Assert\n+        assertThat(cell.getText()).isEqualTo(\"Test Habit\");\n+    }\n+\n+    @Test\n+    void habitListCell_shouldClearText_whenEmpty() {\n+        // Arrange\n+        HabitListController.HabitListCell cell = new HabitListController.HabitListCell();\n+\n+        // Act\n+        cell.updateItem(null, true);\n+\n+        // Assert\n+        assertThat(cell.getText()).isNull();\n+    }\n+\n+    @Test\n+    void habitListCell_shouldApplyCompletedStyle_whenHabitCompletedToday() {\n+        // Arrange\n+        Habit completedHabit = spy(testHabit);\n+        when(completedHabit.isCompletedToday()).thenReturn(true);\n+        \n+        HabitListController.HabitListCell cell = new HabitListController.HabitListCell();\n+\n+        // Act\n+        cell.updateItem(completedHabit, false);\n+\n+        // Assert\n+        assertThat(cell.getStyle()).contains(\"-fx-text-fill: #4CAF50\");\n+        assertThat(cell.getStyle()).contains(\"-fx-font-weight: bold\");\n+    }\n+\n+    @Test\n+    void habitListCell_shouldApplyNormalStyle_whenHabitNotCompletedToday() {\n+        // Arrange\n+        Habit incompleteHabit = spy(testHabit);\n+        when(incompleteHabit.isCompletedToday()).thenReturn(false);\n+        \n+        HabitListController.HabitListCell cell = new HabitListController.HabitListCell();\n+\n+        // Act\n+        cell.updateItem(incompleteHabit, false);\n+\n+        // Assert\n+        assertThat(cell.getStyle()).isEqualTo(\"-fx-text-fill: #333333;\");\n+    }\n+\n+    @Test\n+    void habitListCell_shouldHandleNullHabit() {\n+        // Arrange\n+        HabitListController.HabitListCell cell = new HabitListController.HabitListCell();\n+\n+        // Act\n+        cell.updateItem(null, false);\n+\n+        // Assert\n+        assertThat(cell.getText()).isNull();\n+        assertThat(cell.getStyle()).isEmpty();\n+    }\n+\n+    // Integration test methods would require JavaFX Application Thread\n+    // These are simplified versions focusing on the business logic\n+\n+    @Test\n+    void initialize_shouldCallRefreshHabitList() {\n+        // This test verifies that initialize calls the required setup methods\n+        // In a real JavaFX test, we would verify the UI setup as well\n+        \n+        // Act\n+        habitListController.initialize();\n+\n+        // Assert\n+        verify(startupMediator).handleApplicationStartup(1L);\n+        // Verify that habitService.findAllByUserId was called (part of refreshHabitList)\n+        verify(habitService).findAllByUserId(1L);\n+    }\n+\n+    @Test\n+    void constructor_shouldInitializeDefaultUserId() throws Exception {\n+        // Arrange & Act\n+        HabitListController controller = new HabitListController();\n+        \n+        // Use reflection to access private field\n+        Field userIdField = HabitListController.class.getDeclaredField(\"currentUserId\");\n+        userIdField.setAccessible(true);\n+        Long currentUserId = (Long) userIdField.get(controller);\n+\n+        // Assert\n+        assertThat(currentUserId).isEqualTo(1L);\n+    }\n+}",
+                    "refToolCallId": "toolu_011TWQPxdiH7xpS9jMcfANRB"
+                },
+                {
+                    "type": "text",
+                    "text": "Now let me run the tests to make sure they compile and work correctly:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_01A9p33gESmZrZ5EESKcaFHs",
+                    "statusText": "No issues found in code",
+                    "status": "SUCCESS",
+                    "isHidden": false
+                },
+                {
+                    "type": "text",
+                    "text": "Let me check the entire test file for any compilation issues:"
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_015XrnLzecYiN7WAEVjgS9dM",
+                    "title": "",
+                    "statusText": "Failed",
+                    "status": "ERROR",
+                    "isHidden": false
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "6716a0dc-d589-4d29-abf2-43d761174ea7"
+            },
+            "createdAt": 1755513218745,
+            "isInternal": false
+        },
+        {
+            "id": "fc31110f-f2e2-4ada-ae14-af67be3200a6",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": ""
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_015XrnLzecYiN7WAEVjgS9dM",
+                    "title": "",
+                    "statusText": "Failed",
+                    "status": "ERROR",
+                    "isHidden": false
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "358ac0fc-e3ce-44f6-a1e8-8627be2c0edd"
+            },
+            "createdAt": 1755513307292,
+            "isInternal": false
+        },
+        {
+            "id": "4d06563f-80b7-44ce-a4b8-8633472603e3",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": ""
+                },
+                {
+                    "type": "toolCall",
+                    "toolCallId": "toolu_015XrnLzecYiN7WAEVjgS9dM",
+                    "title": "",
+                    "statusText": "Failed",
+                    "status": "ERROR",
+                    "isHidden": false
+                }
+            ],
+            "context": {
+                "author": "Unit test agent",
+                "operationId": "e911030b-88ce-4119-a44d-32dd6a5b6632"
+            },
+            "createdAt": 1755513313229,
+            "isInternal": false
+        },
+        {
+            "id": "9f7d4562-e1f4-45db-b3f7-0591a7cd17f6",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "Internal server error. Please try again later.\nOperation ID: e911030b-88ce-4119-a44d-32dd6a5b6632\nUser ID: 34fbbb83-638c-4eb2-a7db-e11a43d31af1",
+                    "actions": [
+                        {
+                            "type": "externalAction",
+                            "title": "Regenerate",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1755513314502,
+            "isInternal": false
+        }
+    ],
+    "isAgent": false,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": true,
+    "isE2EAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "isClaudeCode": false,
+    "isZencoderCli": false,
+    "autoApply": false,
+    "model": "default"
+}
+}

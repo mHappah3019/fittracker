@@ -1,0 +1,181 @@
+/* === COLORI E VARIABILI === */
+.root {
+    -fx-primary-color: #4CAF50;
+    -fx-secondary-color: #2196F3;
+    -fx-danger-color: #F44336;
+    -fx-warning-color: #FF9800;
+    -fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+/* === CONTAINERS === */
+.main-container, .form-container, .equipment-container {
+    -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    -fx-padding: 20;
+}
+
+/* === HEADER SECTIONS === */
+.header-section {
+    -fx-background-color: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+    -fx-padding: 25;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);
+}
+
+.user-stats-container {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+}
+
+.stat-card {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+/* === PROGRESS BARS === */
+.exp-bar .bar {
+    -fx-background-color: linear-gradient(to right, #FFD700, #FFA500);
+    -fx-background-radius: 10;
+}
+
+.health-bar .bar {
+    -fx-background-color: linear-gradient(to right, #FF6B6B, #4ECDC4);
+    -fx-background-radius: 10;
+}
+
+.exp-bar .track, .health-bar .track {
+    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-background-radius: 10;
+}
+
+/* === BUTTONS === */
+.primary-button {
+    -fx-background-color: linear-gradient(to bottom, #4CAF50, #45a049);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #45a049, #3d8b40);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.secondary-button {
+    -fx-background-color: linear-gradient(to bottom, #6c757d, #5a6268);
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+.danger-button {
+    -fx-background-color: linear-gradient(to bottom, #F44336, #d32f2f);
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+/* === FORM ELEMENTS === */
+.modern-textfield, .modern-textarea {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.modern-textfield:focused, .modern-textarea:focused {
+    -fx-border-color: #4CAF50;
+    -fx-border-width: 2;
+}
+
+.modern-combobox {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+/* === LIST STYLES === */
+.habit-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 12;
+}
+
+.habit-list .list-cell {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.habit-list .list-cell:selected {
+    -fx-background-color: linear-gradient(to right, #4CAF50, #45a049);
+}
+
+/* === LABELS === */
+.form-title, .equipment-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.section-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+
+.stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7f8c8d;
+    -fx-font-weight: bold;
+}
+
+.stat-value-large {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* === ANIMATIONS === */
+.animated-button {
+    -fx-transition: all 0.3s ease;
+}
+
+.pulse {
+    -fx-effect: dropshadow(three-pass-box, rgba(76, 175, 80, 0.6), 20, 0, 0, 0);
+}
+
+/* === EQUIPMENT SPECIFIC === */
+.character-preview {
+    -fx-background-color: linear-gradient(to bottom, #667eea, #764ba2);
+    -fx-padding: 25;
+    -fx-background-radius: 15;
+    -fx-alignment: center;
+}
+
+.character-avatar {
+    -fx-font-size: 64px;
+}
+
+.equipment-tips {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}

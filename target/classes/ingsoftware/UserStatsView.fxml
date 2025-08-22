@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ingsoftware.controller.UserStatsController"
+      spacing="10">
+    <padding>
+        <Insets top="15" bottom="15" left="15" right="15" />
+    </padding>
+
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Livello:" />
+        <Label fx:id="levelLabel" text="1" style="-fx-font-weight: bold;" />
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Esperienza:" />
+        <ProgressBar fx:id="experienceBar" progress="0.0" prefWidth="200" />
+        <Label fx:id="experienceLabel" text="0/100" />
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Salute:" />
+        <ProgressBar fx:id="healthBar" progress="1.0" prefWidth="200" style="-fx-accent: #4CAF50;" />
+        <Label fx:id="healthLabel" text="100/100" />
+    </HBox>
+</VBox>

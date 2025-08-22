@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="ingsoftware.controller.CreateHabitController"
+      styleClass="form-container" spacing="20">
+
+   <!-- Header -->
+   <HBox styleClass="form-header">
+      <VBox>
+         <Label fx:id="titleLabel" text="Crea Nuova Abitudine" styleClass="form-title"/>
+         <Label text="Inizia il tuo viaggio verso una vita migliore! 🚀" styleClass="form-subtitle"/>
+      </VBox>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Label text="✨" styleClass="form-icon"/>
+   </HBox>
+
+   <ScrollPane styleClass="form-scroll" fitToWidth="true">
+      <VBox spacing="25">
+         
+         <!-- Sezione Base -->
+         <VBox styleClass="form-section">
+            <Label text="📝 Informazioni Base" styleClass="section-header"/>
+            
+            <VBox styleClass="field-group" spacing="15">
+               <VBox styleClass="input-container">
+                  <Label text="Nome Abitudine *" styleClass="field-label"/>
+                  <TextField fx:id="nameField" promptText="es. Bere 2L di acqua" 
+                            styleClass="modern-textfield"/>
+               </VBox>
+               
+               <VBox styleClass="input-container">
+                  <Label text="Descrizione" styleClass="field-label"/>
+                  <TextArea fx:id="descriptionArea" 
+                           promptText="Descrivi perché questa abitudine è importante per te..."
+                           styleClass="modern-textarea" prefRowCount="3"/>
+               </VBox>
+            </VBox>
+         </VBox>
+
+         <!-- Sezione Configurazione -->
+         <VBox styleClass="form-section">
+            <Label text="⚙️ Configurazione" styleClass="section-header"/>
+            
+            <GridPane styleClass="config-grid" hgap="15" vgap="15">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="150"/>
+               </columnConstraints>
+               
+<!--               <VBox styleClass="input-container" GridPane.columnIndex="0" GridPane.rowIndex="0">-->
+<!--                  <Label text="Tipo *" styleClass="field-label"/>-->
+<!--                  <ComboBox fx:id="typeComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>-->
+<!--               </VBox>-->
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                  <Label text="Difficoltà *" styleClass="field-label"/>
+                  <ComboBox fx:id="difficultyComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>
+               </VBox>
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                  <Label text="Frequenza *" styleClass="field-label"/>
+                  <ComboBox fx:id="frequencyComboBox" styleClass="modern-combobox" maxWidth="Infinity"/>
+               </VBox>
+               
+               <VBox styleClass="input-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label text="Target Streak" styleClass="field-label"/>
+                  <TextField fx:id="targetStreakField" promptText="es. 30" 
+                            styleClass="modern-textfield"/>
+               </VBox>
+            </GridPane>
+         </VBox>
+
+         <!-- Sezione Avanzata -->
+         <VBox styleClass="form-section">
+            <Label text="🏷️ Personalizzazione" styleClass="section-header"/>
+            
+            <VBox styleClass="input-container">
+               <Label text="Tag (separati da virgola)" styleClass="field-label"/>
+               <TextField fx:id="tagsField" promptText="es. salute, fitness, mattina" 
+                         styleClass="modern-textfield"/>
+            </VBox>
+         </VBox>
+
+      </VBox>
+   </ScrollPane>
+
+   <!-- Error Label -->
+   <Label fx:id="errorLabel" styleClass="error-message" visible="false"/>
+
+   <!-- Action Buttons -->
+   <HBox styleClass="button-container" spacing="15">
+      <Button text="❌ Annulla" styleClass="secondary-button" onAction="#handleCancel"/>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Button fx:id="saveButton" text="💾 Salva Abitudine" 
+              styleClass="primary-button, save-button" onAction="#handleSave">
+         <effect>
+            <DropShadow color="#4CAF50" radius="10"/>
+         </effect>
+      </Button>
+   </HBox>
+
+</VBox>
