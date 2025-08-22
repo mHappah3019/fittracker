@@ -9,34 +9,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="ingsoftware.controller.HabitListController"
             styleClass="main-container">
-   
-<!--   &lt;!&ndash; Header con Stats Utente &ndash;&gt;-->
-<!--   <top>-->
-<!--      <VBox styleClass="header-section">-->
-<!--         <HBox styleClass="user-stats-container">-->
-<!--            <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">-->
-<!--               <Label text="Livello" styleClass="stat-label"/>-->
-<!--               <Label fx:id="levelLabel" text="1" styleClass="stat-value-large"/>-->
-<!--            </VBox>-->
 
-<!--            <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">-->
-<!--               <Label text="Esperienza" styleClass="stat-label"/>-->
-<!--               <HBox styleClass="progress-container">-->
-<!--                  <ProgressBar fx:id="experienceBar" styleClass="exp-bar" HBox.hgrow="ALWAYS"/>-->
-<!--                  <Label fx:id="experienceLabel" text="0/100" styleClass="progress-label"/>-->
-<!--               </HBox>-->
-<!--            </VBox>-->
-
-<!--            <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">-->
-<!--               <Label text="Salute" styleClass="stat-label"/>-->
-<!--               <HBox styleClass="progress-container">-->
-<!--                  <ProgressBar fx:id="healthBar" styleClass="health-bar" HBox.hgrow="ALWAYS"/>-->
-<!--                  <Label fx:id="healthLabel" text="100/100" styleClass="progress-label"/>-->
-<!--               </HBox>-->
-<!--            </VBox>-->
-<!--         </HBox>-->
-<!--      </VBox>-->
-<!--   </top>-->
 
    <!-- Lista Abitudini Centrale -->
    <center>

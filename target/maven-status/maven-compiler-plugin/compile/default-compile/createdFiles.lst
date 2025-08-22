@@ -35,12 +35,13 @@ ingsoftware\service\post_completion\DailySummaryService.class
 ingsoftware\service\strategy\EventBonusStrategy.class
 ingsoftware\model\HabitDifficulty.class
 ingsoftware\exception\EquipmentNotFoundException.class
-ingsoftware\service\EquipmentDataInitializer.class
 ingsoftware\repository\EquipmentRepository.class
 ingsoftware\model\DTO\LifePointsDTO.class
+ingsoftware\service\mediator\StartupMediator.class
 ingsoftware\controller\UserStatsController.class
 ingsoftware\service\PostCompletionMediator.class
 ingsoftware\model\User.class
+ingsoftware\service\mediator\PostCompletionMediator.class
 ingsoftware\model\EquipmentType.class
 ingsoftware\service\PopupUIService.class
 ingsoftware\model\HabitFrequency.class

@@ -87,7 +87,6 @@ public class EquipmentService {
 
     @Transactional
     public void unequip(Long userId, EquipmentType type) {
-        //TODO
         equipmentRepository.findByTypeAndState(type, EquipmentState.ACTIVE)
                 .ifPresent(equipment -> {
                     equipment.setState(EquipmentState.INACTIVE);

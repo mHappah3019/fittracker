@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class UserStatsController {
 
+    private static final double XP_PER_LEVEL = 100.0;
+
     private static final Logger logger = LoggerFactory.getLogger(UserStatsController.class);
 
     // Dependencies
@@ -87,13 +89,14 @@ public class UserStatsController {
         // Aggiorna l'esperienza
         double xp = user.getTotalXp();
         double xpForNextLevel = calculateXpForNextLevel(user.getLevel());
-        experienceBar.setProgress(xp / xpForNextLevel);
+        //experienceBar.setProgress(xp  / xpForNextLevel);
+        experienceBar.setProgress( ( (xp - XP_PER_LEVEL*(user.getLevel()-1))) / XP_PER_LEVEL);
         experienceLabel.setText((int)xp + "/" + (int)xpForNextLevel);
     }
 
     // Metodo per calcolare l'esperienza necessaria per il prossimo livello
     private double calculateXpForNextLevel(int currentLevel) {
-        return 100 * currentLevel;
+        return XP_PER_LEVEL * currentLevel;
     }
     
     // Metodi per mostrare messaggi all'utente
