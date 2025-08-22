@@ -67,7 +67,7 @@ public class CompletionPopupUIService implements PopupUIService {
 
         // Level-up opzionale
         if (newLevel > 0 && newLevel != 1) {
-            Label lvl = new Label("Level Up! \u2192 " + newLevel); // Simbolo freccia unicode
+            Label lvl = new Label("Level Up! → " + newLevel); // Simbolo freccia unicode
             lvl.getStyleClass().add("level-label");
             root.getChildren().add(lvl);
         }
@@ -116,7 +116,7 @@ public class CompletionPopupUIService implements PopupUIService {
         FadeTransition fadeOut = new FadeTransition(config.getFadeOut(), stage.getScene().getRoot());
         fadeOut.setFromValue(1);
         fadeOut.setToValue(0);
-        fadeOut.setOnFinished(e -> stage.close());
+        fadeOut.setOnFinished(_ -> stage.close());
 
         SequentialTransition seq = new SequentialTransition(fadeIn, hold, fadeOut);
         stage.show();

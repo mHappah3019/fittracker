@@ -1,7 +1,5 @@
 package ingsoftware.service.mediator;
 
-import ingsoftware.model.DTO.LifePointsDTO;
-
 /**
  * Mediator per gestire le operazioni di avvio dell'applicazione.
  * Coordina le interazioni tra servizi di gamification, utente e UI.

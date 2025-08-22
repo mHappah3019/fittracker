@@ -8,13 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class MidnightRolloverJob {
 
-    private static final ZoneId ZONE = ZoneId.of("Europe/Rome");
     private static final int PAGE_SIZE = 500;
 
     private final UserRepository userRepository;

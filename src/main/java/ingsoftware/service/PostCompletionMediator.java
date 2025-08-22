@@ -19,17 +19,14 @@ public class PostCompletionMediator {
     private final CompletionPopupUIService popupUISvc;
 
     private final AchievementService achievementSvc;
-    private final DailySummaryService summarySvc;
     private final AnalyticsLoggerService analyticsSvc;
 
     public PostCompletionMediator(
             CompletionPopupUIService popupUI,
             AchievementService achievementSvc,
-            DailySummaryService summarySvc,
             AnalyticsLoggerService analyticsSvc) {
         this.popupUISvc = popupUI;
         this.achievementSvc = achievementSvc;
-        this.summarySvc = summarySvc;
         this.analyticsSvc = analyticsSvc;
     }
 
@@ -49,7 +46,6 @@ public class PostCompletionMediator {
             try {
                 // Esegui tutti i servizi in sequenza o parallelo interno
                 achievementSvc.checkForNewBadges(completion);
-                summarySvc.updateSummary(completion);
                 analyticsSvc.logEvent("HabitCompleted", completion);
             } catch(Exception e) {
                 logger.error("Errore nel post-completamento: {}", e.getMessage());
