@@ -21,7 +21,7 @@ public class EquipmentBoostedStrategy implements GamificationStrategy {
     public double calculateExperience(double baseExperience, User user) {
         double baseResult = baseStrategy.calculateExperience(baseExperience, user);
 
-        Map<EquipmentType, Equipment> activeEquipments = equipmentService.getFullEquipmentSet(user.getID());
+        Map<EquipmentType, Equipment> activeEquipments = equipmentService.getFullEquipmentSet(user.getId());
         if (activeEquipments == null || activeEquipments.isEmpty()) {
             return baseResult;
         }

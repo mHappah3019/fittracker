@@ -27,10 +27,10 @@ public class DailySummaryHandler {
 
     public void onFirstAccessOfDay(User user, LocalDate previousAccessDate) {
         // Generate a daily summary for the user
-        System.out.println("Generating daily summary for user: " + user.getID());
+        System.out.println("Generating daily summary for user: " + user.getId());
         
         // Get habits that were due yesterday
-        List<Habit> yesterdayHabits = habitRepository.findAllByUserId(user.getID());
+        List<Habit> yesterdayHabits = habitRepository.findAllByUserId(user.getId());
         
         // Filter to those that were completed
         long completedCount = yesterdayHabits.stream()

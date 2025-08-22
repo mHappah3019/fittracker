@@ -90,7 +90,7 @@ public class MainDashboardController {
 
     private void checkAndCreateDefaultUser(Long userId) {
         if (userService.checkDefaultUser()) {
-            User defaultUser = new User("DefaultUser", "default@email.com", "defaultHash");
+            User defaultUser = new User();
             defaultUser.setLevel(1);
             defaultUser.setId(userId);
             userService.saveUser(defaultUser);

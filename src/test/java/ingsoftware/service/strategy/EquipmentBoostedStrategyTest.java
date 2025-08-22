@@ -43,7 +43,7 @@ class EquipmentBoostedStrategyTest {
         double expectedBaseResult = 150.0;
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(expectedBaseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(null);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(null);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -51,7 +51,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedBaseResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -62,7 +62,7 @@ class EquipmentBoostedStrategyTest {
         Map<EquipmentType, Equipment> emptyEquipmentMap = new EnumMap<>(EquipmentType.class);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(expectedBaseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(emptyEquipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(emptyEquipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -70,7 +70,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedBaseResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -86,7 +86,7 @@ class EquipmentBoostedStrategyTest {
         equipmentMap.put(EquipmentType.WEAPON, weapon);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(equipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(equipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -94,7 +94,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -117,7 +117,7 @@ class EquipmentBoostedStrategyTest {
         equipmentMap.put(EquipmentType.MISC, accessory);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(equipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(equipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -125,7 +125,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -141,7 +141,7 @@ class EquipmentBoostedStrategyTest {
         equipmentMap.put(EquipmentType.WEAPON, neutralEquipment);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(equipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(equipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -149,7 +149,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -165,7 +165,7 @@ class EquipmentBoostedStrategyTest {
         equipmentMap.put(EquipmentType.WEAPON, reducingEquipment);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(equipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(equipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -173,7 +173,7 @@ class EquipmentBoostedStrategyTest {
         // Assert
         assertThat(result).isEqualTo(expectedResult);
         verify(baseStrategy).calculateExperience(baseExperience, testUser);
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
     }
 
     @Test
@@ -181,7 +181,7 @@ class EquipmentBoostedStrategyTest {
         // Arrange
         double baseExperience = 100.0;
         double baseResult = 150.0;
-        Long expectedUserId = testUser.getID();
+        Long expectedUserId = testUser.getId();
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
         when(equipmentService.getFullEquipmentSet(expectedUserId)).thenReturn(new EnumMap<>(EquipmentType.class));
@@ -207,7 +207,7 @@ class EquipmentBoostedStrategyTest {
         equipmentMap.put(EquipmentType.ARMOR, armor);
         
         when(baseStrategy.calculateExperience(baseExperience, testUser)).thenReturn(baseResult);
-        when(equipmentService.getFullEquipmentSet(testUser.getID())).thenReturn(equipmentMap);
+        when(equipmentService.getFullEquipmentSet(testUser.getId())).thenReturn(equipmentMap);
 
         // Act
         double result = equipmentBoostedStrategy.calculateExperience(baseExperience, testUser);
@@ -218,7 +218,7 @@ class EquipmentBoostedStrategyTest {
         assertThat(result).isEqualTo(expectedResult);
         
         // Verify that equipment service was called
-        verify(equipmentService).getFullEquipmentSet(testUser.getID());
+        verify(equipmentService).getFullEquipmentSet(testUser.getId());
         
         // Verify that the equipment objects returned have the correct multipliers
         assertThat(weapon.getExperienceMultiplier()).isEqualTo(1.5);

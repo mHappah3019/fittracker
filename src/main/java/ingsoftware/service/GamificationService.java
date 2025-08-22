@@ -2,9 +2,6 @@ package ingsoftware.service;
 
 import ingsoftware.model.*;
 import ingsoftware.model.DTO.LifePointsDTO;
-import ingsoftware.repository.UserRepository;
-import ingsoftware.repository.EquipmentRepository;
-import ingsoftware.repository.HabitCompletionRepository;
 import ingsoftware.service.strategy.ExperienceStrategyFactory;
 import ingsoftware.service.strategy.GamificationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class GamificationService {
@@ -71,7 +67,7 @@ public class GamificationService {
      * Calcola e assegna punti per le abitudini che l'utente ha completato in una data specifica.
      */
     private void processCompletedHabitsForDate(User user, LocalDate completedDate) {
-        List<Habit> allUserHabits = habitService.findAllByUserId(user.getID());
+        List<Habit> allUserHabits = habitService.findAllByUserId(user.getId());
         List<Habit> completedHabits = allUserHabits.stream()
                 .filter(habit -> habit.getLastCompletedDate() != null &&
                         habit.getLastCompletedDate().equals(completedDate))

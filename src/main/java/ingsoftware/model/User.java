@@ -3,11 +3,8 @@ package ingsoftware.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map; // oppure un oggetto AvatarCustomization vero, se vuoi tipizzarlo meglio
-import java.util.HashMap;
 
 @Entity
 public class User {
@@ -23,20 +20,17 @@ public class User {
     private List<HabitCompletion> habitCompletions = new ArrayList<>();
 
     // Constructor per nuovo utente
-    public User(String username, String email, String passwordHash) {
-        this.username = username;
+    public User() {
+        this.username = "defaultUsername";
         this.level = 1;
         this.xp = 0;
         this.lastAccessDate = LocalDate.now();
     }
 
-    // Empty constructor for frameworks/ORM
-    public User() {}
-
     // Getters & setters per tutti i campi...
 
 
-    public Long getID() {
+    public Long getId() {
         return id;
     }
 
@@ -93,7 +87,7 @@ public class User {
         this.id = userId;
     }
 
-    public void setTotalXp(int i) {
+    public void setTotalXp(double i) {
         this.xp = i;
     }
 }

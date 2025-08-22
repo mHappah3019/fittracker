@@ -51,7 +51,7 @@ public class EquipmentService {
 
     public void refreshCache() {
         activeEquipmentByTypeCache.clear();
-        findAllEquippedByUser(userRepository.findById(1L).orElseThrow().getID()).forEach(
+        findAllEquippedByUser(userRepository.findById(1L).orElseThrow().getId()).forEach(
                 (type, equipment) -> activeEquipmentByTypeCache.put(type, equipment)
         );
     }

@@ -158,7 +158,7 @@ class UserTest {
         user.setId(testId);
 
         // Assert
-        assertThat(user.getID()).isEqualTo(testId);
+        assertThat(user.getId()).isEqualTo(testId);
     }
 
     @Test

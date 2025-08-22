@@ -28,7 +28,7 @@ public class DailyStreakNotificationHandler {
 
     public void onFirstAccessOfDay(User user, LocalDate previousAccessDate) {
         // Get all habits for the user
-        List<Habit> userHabits = habitRepository.findAllByUserId(user.getID());
+        List<Habit> userHabits = habitRepository.findAllByUserId(user.getId());
         
         // Find habits with significant streaks (e.g., 7+ days)
         List<Habit> significantStreakHabits = userHabits.stream()
@@ -36,7 +36,7 @@ public class DailyStreakNotificationHandler {
                 .collect(Collectors.toList());
         
         if (!significantStreakHabits.isEmpty()) {
-            System.out.println("Streak Notification for user: " + user.getID());
+            System.out.println("Streak Notification for user: " + user.getId());
             System.out.println("You have " + significantStreakHabits.size() + " habits with significant streaks!");
             
             // Display each significant streak
@@ -66,7 +66,7 @@ public class DailyStreakNotificationHandler {
                 .collect(Collectors.toList());
         
         if (!atRiskHabits.isEmpty()) {
-            System.out.println("\nStreak Alert for user: " + user.getID());
+            System.out.println("\nStreak Alert for user: " + user.getId());
             System.out.println("You have " + atRiskHabits.size() + " habits at risk of breaking their streak!");
             
             for (Habit habit : atRiskHabits) {
