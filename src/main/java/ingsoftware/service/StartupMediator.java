@@ -15,18 +15,18 @@ import java.util.List;
 
 @Component
 public class StartupMediator {
+    
+    private final GamificationService gamificationService;
+    private final UserService userService;
+    private final StartupPopupUIService popupUIService;
 
-    @Autowired
-    private GamificationService gamificationService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private StartupPopupUIService popupUIService;
-
-    @Autowired
-    public StartupMediator(GamificationService gamificationService, UserService userService) {}
+    public StartupMediator(GamificationService gamificationService, 
+                          UserService userService, 
+                          StartupPopupUIService popupUIService) {
+        this.gamificationService = gamificationService;
+        this.userService = userService;
+        this.popupUIService = popupUIService;
+    }
 
     public void handleApplicationStartup(Long userId) {
         User user = userService.findUserOrThrow(userId);

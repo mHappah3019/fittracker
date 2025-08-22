@@ -3,12 +3,17 @@ package ingsoftware.service;
 import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.service.post_completion.*;
 import javafx.application.Platform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
 @Component
 public class PostCompletionMediator {
+
+    private static final Logger logger = LoggerFactory.getLogger(PostCompletionMediator.class);
+
 
     //– Dipendenze opzionali (iniettate via costruttore o setter)
     private final CompletionPopupUIService popupUISvc;
@@ -35,7 +40,7 @@ public class PostCompletionMediator {
             try {
                 popupUISvc.showCompletionPopup(completion);
             } catch(Exception e) {
-                System.err.println("Errore aggiornamento UI: " + e.getMessage());
+                logger.error("Errore nella visualizzazione popup completamento: {}", e.getMessage());
             }
         });
 
@@ -47,7 +52,7 @@ public class PostCompletionMediator {
                 summarySvc.updateSummary(completion);
                 analyticsSvc.logEvent("HabitCompleted", completion);
             } catch(Exception e) {
-                System.err.println("Errore nei servizi post-completion: " + e.getMessage());
+                logger.error("Errore nel post-completamento: {}", e.getMessage());
             }
         });
     }
