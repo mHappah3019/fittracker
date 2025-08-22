@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EventService {
-    //TODO: implementare il servizio per gestire gli eventi: un toggle da app?
+
+    private static final boolean EVENT_BONUS_ACTIVE = true;
+
     public boolean isEventBonusActive() {
-        return false;
+        return EVENT_BONUS_ACTIVE;
     }
-
-
 }

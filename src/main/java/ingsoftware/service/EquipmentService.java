@@ -24,8 +24,6 @@ public class EquipmentService {
     @Autowired
     private UserRepository userRepository;
 
-
-    //TODO: decidere se mantenere la "cache" qua o metterla in "User"
     private final Map<EquipmentType, Equipment> activeEquipmentByTypeCache = new EnumMap<>(EquipmentType.class);
 
 

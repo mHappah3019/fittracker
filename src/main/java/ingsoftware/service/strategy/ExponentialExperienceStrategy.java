@@ -16,7 +16,7 @@ public class ExponentialExperienceStrategy implements GamificationStrategy {
         int userLevel = user.getLevel();
 
         // Esperienza esponenziale basata sul livello
-        double exponentialFactor = Math.pow(1.1, userLevel);
+        double exponentialFactor = Math.pow(0.85, userLevel);
         return baseResult * exponentialFactor;
     }
 }
