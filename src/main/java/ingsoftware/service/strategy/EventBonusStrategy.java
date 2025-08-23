@@ -6,17 +6,12 @@ import ingsoftware.service.EventService;
 public class EventBonusStrategy implements GamificationStrategy {
     private final GamificationStrategy baseStrategy;
     private final EventService eventService;
-    private double eventMultiplier;
-
-    public EventBonusStrategy(GamificationStrategy baseStrategy) {
-        this.baseStrategy = baseStrategy;
-        this.eventService = null;
-        this.eventMultiplier = 2.0;
-    }
+    private final double eventMultiplier;
 
     public EventBonusStrategy(GamificationStrategy baseStrategy, EventService eventService) {
         this.baseStrategy = baseStrategy;
         this.eventService = eventService;
+        this.eventMultiplier = 2.0; // Inizializza il moltiplicatore
     }
 
     @Override

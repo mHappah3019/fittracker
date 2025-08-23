@@ -1,3 +1,4 @@
+ingsoftware\model\enum_helpers\HabitFrequencyType.class
 ingsoftware\service\startup_handlers\DailyStreakNotificationHandler.class
 ingsoftware\repository\UserRepository.class
 ingsoftware\repository\HabitCompletionRepository.class
@@ -7,9 +8,9 @@ ingsoftware\repository\HabitRepository.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
 ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell.class
+ingsoftware\model\enum_helpers\HabitDifficulty.class
 ingsoftware\controller\CreateHabitController.class
 ingsoftware\model\builder\HabitBuilder.class
-ingsoftware\service\post_completion\Badge.class
 ingsoftware\service\strategy\GamificationStrategy.class
 ingsoftware\controller\EquipmentController.class
 ingsoftware\exception\HabitCompletionException.class
@@ -17,7 +18,6 @@ ingsoftware\model\Equipment$EquipmentState$3.class
 ingsoftware\service\strategy\ExponentialExperienceStrategy.class
 ingsoftware\service\StartupMediator.class
 ingsoftware\service\GamificationService.class
-ingsoftware\model\HabitFrequencyType.class
 ingsoftware\exception\HabitAlreadyCompletedException.class
 ingsoftware\service\post_completion\AnalyticsLoggerService.class
 ingsoftware\HabitTrackerApplication.class
@@ -31,9 +31,8 @@ ingsoftware\service\startup_handlers\DailySummaryHandler.class
 ingsoftware\service\strategy\BaseGamificationStrategy.class
 ingsoftware\service\strategy\EquipmentBoostedStrategy.class
 ingsoftware\controller\strictly_view\EquipmentRowManager.class
-ingsoftware\service\post_completion\DailySummaryService.class
 ingsoftware\service\strategy\EventBonusStrategy.class
-ingsoftware\model\HabitDifficulty.class
+ingsoftware\model\Badge.class
 ingsoftware\exception\EquipmentNotFoundException.class
 ingsoftware\repository\EquipmentRepository.class
 ingsoftware\model\DTO\LifePointsDTO.class
@@ -42,15 +41,15 @@ ingsoftware\controller\UserStatsController.class
 ingsoftware\service\PostCompletionMediator.class
 ingsoftware\model\User.class
 ingsoftware\service\mediator\PostCompletionMediator.class
-ingsoftware\model\EquipmentType.class
 ingsoftware\service\PopupUIService.class
-ingsoftware\model\HabitFrequency.class
 ingsoftware\controller\AbstractHabitFormController.class
 ingsoftware\service\HabitCompletionService$1.class
+ingsoftware\model\enum_helpers\EquipmentType.class
 ingsoftware\model\Equipment$EquipmentState.class
 ingsoftware\model\Equipment$EquipmentState$2.class
 ingsoftware\service\UserService.class
 ingsoftware\exception\GamificationException.class
+ingsoftware\model\enum_helpers\HabitFrequency.class
 ingsoftware\model\HabitCompletion.class
 ingsoftware\controller\HabitListController.class
 ingsoftware\util\AlertHelper.class
