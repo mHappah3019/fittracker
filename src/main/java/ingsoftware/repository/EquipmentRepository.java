@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
-    List<Equipment> findByStateEquals(Equipment.EquipmentState equipmentState);
-
-    Optional<Equipment> findByTypeAndState(EquipmentType type, Equipment.EquipmentState equipmentState);
+    List<Equipment> findByAvailableTrue();
+    
+    List<Equipment> findByType(EquipmentType type);
+    
+    List<Equipment> findByTypeAndAvailableTrue(EquipmentType type);
 }

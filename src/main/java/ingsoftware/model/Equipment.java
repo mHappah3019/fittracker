@@ -1,113 +1,55 @@
 package ingsoftware.model;
 import ingsoftware.model.enum_helpers.EquipmentType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 import java.util.Optional;
 
 @Entity
+@Table(name = "equipments")
 public class Equipment {
-    public enum EquipmentState {
-        NONE {
-            @Override
-            public String getIconPath(EquipmentType type) {
-                return "/icons/none-equipment.png";
-            }
-            @Override
-            public String getTypeIcon(EquipmentType type) {
-                return "⭕";
-            }
-            @Override
-            public String getStatusDisplay() {
-                return "➖ Non equipaggiato";
-            }
-            @Override
-            public boolean isActive() {
-                return false;
-            }
-        },
-        ACTIVE {
-            @Override
-            public String getIconPath(EquipmentType type) {
-                return type != null ? type.getIconPath() : "/icons/default-equipment.png";
-            }
-            @Override
-            public String getTypeIcon(EquipmentType type) {
-                return type != null ? type.getIcon() : "❓";
-            }
-            @Override
-            public String getStatusDisplay() {
-                return "🟢 Attivo";
-            }
-            @Override
-            public boolean isActive() {
-                return true;
-            }
-        },
-        INACTIVE {
-            @Override
-            public String getIconPath(EquipmentType type) {
-                return type != null ? type.getIconPath() : "/icons/default-equipment.png";
-            }
-            @Override
-            public String getTypeIcon(EquipmentType type) {
-                return type != null ? type.getIcon() : "❓";
-            }
-            @Override
-            public String getStatusDisplay() {
-                return "🔴 Disattivato";
-            }
-            @Override
-            public boolean isActive() {
-                return false;
-            }
-        };
-        public abstract String getIconPath(EquipmentType type);
-        public abstract String getTypeIcon(EquipmentType type);
-        public abstract String getStatusDisplay();
-        public abstract boolean isActive();
-    }
-
-    @Id private Long id;
+    
+    @Id 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String description;
     private EquipmentType type;
     private double experienceMultiplier = 1.0;
-    private EquipmentState state = EquipmentState.NONE;
+    private boolean available = true; // Indica se l'equipaggiamento è disponibile nel catalogo
     private transient boolean noneOption = false; // Aggiunto per l'opzione "Nessuno"
 
     // Metodo statico per creare l'opzione "Nessuno"
     public static Equipment createNoneOption() {
         Equipment none = new Equipment();
         none.setName("Nessuno");
-        none.setState(EquipmentState.NONE);
+        none.available = false;
         none.noneOption = true;
         return none;
     }
+    
     // Metodo per verificare se è l'opzione "Nessuno"
     public boolean isNoneOption() {
         return noneOption;
     }
-    // Metodi di stato migliorati
-    public boolean isNoneEquipment() {
-        return state == EquipmentState.NONE;
-    }
-    public boolean isActive() {
-        return state.isActive();
-    }
-    // Metodi di utilità migliorati
+    
+    // Metodi di utilità semplificati
     public String getIconPath() {
-        return state.getIconPath(type);
+        if (noneOption) {
+            return "/icons/none-equipment.png";
+        }
+        return type != null ? type.getIconPath() : "/icons/default-equipment.png";
     }
+    
     public String getTypeIcon() {
-        return state.getTypeIcon(type);
+        if (noneOption) {
+            return "⭕";
+        }
+        return type != null ? type.getIcon() : "❓";
     }
-    public String getStatusDisplay() {
-        return state.getStatusDisplay();
-    }
+    
     public String getMultiplierDisplay() {
-        return isNoneEquipment() ? "1.0x" : String.format("%.1fx", experienceMultiplier);
+        return noneOption ? "1.0x" : String.format("%.1fx", experienceMultiplier);
     }
     // Getter e setter completi
     public Long getId() {
@@ -141,11 +83,12 @@ public class Equipment {
         this.experienceMultiplier = experienceMultiplier;
     }
 
-    public EquipmentState getState() {
-        return state;
+    public boolean isAvailable() {
+        return available;
     }
-    public void setState(EquipmentState state) {
-        this.state = state != null ? state : EquipmentState.NONE;
+    
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
     // Metodi equals e hashCode
     @Override

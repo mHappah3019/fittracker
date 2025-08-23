@@ -14,6 +14,7 @@ import java.util.Set;
 
 
 @Entity
+@Table(name = "habits")
 public class Habit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

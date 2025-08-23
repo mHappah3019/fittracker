@@ -24,7 +24,7 @@ class EquipmentTest {
 
         // Assert
         assertThat(newEquipment.getExperienceMultiplier()).isEqualTo(1.0);
-        assertThat(newEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);
+        assertThat(newEquipment.isAvailable()).isTrue();
         assertThat(newEquipment.isNoneOption()).isFalse();
     }
 
@@ -35,92 +35,22 @@ class EquipmentTest {
 
         // Assert
         assertThat(noneEquipment.getName()).isEqualTo("Nessuno");
-        assertThat(noneEquipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);
+        assertThat(noneEquipment.isAvailable()).isFalse();
         assertThat(noneEquipment.isNoneOption()).isTrue();
     }
 
     @Test
-    void isNoneEquipment_shouldReturnTrue_whenStateIsNone() {
+    void getMultiplierDisplay_shouldReturn1_0x_whenNoneOption() {
         // Arrange
-        equipment.setState(Equipment.EquipmentState.NONE);
+        Equipment noneEquipment = Equipment.createNoneOption();
 
         // Act & Assert
-        assertThat(equipment.isNoneEquipment()).isTrue();
+        assertThat(noneEquipment.getMultiplierDisplay()).isEqualTo("1.0x");
     }
 
     @Test
-    void isNoneEquipment_shouldReturnFalse_whenStateIsActive() {
+    void getMultiplierDisplay_shouldReturnFormattedMultiplier_whenNotNoneOption() {
         // Arrange
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
-
-        // Act & Assert
-        assertThat(equipment.isNoneEquipment()).isFalse();
-    }
-
-    @Test
-    void isNoneEquipment_shouldReturnFalse_whenStateIsInactive() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.INACTIVE);
-
-        // Act & Assert
-        assertThat(equipment.isNoneEquipment()).isFalse();
-    }
-
-    @Test
-    void isActive_shouldReturnTrue_whenStateIsActive() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
-
-        // Act & Assert
-        assertThat(equipment.isActive()).isTrue();
-    }
-
-    @Test
-    void isActive_shouldReturnFalse_whenStateIsNone() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.NONE);
-
-        // Act & Assert
-        assertThat(equipment.isActive()).isFalse();
-    }
-
-    @Test
-    void isActive_shouldReturnFalse_whenStateIsInactive() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.INACTIVE);
-
-        // Act & Assert
-        assertThat(equipment.isActive()).isFalse();
-    }
-
-    @Test
-    void getStatusDisplay_shouldReturnCorrectDisplay_forEachState() {
-        // Test NONE state
-        equipment.setState(Equipment.EquipmentState.NONE);
-        assertThat(equipment.getStatusDisplay()).isEqualTo("➖ Non equipaggiato");
-
-        // Test ACTIVE state
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
-        assertThat(equipment.getStatusDisplay()).isEqualTo("🟢 Attivo");
-
-        // Test INACTIVE state
-        equipment.setState(Equipment.EquipmentState.INACTIVE);
-        assertThat(equipment.getStatusDisplay()).isEqualTo("🔴 Disattivato");
-    }
-
-    @Test
-    void getMultiplierDisplay_shouldReturn1_0x_whenNoneEquipment() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.NONE);
-
-        // Act & Assert
-        assertThat(equipment.getMultiplierDisplay()).isEqualTo("1.0x");
-    }
-
-    @Test
-    void getMultiplierDisplay_shouldReturnFormattedMultiplier_whenNotNoneEquipment() {
-        // Arrange
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
         equipment.setExperienceMultiplier(1.5);
 
         // Act & Assert
@@ -130,11 +60,25 @@ class EquipmentTest {
     @Test
     void getMultiplierDisplay_shouldHandleDecimalValues() {
         // Arrange
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
         equipment.setExperienceMultiplier(2.75);
 
         // Act & Assert
         assertThat(equipment.getMultiplierDisplay()).isEqualTo("2.8x"); // Rounded to 1 decimal place
+    }
+
+    @Test
+    void isAvailable_shouldReturnTrue_byDefault() {
+        // Act & Assert
+        assertThat(equipment.isAvailable()).isTrue();
+    }
+
+    @Test
+    void setAvailable_shouldSetAvailabilityCorrectly() {
+        // Act
+        equipment.setAvailable(false);
+
+        // Assert
+        assertThat(equipment.isAvailable()).isFalse();
     }
 
     @Test
@@ -159,23 +103,7 @@ class EquipmentTest {
         assertThat(result.get()).isEqualTo(EquipmentType.WEAPON);
     }
 
-    @Test
-    void setState_shouldHandleNullState() {
-        // Act
-        equipment.setState(null);
 
-        // Assert
-        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.NONE);
-    }
-
-    @Test
-    void setState_shouldSetStateCorrectly() {
-        // Act
-        equipment.setState(Equipment.EquipmentState.ACTIVE);
-
-        // Assert
-        assertThat(equipment.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);
-    }
 
     @Test
     void settersAndGetters_shouldWorkCorrectly() {

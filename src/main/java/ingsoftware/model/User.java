@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
-    @Id private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String username;
     private int level;
     private double xp;
@@ -18,6 +21,9 @@ public class User {
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<HabitCompletion> habitCompletions = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserEquipment> userEquipments = new ArrayList<>();
 
     // Constructor per nuovo utente
     public User() {
@@ -89,6 +95,24 @@ public class User {
 
     public void setTotalXp(double i) {
         this.xp = i;
+    }
+    
+    public List<UserEquipment> getUserEquipments() {
+        return userEquipments;
+    }
+    
+    public void setUserEquipments(List<UserEquipment> userEquipments) {
+        this.userEquipments = userEquipments;
+    }
+    
+    public void addUserEquipment(UserEquipment userEquipment) {
+        this.userEquipments.add(userEquipment);
+        userEquipment.setUser(this);
+    }
+    
+    public void removeUserEquipment(UserEquipment userEquipment) {
+        this.userEquipments.remove(userEquipment);
+        userEquipment.setUser(null);
     }
 }
 
