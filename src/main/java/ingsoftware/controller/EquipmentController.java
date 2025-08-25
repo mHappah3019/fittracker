@@ -47,7 +47,7 @@ public class EquipmentController {
     private void initialize() {
         try {
             Map<EquipmentType, ObservableList<Equipment>> byType = equipmentService.getAllEquipmentGroupedByType();
-            equipmentService.refreshCache();
+            equipmentService.refreshCache(currentUserId);
 
             byType.forEach((type, list) -> {
                 EquipmentRowManager rowManager = new EquipmentRowManager(type, list);
@@ -102,7 +102,7 @@ public class EquipmentController {
                 }
             });
 
-            equipmentService.refreshCache();
+            equipmentService.refreshCache(currentUserId);
             showSuccessMessage("Equipaggiamento salvato con successo!");
             close();
 
@@ -110,7 +110,7 @@ public class EquipmentController {
             showErrorMessage(e.getMessage());
         } catch (Exception e) {
             logger.error("Errore durante il salvataggio dell'equipaggiamento per l'utente {}", currentUserId, e);
-            showErrorMessage("Errore durante il salvataggio dell'equipaggiamento. Riprova più tardi.");
+            showErrorMessage(e.getMessage());
         }
     }
 

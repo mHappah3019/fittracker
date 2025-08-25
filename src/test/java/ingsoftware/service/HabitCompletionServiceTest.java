@@ -60,7 +60,7 @@ class HabitCompletionServiceTest {
 
         when(habitRepository.findById(habitId)).thenReturn(Optional.of(mockHabit));
         when(userService.findUserOrThrow(userId)).thenReturn(mockUser);
-        when(completionRepository.existsByUserAndHabitAndCompletionDate(mockUser, mockHabit, today)).thenReturn(false);
+        when(completionRepository.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today)).thenReturn(false);
         when(completionRepository.save(any(HabitCompletion.class))).thenReturn(new HabitCompletion());
 
         double xpGained = 50.0;
@@ -107,7 +107,7 @@ class HabitCompletionServiceTest {
 
         when(habitRepository.findById(habitId)).thenReturn(Optional.of(mockHabit));
         when(userService.findUserOrThrow(userId)).thenReturn(mockUser);
-        when(completionRepository.existsByUserAndHabitAndCompletionDate(mockUser, mockHabit, today)).thenReturn(true);
+        when(completionRepository.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today)).thenReturn(true);
 
         assertThrows(HabitAlreadyCompletedException.class, () -> habitCompletionService.completeHabit(habitId, userId));
 
@@ -132,7 +132,7 @@ class HabitCompletionServiceTest {
 
         when(habitRepository.findById(habitId)).thenReturn(Optional.of(mockHabit));
         when(userService.findUserOrThrow(userId)).thenReturn(mockUser);
-        when(completionRepository.existsByUserAndHabitAndCompletionDate(mockUser, mockHabit, today)).thenReturn(false);
+        when(completionRepository.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today)).thenReturn(false);
         when(completionRepository.save(any(HabitCompletion.class))).thenReturn(new HabitCompletion());
 
         double xpGained = 30;

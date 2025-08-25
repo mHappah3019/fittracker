@@ -9,16 +9,14 @@ import java.util.Objects;
 public class UserEquipment {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipment_id", nullable = false)
-    private Equipment equipment;
+    @Column(name = "equipment_id", nullable = false)
+    private Long equipmentId;
     
     @Column(name = "is_equipped", nullable = false)
     private boolean equipped = false;
@@ -34,14 +32,14 @@ public class UserEquipment {
         this.acquiredDate = LocalDateTime.now();
     }
     
-    public UserEquipment(User user, Equipment equipment) {
+    public UserEquipment(Long userId, Long equipmentId) {
         this();
-        this.user = user;
-        this.equipment = equipment;
+        this.userId = userId;
+        this.equipmentId = equipmentId;
     }
     
-    public UserEquipment(User user, Equipment equipment, boolean equipped) {
-        this(user, equipment);
+    public UserEquipment(Long userId, Long equipmentId, boolean equipped) {
+        this(userId, equipmentId);
         this.equipped = equipped;
         if (equipped) {
             this.equippedDate = LocalDateTime.now();
@@ -68,20 +66,20 @@ public class UserEquipment {
         this.id = id;
     }
     
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
     
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
     
-    public Equipment getEquipment() {
-        return equipment;
+    public Long getEquipmentId() {
+        return equipmentId;
     }
     
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
+    public void setEquipmentId(Long equipmentId) {
+        this.equipmentId = equipmentId;
     }
     
     public boolean isEquipped() {
@@ -120,20 +118,20 @@ public class UserEquipment {
         if (o == null || getClass() != o.getClass()) return false;
         UserEquipment that = (UserEquipment) o;
         return Objects.equals(id, that.id) ||
-               (Objects.equals(user, that.user) && Objects.equals(equipment, that.equipment));
+               (Objects.equals(userId, that.userId) && Objects.equals(equipmentId, that.equipmentId));
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(user, equipment);
+        return Objects.hash(userId, equipmentId);
     }
     
     @Override
     public String toString() {
         return "UserEquipment{" +
                 "id=" + id +
-                ", user=" + (user != null ? user.getId() : null) +
-                ", equipment=" + (equipment != null ? equipment.getName() : null) +
+                ", userId=" + userId +
+                ", equipmentId=" + equipmentId +
                 ", equipped=" + equipped +
                 ", acquiredDate=" + acquiredDate +
                 ", equippedDate=" + equippedDate +

@@ -38,13 +38,13 @@ public interface UserEquipmentRepository extends JpaRepository<UserEquipment, Lo
     /**
      * Trova l'equipaggiamento equipaggiato di un tipo specifico per un utente
      */
-    @Query("SELECT ue FROM UserEquipment ue WHERE ue.user.id = :userId AND ue.equipped = true AND ue.equipment.type = :type")
+    @Query("SELECT ue FROM UserEquipment ue JOIN Equipment e ON ue.equipmentId = e.id WHERE ue.userId = :userId AND ue.equipped = true AND e.type = :type")
     Optional<UserEquipment> findEquippedByUserIdAndType(@Param("userId") Long userId, @Param("type") EquipmentType type);
     
     /**
      * Trova tutti gli equipaggiamenti di un tipo specifico per un utente
      */
-    @Query("SELECT ue FROM UserEquipment ue WHERE ue.user.id = :userId AND ue.equipment.type = :type")
+    @Query("SELECT ue FROM UserEquipment ue JOIN Equipment e ON ue.equipmentId = e.id WHERE ue.userId = :userId AND e.type = :type")
     List<UserEquipment> findByUserIdAndEquipmentType(@Param("userId") Long userId, @Param("type") EquipmentType type);
     
     /**

@@ -53,8 +53,8 @@ class UserEquipmentRepositoryTest {
         entityManager.persistAndFlush(armor);
 
         // Crea associazioni utente-equipaggiamento
-        userWeapon = new UserEquipment(user, weapon, true); // equipaggiato
-        userArmor = new UserEquipment(user, armor, false);  // non equipaggiato
+        userWeapon = new UserEquipment(user.getId(), weapon.getId(), true); // equipaggiato
+        userArmor = new UserEquipment(user.getId(), armor.getId(), false);  // non equipaggiato
         
         entityManager.persistAndFlush(userWeapon);
         entityManager.persistAndFlush(userArmor);
@@ -72,7 +72,7 @@ class UserEquipmentRepositoryTest {
         List<UserEquipment> equippedItems = userEquipmentRepository.findByUserIdAndEquippedTrue(user.getId());
         
         assertEquals(1, equippedItems.size());
-        assertEquals(weapon, equippedItems.get(0).getEquipment());
+        assertEquals(weapon.getId(), equippedItems.get(0).getEquipmentId());
     }
 
     @Test
@@ -80,7 +80,7 @@ class UserEquipmentRepositoryTest {
         List<UserEquipment> unequippedItems = userEquipmentRepository.findByUserIdAndEquippedFalse(user.getId());
         
         assertEquals(1, unequippedItems.size());
-        assertEquals(armor, unequippedItems.get(0).getEquipment());
+        assertEquals(armor.getId(), unequippedItems.get(0).getEquipmentId());
     }
 
     @Test
@@ -96,7 +96,7 @@ class UserEquipmentRepositoryTest {
         Optional<UserEquipment> found = userEquipmentRepository.findEquippedByUserIdAndType(user.getId(), EquipmentType.WEAPON);
         
         assertTrue(found.isPresent());
-        assertEquals(weapon, found.get().getEquipment());
+        assertEquals(weapon.getId(), found.get().getEquipmentId());
         
         // Test per tipo non equipaggiato
         Optional<UserEquipment> notFound = userEquipmentRepository.findEquippedByUserIdAndType(user.getId(), EquipmentType.ARMOR);
@@ -108,7 +108,7 @@ class UserEquipmentRepositoryTest {
         List<UserEquipment> weaponItems = userEquipmentRepository.findByUserIdAndEquipmentType(user.getId(), EquipmentType.WEAPON);
         
         assertEquals(1, weaponItems.size());
-        assertEquals(weapon, weaponItems.get(0).getEquipment());
+        assertEquals(weapon.getId(), weaponItems.get(0).getEquipmentId());
     }
 
     @Test

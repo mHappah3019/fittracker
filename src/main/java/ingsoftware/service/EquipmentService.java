@@ -53,12 +53,13 @@ public class EquipmentService {
                 ));
     }
 
-    public void refreshCache() {
+    public void refreshCache(Long userId) {
         activeEquipmentByTypeCache.clear();
-        findAllEquippedByUser(userRepository.findById(1L).orElseThrow().getId()).forEach(
+        findAllEquippedByUser(userId).forEach(
                 (type, equipment) -> activeEquipmentByTypeCache.put(type, equipment)
         );
     }
+
 
     public Map<EquipmentType, Equipment> findAllEquippedByUser(Long userId) {
         List<UserEquipment> equippedUserEquipments = userEquipmentRepository.findByUserIdAndEquippedTrue(userId);
@@ -66,7 +67,8 @@ public class EquipmentService {
         // Utilizziamo uno Stream per processare la lista e gestire l'Optional in modo pulito.
         // Usiamo EnumMap per efficienza con chiavi enum.
         return equippedUserEquipments.stream()
-                .map(UserEquipment::getEquipment) // Estrae l'equipaggiamento da UserEquipment
+                .map(ue -> equipmentRepository.findById(ue.getEquipmentId()).orElse(null)) // Carica l'equipaggiamento tramite ID
+                .filter(Objects::nonNull) // Filtra gli equipaggiamenti non trovati
                 .filter(e -> e.getType().isPresent()) // Filtra solo gli equipaggiamenti che hanno un tipo.
                 .collect(Collectors.toMap(
                         e -> e.getType().get(), // Estrae il tipo dall'Optional per usarlo come chiave.
@@ -112,29 +114,35 @@ public class EquipmentService {
 
     public Optional<Equipment> findEquippedByUserAndType(Long currentUserId, EquipmentType type) {
         return userEquipmentRepository.findEquippedByUserIdAndType(currentUserId, type)
-                .map(UserEquipment::getEquipment);
+                .flatMap(ue -> equipmentRepository.findById(ue.getEquipmentId()));
     }
-    
+
     /**
-     * Assegna un equipaggiamento a un utente (lo aggiunge al suo inventario)
+     * Inizializza l'inventario di un utente assegnandogli tutti gli equipaggiamenti disponibili.
+     * Questo metodo è utile in fase di sviluppo o per semplificare l'acquisizione iniziale.
+     * Deve essere chiamato una sola volta per utente.
+     *
+     * @param userId L'ID dell'utente da inizializzare.
      */
     @Transactional
-    public UserEquipment assignEquipmentToUser(Long userId, Long equipmentId) {
-        // Verifica se l'utente possiede già questo equipaggiamento
-        if (userEquipmentRepository.existsByUserIdAndEquipmentId(userId, equipmentId)) {
-            throw new RuntimeException("L'utente possiede già questo equipaggiamento");
+    public void initializeUserEquipment(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("Utente con ID " + userId + " non trovato.");
         }
-        
-        Equipment equipment = equipmentRepository.findById(equipmentId)
-                .orElseThrow(() -> new RuntimeException("Equipaggiamento non trovato"));
-        
-        UserEquipment userEquipment = new UserEquipment();
-        userEquipment.setUser(userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Utente non trovato")));
-        userEquipment.setEquipment(equipment);
-        
-        return userEquipmentRepository.save(userEquipment);
+
+        List<Equipment> allCatalogEquipment = equipmentRepository.findAll();
+
+        for (Equipment equipment : allCatalogEquipment) {
+            // Assegna l'equipaggiamento solo se l'utente non lo possiede già
+            // Questo previene la creazione di duplicati se il metodo viene chiamato più volte
+            if (!userEquipmentRepository.existsByUserIdAndEquipmentId(userId, equipment.getId())) {
+                UserEquipment userEquipment = new UserEquipment(userId, equipment.getId());
+                userEquipmentRepository.save(userEquipment);
+            }
+        }
     }
+
+
     
     /**
      * Ottiene tutti gli equipaggiamenti posseduti da un utente

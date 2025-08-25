@@ -25,14 +25,14 @@ class UserEquipmentTest {
         equipment.setType(EquipmentType.WEAPON);
         equipment.setExperienceMultiplier(1.5);
         
-        userEquipment = new UserEquipment(user, equipment);
+        userEquipment = new UserEquipment(1L, 1L);
     }
 
     @Test
     void testUserEquipmentCreation() {
         assertNotNull(userEquipment);
-        assertEquals(user, userEquipment.getUser());
-        assertEquals(equipment, userEquipment.getEquipment());
+        assertEquals(1L, userEquipment.getUserId());
+        assertEquals(1L, userEquipment.getEquipmentId());
         assertFalse(userEquipment.isEquipped());
         assertNotNull(userEquipment.getAcquiredDate());
         assertNull(userEquipment.getEquippedDate());
@@ -85,7 +85,7 @@ class UserEquipmentTest {
 
     @Test
     void testEqualsAndHashCode() {
-        UserEquipment userEquipment2 = new UserEquipment(user, equipment);
+        UserEquipment userEquipment2 = new UserEquipment(1L, 1L);
         
         assertEquals(userEquipment, userEquipment2);
         assertEquals(userEquipment.hashCode(), userEquipment2.hashCode());
@@ -97,14 +97,14 @@ class UserEquipmentTest {
         
         assertNotNull(toString);
         assertTrue(toString.contains("UserEquipment"));
-        assertTrue(toString.contains("user=1"));
-        assertTrue(toString.contains("equipment=Test Equipment"));
+        assertTrue(toString.contains("userId=1"));
+        assertTrue(toString.contains("equipmentId=1"));
         assertTrue(toString.contains("equipped=false"));
     }
 
     @Test
     void testConstructorWithEquippedFlag() {
-        UserEquipment equippedUserEquipment = new UserEquipment(user, equipment, true);
+        UserEquipment equippedUserEquipment = new UserEquipment(1L, 1L, true);
         
         assertTrue(equippedUserEquipment.isEquipped());
         assertNotNull(equippedUserEquipment.getEquippedDate());

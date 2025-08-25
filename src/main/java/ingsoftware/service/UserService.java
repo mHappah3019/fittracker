@@ -1,25 +1,24 @@
 package ingsoftware.service;
 
 import ingsoftware.exception.UserNotFoundException;
-import ingsoftware.model.Habit;
 import ingsoftware.model.User;
-import ingsoftware.repository.HabitRepository;
 import ingsoftware.repository.UserRepository;
+import ingsoftware.service.startup_handlers.DataLoaderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DataLoaderService dataLoaderService;
 
-    // Ho aggiunto HabitRepository e LifePointCalculator al costruttore
-    // in quanto sono utilizzati nei metodi ma non erano presenti.
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    public UserService(UserRepository userRepository, DataLoaderService dataLoaderService) {
         this.userRepository = userRepository;
+        this.dataLoaderService = dataLoaderService;
     }
 
     public boolean isFirstAccessOfDay(User user, LocalDate date) {
@@ -45,5 +44,19 @@ public class UserService {
 
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
+    }
+    
+    /**
+     * Ottiene l'utente di default (il primo utente nel database)
+     */
+    public User getDefaultUser() {
+        return dataLoaderService.getDefaultUser();
+    }
+    
+    /**
+     * Ottiene l'ID dell'utente di default
+     */
+    public Long getDefaultUserId() {
+        return dataLoaderService.getDefaultUserId();
     }
 }

@@ -11,19 +11,17 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(unique = true, nullable = false)
     private String username;
     private int level;
     private double xp;
     private int lifePoints = 100; // valore iniziale
     private LocalDate lastAccessDate;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<HabitCompletion> habitCompletions = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserEquipment> userEquipments = new ArrayList<>();
+
 
     // Constructor per nuovo utente
     public User() {
@@ -80,14 +78,6 @@ public class User {
             this.xp = 0;
         }
     }
-    
-    public List<HabitCompletion> getHabitCompletions() {
-        return habitCompletions;
-    }
-    
-    public void setHabitCompletions(List<HabitCompletion> habitCompletions) {
-        this.habitCompletions = habitCompletions;
-    }
 
     public void setId(Long userId) {
         this.id = userId;
@@ -97,22 +87,18 @@ public class User {
         this.xp = i;
     }
     
-    public List<UserEquipment> getUserEquipments() {
-        return userEquipments;
+    public String getUsername() {
+        return username;
     }
     
-    public void setUserEquipments(List<UserEquipment> userEquipments) {
-        this.userEquipments = userEquipments;
+    public void setUsername(String username) {
+        this.username = username;
     }
     
-    public void addUserEquipment(UserEquipment userEquipment) {
-        this.userEquipments.add(userEquipment);
-        userEquipment.setUser(this);
+    public void setLifePoints(int lifePoints) {
+        this.lifePoints = lifePoints;
     }
     
-    public void removeUserEquipment(UserEquipment userEquipment) {
-        this.userEquipments.remove(userEquipment);
-        userEquipment.setUser(null);
-    }
+
 }
 

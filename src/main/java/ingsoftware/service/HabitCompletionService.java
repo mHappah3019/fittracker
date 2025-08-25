@@ -25,9 +25,6 @@ public class HabitCompletionService {
     @Autowired
     private UserService userService;
 
-
-
-
     /**
      * Implementazione effettiva del completamento dell'abitudine.
      * Questo metodo è privato e viene chiamato da completeHabit che gestisce le eccezioni.
@@ -38,13 +35,13 @@ public class HabitCompletionService {
         Habit habit = habitService.findHabitOrThrow(habitId);
         User  user  = userService.findUserOrThrow(userId);
 
-        verifyNotAlreadyCompletedToday(user, habit, today);
+        verifyNotAlreadyCompletedToday(userId, habitId, today);
 
         int streak = updateStreak(habit, today);
 
         HabitCompletion completion = new HabitCompletionBuilder()
-                .withUser(user)
-                .withHabit(habit)
+                .withUserId(userId)
+                .withHabitId(habitId)
                 .withCompletionDate(today)
                 .withStreak(streak)
                 .build();
@@ -61,10 +58,8 @@ public class HabitCompletionService {
 
     private int calculateAndUpdateLevel(User user) {
         try {
-
             int newLevel = gamificationService.checkUpdateUserLevel(user);
             userService.saveUser(user);
-
             return newLevel;
         } catch (Exception e) {
             throw e;
@@ -74,19 +69,16 @@ public class HabitCompletionService {
     private double calculateAndUpdateXP(Habit habit, User user) {
         try {
             double xpGained = gamificationService.calculateHabitXP(habit, user);
-
             user.addTotalXp(xpGained);
             userService.saveUser(user);
-
             return xpGained;
         } catch (Exception e) {
             throw e;
         }
     }
 
-
-    private void verifyNotAlreadyCompletedToday(User user, Habit habit, LocalDate today) {
-        boolean alreadyCompleted = completionRepository.existsByUserAndHabitAndCompletionDate(user, habit, today);
+    private void verifyNotAlreadyCompletedToday(Long userId, Long habitId, LocalDate today) {
+        boolean alreadyCompleted = completionRepository.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today);
         if (alreadyCompleted) {
             throw new HabitAlreadyCompletedException("Abitudine già completata oggi");
         }
@@ -96,7 +88,6 @@ public class HabitCompletionService {
         try {
             LocalDate lastCompleted = habit.getLastCompletedDate();
             int newStreak = habit.getCurrentStreak();
-
 
             if (lastCompleted == null) {
                 newStreak = 1;

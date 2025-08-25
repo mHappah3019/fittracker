@@ -1,10 +1,12 @@
 package ingsoftware.service;
 
 import ingsoftware.model.Equipment;
+import ingsoftware.model.UserEquipment;
 import ingsoftware.model.enum_helpers.EquipmentType;
 import ingsoftware.model.User;
 import ingsoftware.repository.EquipmentRepository;
 import ingsoftware.repository.UserRepository;
+import ingsoftware.repository.UserEquipmentRepository;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,9 @@ class EquipmentServiceTest {
 
     @Mock
     private UserRepository userRepository;
+    
+    @Mock
+    private UserEquipmentRepository userEquipmentRepository;
 
     @InjectMocks
     private EquipmentService equipmentService;
@@ -55,13 +60,15 @@ class EquipmentServiceTest {
         weapon.setId(1L);
         weapon.setName("Sword");
         weapon.setType(EquipmentType.WEAPON);
+        weapon.setAvailable(true);
 
         Equipment armor = new Equipment();
         armor.setId(2L);
         armor.setName("Shield");
         armor.setType(EquipmentType.ARMOR);
+        armor.setAvailable(true);
 
-        when(equipmentRepository.findAll()).thenReturn(Arrays.asList(weapon, armor));
+        when(equipmentRepository.findByAvailableTrue()).thenReturn(Arrays.asList(weapon, armor));
 
         // Act
         Map<EquipmentType, ObservableList<Equipment>> result = equipmentService.getAllEquipmentGroupedByType();
@@ -90,15 +97,18 @@ class EquipmentServiceTest {
         Equipment activeWeapon = new Equipment();
         activeWeapon.setId(1L);
         activeWeapon.setType(EquipmentType.WEAPON);
-        activeWeapon.setState(Equipment.EquipmentState.ACTIVE);
 
         Equipment activeArmor = new Equipment();
         activeArmor.setId(2L);
         activeArmor.setType(EquipmentType.ARMOR);
-        activeArmor.setState(Equipment.EquipmentState.ACTIVE);
 
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Arrays.asList(activeWeapon, activeArmor));
+        UserEquipment userWeapon = new UserEquipment(userId, 1L, true);
+        UserEquipment userArmor = new UserEquipment(userId, 2L, true);
+
+        when(userEquipmentRepository.findByUserIdAndEquippedTrue(userId))
+                .thenReturn(Arrays.asList(userWeapon, userArmor));
+        when(equipmentRepository.findById(1L)).thenReturn(Optional.of(activeWeapon));
+        when(equipmentRepository.findById(2L)).thenReturn(Optional.of(activeArmor));
 
         // Act
         Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(userId);
@@ -113,7 +123,7 @@ class EquipmentServiceTest {
     void findAllEquippedByUser_shouldHandleEmptyResult() {
         // Arrange
         Long userId = 1L;
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
+        when(userEquipmentRepository.findByUserIdAndEquippedTrue(userId))
                 .thenReturn(Collections.emptyList());
 
         // Act
@@ -131,15 +141,18 @@ class EquipmentServiceTest {
         Equipment equipmentWithType = new Equipment();
         equipmentWithType.setId(1L);
         equipmentWithType.setType(EquipmentType.WEAPON);
-        equipmentWithType.setState(Equipment.EquipmentState.ACTIVE);
 
         Equipment equipmentWithoutType = new Equipment();
         equipmentWithoutType.setId(2L);
-        equipmentWithoutType.setState(Equipment.EquipmentState.ACTIVE);
         // type is not set (Optional.empty())
 
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Arrays.asList(equipmentWithType, equipmentWithoutType));
+        UserEquipment userEquipment1 = new UserEquipment(userId, 1L, true);
+        UserEquipment userEquipment2 = new UserEquipment(userId, 2L, true);
+
+        when(userEquipmentRepository.findByUserIdAndEquippedTrue(userId))
+                .thenReturn(Arrays.asList(userEquipment1, userEquipment2));
+        when(equipmentRepository.findById(1L)).thenReturn(Optional.of(equipmentWithType));
+        when(equipmentRepository.findById(2L)).thenReturn(Optional.of(equipmentWithoutType));
 
         // Act
         Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(userId);
@@ -158,26 +171,26 @@ class EquipmentServiceTest {
         Equipment newEquipment = new Equipment();
         newEquipment.setId(equipmentId);
         newEquipment.setType(EquipmentType.WEAPON);
-        newEquipment.setState(Equipment.EquipmentState.INACTIVE);
 
-        Equipment oldEquipment = new Equipment();
-        oldEquipment.setId(2L);
-        oldEquipment.setType(EquipmentType.WEAPON);
-        oldEquipment.setState(Equipment.EquipmentState.ACTIVE);
+        UserEquipment userEquipment = new UserEquipment(userId, equipmentId, false);
+        UserEquipment oldUserEquipment = new UserEquipment(userId, 2L, true);
 
         when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(newEquipment));
-        when(equipmentRepository.findByTypeAndState(EquipmentType.WEAPON, Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Optional.of(oldEquipment));
-        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userEquipmentRepository.findByUserIdAndEquipmentId(userId, equipmentId))
+                .thenReturn(Optional.of(userEquipment));
+        when(userEquipmentRepository.findEquippedByUserIdAndType(userId, EquipmentType.WEAPON))
+                .thenReturn(Optional.of(oldUserEquipment));
+        when(userEquipmentRepository.save(any(UserEquipment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         Equipment result = equipmentService.equip(userId, equipmentId);
 
         // Assert
-        assertThat(result.getState()).isEqualTo(Equipment.EquipmentState.ACTIVE);
-        verify(equipmentRepository).save(oldEquipment); // Should save unequipped item
-        verify(equipmentRepository).save(newEquipment); // Should save equipped item
-        assertThat(oldEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);
+        assertThat(result).isEqualTo(newEquipment);
+        verify(userEquipmentRepository).save(oldUserEquipment); // Should save unequipped item
+        verify(userEquipmentRepository).save(userEquipment); // Should save equipped item
+        assertThat(userEquipment.isEquipped()).isTrue();
+        assertThat(oldUserEquipment.isEquipped()).isFalse();
     }
 
     @Test
@@ -192,6 +205,26 @@ class EquipmentServiceTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Equipaggiamento non trovato");
     }
+    
+    @Test
+    void equip_shouldThrowException_whenUserDoesNotOwnEquipment() {
+        // Arrange
+        Long userId = 1L;
+        Long equipmentId = 1L;
+        
+        Equipment equipment = new Equipment();
+        equipment.setId(equipmentId);
+        equipment.setType(EquipmentType.WEAPON);
+        
+        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(equipment));
+        when(userEquipmentRepository.findByUserIdAndEquipmentId(userId, equipmentId))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThatThrownBy(() -> equipmentService.equip(userId, equipmentId))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("L'utente non possiede questo equipaggiamento");
+    }
 
     @Test
     void equip_shouldThrowException_whenEquipmentHasNoType() {
@@ -201,10 +234,13 @@ class EquipmentServiceTest {
         
         Equipment equipmentWithoutType = new Equipment();
         equipmentWithoutType.setId(equipmentId);
-        equipmentWithoutType.setState(Equipment.EquipmentState.INACTIVE);
         // type is not set
 
+        UserEquipment userEquipment = new UserEquipment(userId, equipmentId, false);
+
         when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(equipmentWithoutType));
+        when(userEquipmentRepository.findByUserIdAndEquipmentId(userId, equipmentId))
+                .thenReturn(Optional.of(userEquipment));
 
         // Act & Assert
         assertThatThrownBy(() -> equipmentService.equip(userId, equipmentId))
@@ -218,21 +254,18 @@ class EquipmentServiceTest {
         Long userId = 1L;
         EquipmentType type = EquipmentType.WEAPON;
         
-        Equipment activeEquipment = new Equipment();
-        activeEquipment.setId(1L);
-        activeEquipment.setType(type);
-        activeEquipment.setState(Equipment.EquipmentState.ACTIVE);
+        UserEquipment equippedUserEquipment = new UserEquipment(userId, 1L, true);
 
-        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Optional.of(activeEquipment));
-        when(equipmentRepository.save(any(Equipment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userEquipmentRepository.findEquippedByUserIdAndType(userId, type))
+                .thenReturn(Optional.of(equippedUserEquipment));
+        when(userEquipmentRepository.save(any(UserEquipment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         equipmentService.unequip(userId, type);
 
         // Assert
-        assertThat(activeEquipment.getState()).isEqualTo(Equipment.EquipmentState.INACTIVE);
-        verify(equipmentRepository).save(activeEquipment);
+        assertThat(equippedUserEquipment.isEquipped()).isFalse();
+        verify(userEquipmentRepository).save(equippedUserEquipment);
     }
 
     @Test
@@ -241,21 +274,21 @@ class EquipmentServiceTest {
         Long userId = 1L;
         EquipmentType type = EquipmentType.WEAPON;
         
-        when(equipmentRepository.findByTypeAndState(type, Equipment.EquipmentState.ACTIVE))
+        when(userEquipmentRepository.findEquippedByUserIdAndType(userId, type))
                 .thenReturn(Optional.empty());
 
         // Act
         equipmentService.unequip(userId, type);
 
         // Assert
-        verify(equipmentRepository, never()).save(any(Equipment.class));
+        verify(userEquipmentRepository, never()).save(any(UserEquipment.class));
     }
 
     @Test
     void refreshCache_shouldClearCacheAndReloadFromRepository() {
         // Arrange
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
+        when(userEquipmentRepository.findByUserIdAndEquippedTrue(1L))
                 .thenReturn(Collections.emptyList());
 
         // Act
@@ -263,50 +296,41 @@ class EquipmentServiceTest {
 
         // Assert
         verify(userRepository).findById(1L);
-        verify(equipmentRepository).findByStateEquals(Equipment.EquipmentState.ACTIVE);
+        verify(userEquipmentRepository).findByUserIdAndEquippedTrue(1L);
     }
 
     @Test
-    void findEquippedByUserAndType_shouldReturnEquipmentFromCache() {
-        // This test verifies the cache functionality, but since the cache is private,
-        // we need to setup the cache first through refreshCache
-        
+    void findEquippedByUserAndType_shouldReturnEquipment() {
         // Arrange
         Long userId = 1L;
         EquipmentType type = EquipmentType.WEAPON;
         
-        Equipment cachedEquipment = new Equipment();
-        cachedEquipment.setId(1L);
-        cachedEquipment.setType(type);
-        cachedEquipment.setState(Equipment.EquipmentState.ACTIVE);
+        Equipment equipment = new Equipment();
+        equipment.setId(1L);
+        equipment.setType(type);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Arrays.asList(cachedEquipment));
+        UserEquipment userEquipment = new UserEquipment(userId, 1L, true);
 
-        // Setup cache
-        equipmentService.refreshCache();
+        when(userEquipmentRepository.findEquippedByUserIdAndType(userId, type))
+                .thenReturn(Optional.of(userEquipment));
+        when(equipmentRepository.findById(1L)).thenReturn(Optional.of(equipment));
         
         // Act
         Optional<Equipment> result = equipmentService.findEquippedByUserAndType(userId, type);
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(cachedEquipment);
+        assertThat(result.get()).isEqualTo(equipment);
     }
 
     @Test
-    void findEquippedByUserAndType_shouldReturnEmpty_whenNotInCache() {
+    void findEquippedByUserAndType_shouldReturnEmpty_whenNotEquipped() {
         // Arrange
         Long userId = 1L;
         EquipmentType type = EquipmentType.WEAPON;
         
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(equipmentRepository.findByStateEquals(Equipment.EquipmentState.ACTIVE))
-                .thenReturn(Collections.emptyList());
-
-        // Setup empty cache
-        equipmentService.refreshCache();
+        when(userEquipmentRepository.findEquippedByUserIdAndType(userId, type))
+                .thenReturn(Optional.empty());
         
         // Act
         Optional<Equipment> result = equipmentService.findEquippedByUserAndType(userId, type);

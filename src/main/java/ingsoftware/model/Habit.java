@@ -17,13 +17,21 @@ import java.util.Set;
 @Table(name = "habits")
 public class Habit {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    
     private String description;
+    
+    @Column(nullable = false)
     private HabitFrequencyType frequency;
+    
+    @Column(nullable = false)
     private HabitDifficulty difficulty = HabitDifficulty.MEDIUM;
+    
+    @Column(name = "user_id", nullable = false)
     private Long userId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -33,9 +41,6 @@ public class Habit {
     private int currentStreak = 0;
     private int longestStreak = 0;
     private Integer targetStreak = null;
-    
-    @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL)
-    private List<HabitCompletion> completions = new ArrayList<>();
 
 
     // **COSTRUTTORE PACKAGE-PRIVATE PER IL BUILDER**
@@ -180,13 +185,5 @@ public class Habit {
 
     public void setTargetStreak(Integer targetStreak) {
         this.targetStreak = targetStreak;
-    }
-    
-    public List<HabitCompletion> getCompletions() {
-        return completions;
-    }
-    
-    public void setCompletions(List<HabitCompletion> completions) {
-        this.completions = completions;
     }
 }
