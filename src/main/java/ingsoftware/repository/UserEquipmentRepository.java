@@ -1,7 +1,6 @@
 package ingsoftware.repository;
 
-import ingsoftware.model.Equipment;
-import ingsoftware.model.User;
+
 import ingsoftware.model.UserEquipment;
 import ingsoftware.model.enum_helpers.EquipmentType;
 import org.springframework.data.jpa.repository.JpaRepository;

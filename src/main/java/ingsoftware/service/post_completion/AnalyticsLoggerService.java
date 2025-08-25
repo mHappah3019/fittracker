@@ -6,7 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyticsLoggerService {
-    public void logEvent(String habitCompleted, CompletionResultDTO completion) {
-
-    }
+    public void logEvent(String habitCompleted, CompletionResultDTO completion) {}
 }

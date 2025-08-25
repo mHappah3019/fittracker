@@ -4,9 +4,6 @@ package ingsoftware.service.post_completion;
 import ingsoftware.config.PopupConfig;
 import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.service.PopupUIService;
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
@@ -26,14 +22,12 @@ import java.util.logging.Logger;
 
 
 @Service
-public class CompletionPopupUIService implements PopupUIService {
+public class CompletionPopupUIService extends PopupUIService {
 
-    @Autowired
-    private PopupConfig config;
 
-    @Override
-    public void showPopup(CompletionResultDTO result) {
-        throw new UnsupportedOperationException("Metodo non implementato");
+
+    public CompletionPopupUIService(PopupConfig config) {
+        super(config);
     }
 
     public void showCompletionPopup(CompletionResultDTO completion) {
@@ -41,8 +35,9 @@ public class CompletionPopupUIService implements PopupUIService {
             // Il servizio popup interpreta autonomamente i dati
             double gainedXP = completion.getGainedXP();
             int newLevel = completion.getNewLevelAchieved();
-            boolean streakTriggered = config.getStreakMilestones().contains(completion.getStreak());
             int streakDays = completion.getStreak();
+
+            boolean streakTriggered = config.getStreakMilestones().contains(completion.getStreak());
 
             Stage popup = buildStage(gainedXP, newLevel, streakTriggered, streakDays);
             animateAndShow(popup);
@@ -105,23 +100,4 @@ public class CompletionPopupUIService implements PopupUIService {
         return stage;
     }
 
-    private void animateAndShow(Stage stage) {
-        System.out.println("CompletionPopupUIService: animateAndShow iniziato");
-        FadeTransition fadeIn = new FadeTransition(config.getFadeIn(), stage.getScene().getRoot());
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-
-        PauseTransition hold = new PauseTransition(config.getDisplay());
-
-        FadeTransition fadeOut = new FadeTransition(config.getFadeOut(), stage.getScene().getRoot());
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.setOnFinished(_ -> stage.close());
-
-        SequentialTransition seq = new SequentialTransition(fadeIn, hold, fadeOut);
-        stage.show();
-        seq.play();
-
-        System.out.println("CompletionPopupUIService: animateAndShow completato (animazioni in corso)");
-    }
 }

@@ -20,7 +20,6 @@ public class HabitBuilder {
     private List<String> tags = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Integer targetStreak;
 
     public HabitBuilder() {}
 
@@ -65,11 +64,6 @@ public class HabitBuilder {
             this.tags = new ArrayList<>();
         }
         this.tags.add(tag);
-        return this;
-    }
-
-    public HabitBuilder withTargetStreak(Integer targetStreak) {
-        this.targetStreak = targetStreak;
         return this;
     }
 

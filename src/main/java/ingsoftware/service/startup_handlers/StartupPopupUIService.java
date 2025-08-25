@@ -2,9 +2,7 @@ package ingsoftware.service.startup_handlers;
 
 import ingsoftware.config.PopupConfig;
 import ingsoftware.model.DTO.LifePointsDTO;
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
+import ingsoftware.service.PopupUIService;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,21 +14,15 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StartupPopupUIService {
-    
-    @Autowired
-    private PopupConfig config;
-    
-    public void showPopup(String s, String s1) {
+public class StartupPopupUIService extends PopupUIService {
 
+    public StartupPopupUIService(PopupConfig config) {
+        super(config);
     }
 
-    public void showPopup(LifePointsDTO result) {
-    }
 
     public void showfirstAccessPopup(LifePointsDTO result) {
         Platform.runLater(() -> {
@@ -39,7 +31,7 @@ public class StartupPopupUIService {
         });
     }
 
-    //TODO: modifica per mostrare aumento/decremento di vita e messaggio personalizzato se lifePointsDTO.isLevelDecreased() == true
+
     private Stage buildFirstAccessStage(LifePointsDTO lifePointsDTO) {
         VBox root = new VBox(15);
         root.setPadding(new Insets(20));
@@ -88,22 +80,5 @@ public class StartupPopupUIService {
         stage.setY((screen.getHeight() - 200) / 2);
         
         return stage;
-    }
-    
-    private void animateAndShow(Stage stage) {
-        FadeTransition fadeIn = new FadeTransition(config.getFadeIn(), stage.getScene().getRoot());
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        
-        PauseTransition hold = new PauseTransition(config.getDisplay().multiply(2)); // Show longer for first access
-        
-        FadeTransition fadeOut = new FadeTransition(config.getFadeOut(), stage.getScene().getRoot());
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.setOnFinished(e -> stage.close());
-        
-        SequentialTransition seq = new SequentialTransition(fadeIn, hold, fadeOut);
-        stage.show();
-        seq.play();
     }
 }

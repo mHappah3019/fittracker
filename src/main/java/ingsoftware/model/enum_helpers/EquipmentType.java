@@ -38,40 +38,25 @@ public enum EquipmentType {
      * Restituisce una descrizione dettagliata del tipo di equipaggiamento
      */
     public String getDescription() {
-        switch (this) {
-            case WEAPON:
-                return "Aumenta l'esperienza guadagnata completando le abitudini";
-            case ARMOR:
-                return "Protegge dalla perdita di streak quando salti un giorno";
-            case SHIELD:
-                return "Fornisce bonus speciali e moltiplicatori unici";
-            case MISC:
-                return "Oggetto usa e getta con effetti temporanei potenti";
-            default:
-                return "Tipo di equipaggiamento sconosciuto";
-        }
+        return switch (this) {
+            case WEAPON -> "Aumenta l'esperienza guadagnata completando le abitudini";
+            case ARMOR -> "Protegge dalla perdita di streak quando salti un giorno";
+            case SHIELD -> "Fornisce bonus speciali e moltiplicatori unici";
+            case MISC -> "Oggetto usa e getta con effetti temporanei potenti";
+        };
     }
-
-    /**
-     * Verifica se il tipo è compatibile con equipaggiamenti permanenti
-     */
 
     /**
      * Restituisce il colore associato al tipo per la UI
      */
     public String getTypeColor() {
-        switch (this) {
-            case WEAPON:
-                return "#FF6B6B"; // Rosso
-            case ARMOR:
-                return "#4ECDC4"; // Verde acqua
-            case SHIELD:
-                return "#45B7D1"; // Blu
-            case MISC:
-                return "#96CEB4"; // Verde chiaro
-            default:
-                return "#95A5A6"; // Grigio
-        }
+        return switch (this) {
+            case WEAPON -> "#FF6B6B"; // Rosso
+            case ARMOR -> "#4ECDC4"; // Verde acqua
+            case SHIELD -> "#45B7D1"; // Blu
+            case MISC -> "#96CEB4"; // Verde chiaro
+            default -> "#95A5A6"; // Grigio
+        };
     }
 
 
