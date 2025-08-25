@@ -3,57 +3,54 @@ package ingsoftware.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "habit_completions")
 public class HabitCompletion {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "habit_id")
-    private Habit habit;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    @Column(name = "habit_id", nullable = false)
+    private Long habitId;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     private LocalDate completionDate;
     private int streak;
     private String notes;
 
-
-    // **COSTRUTTORI**
+    // Costruttore di default
     public HabitCompletion() {
         this.completionDate = LocalDate.now();
     }
 
-    // **BUSINESS LOGIC METHODS**
-
+    // BUSINESS LOGIC METHODS
     public boolean isCompletedToday() {
-        return completionDate.isEqual(LocalDate.now());
+        return completionDate != null && completionDate.isEqual(LocalDate.now());
     }
 
     public boolean hasNotes() {
         return notes != null && !notes.trim().isEmpty();
     }
 
-    // **FLUENT INTERFACE per configurazione post-costruzione**
+    // FLUENT INTERFACE per configurazione post-costruzione
     public HabitCompletion withNotes(String notes) {
         this.notes = notes;
         return this;
     }
 
-    // **GETTERS E SETTERS**
+    // GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Habit getHabit() { return habit; }
-    public void setHabit(Habit habit) { this.habit = habit; }
+    public Long getHabitId() { return habitId; }
+    public void setHabitId(Long habitId) { this.habitId = habitId; }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public LocalDate getCompletionDate() { return completionDate; }
     public void setCompletionDate(LocalDate completionDate) { this.completionDate = completionDate; }

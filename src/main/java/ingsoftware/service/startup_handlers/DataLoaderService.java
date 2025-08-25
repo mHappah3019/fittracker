@@ -58,12 +58,7 @@ public class DataLoaderService {
 
         } else {
             logger.info("Utente di default già esistente, skip creazione.");
-            // Potresti anche qui voler inizializzare l'equipaggiamento per l'utente esistente
-            // se non sei sicuro che sia già stato fatto, o se hai aggiunto nuovi equipaggiamenti al catalogo.
-            // Però, attenzione a non sovrascrivere lo stato di "equipaggiato" se non desiderato.
-            // In fase di sviluppo, potrebbe essere utile chiamarlo ogni volta, ma in produzione no.
-            // Long defaultUserId = getDefaultUserId();
-            // equipmentService.initializeUserEquipment(defaultUserId); // <--- DA CONSIDERARE CON ATTENZIONE
+
         }
     }
 

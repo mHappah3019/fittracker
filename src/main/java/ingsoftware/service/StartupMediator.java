@@ -1,17 +1,13 @@
 package ingsoftware.service;
 
 import ingsoftware.model.DTO.LifePointsDTO;
-import ingsoftware.model.Habit;
 import ingsoftware.model.User;
-import ingsoftware.repository.HabitRepository;
-import ingsoftware.repository.UserRepository;
+import ingsoftware.service.startup_handlers.DailySummaryService;
 import ingsoftware.service.startup_handlers.StartupPopupUIService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Component
 public class StartupMediator {
@@ -19,13 +15,15 @@ public class StartupMediator {
     private final GamificationService gamificationService;
     private final UserService userService;
     private final StartupPopupUIService popupUIService;
+    private final DailySummaryService dailySummaryService;
 
-    public StartupMediator(GamificationService gamificationService, 
-                          UserService userService, 
-                          StartupPopupUIService popupUIService) {
+    public StartupMediator(GamificationService gamificationService,
+                           UserService userService,
+                           StartupPopupUIService popupUIService, DailySummaryService dailySummaryService) {
         this.gamificationService = gamificationService;
         this.userService = userService;
         this.popupUIService = popupUIService;
+        this.dailySummaryService = dailySummaryService;
     }
 
     public void handleApplicationStartup(Long userId) {
@@ -34,7 +32,10 @@ public class StartupMediator {
         if (userService.isFirstAccessOfDay(user, LocalDate.now())) {
             LifePointsDTO result = updatesForNewDay(user);
             popupUIService.showfirstAccessPopup(result);
+            dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
         }
+
+        dailySummaryService.onAccess(user, LocalDate.now());
     }
 
 
