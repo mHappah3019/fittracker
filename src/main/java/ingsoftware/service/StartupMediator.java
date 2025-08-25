@@ -29,11 +29,16 @@ public class StartupMediator {
     public void handleApplicationStartup(Long userId) {
         User user = userService.findUserOrThrow(userId);
 
+        //TODO:
+
         if (userService.isFirstAccessOfDay(user, LocalDate.now())) {
             LifePointsDTO result = updatesForNewDay(user);
             popupUIService.showfirstAccessPopup(result);
             dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
         }
+
+        LifePointsDTO result = new LifePointsDTO(false, 20, 30);
+        popupUIService.showfirstAccessPopup(result);
 
         dailySummaryService.onAccess(user, LocalDate.now());
     }

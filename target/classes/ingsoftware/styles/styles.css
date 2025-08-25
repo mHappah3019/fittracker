@@ -1,25 +1,18 @@
 /* === COLORI E VARIABILI === */
 .root {
-    -fx-primary-color: #4CAF50;
-    -fx-secondary-color: #2196F3;
+    -fx-accent-color: #007AFF;
     -fx-danger-color: #F44336;
-    -fx-warning-color: #FF9800;
-    -fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    -fx-background-color: #f4f5f7;
+    -fx-text-base-color: #212121;
     -fx-font-family: "Segoe UI", "Roboto", sans-serif;
 }
 
 /* === CONTAINERS === */
-.main-container, .form-container, .equipment-container {
-    -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+.main-container, .form-container, .equipment-container, .header-section, .stat-card, .equipment-tips {
+    -fx-background-color: white;
     -fx-padding: 20;
-}
-
-/* === HEADER SECTIONS === */
-.header-section {
-    -fx-background-color: linear-gradient(to right, #667eea 0%, #764ba2 100%);
-    -fx-padding: 25;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 1);
 }
 
 .user-stats-container {
@@ -27,155 +20,111 @@
     -fx-alignment: center;
 }
 
-.stat-card {
-    -fx-background-color: rgba(255,255,255,0.9);
-    -fx-padding: 20;
-    -fx-background-radius: 12;
-    -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+/* === HEADER SECTIONS === */
+.header-section {
+    -fx-padding: 25;
 }
 
 /* === PROGRESS BARS === */
-.exp-bar .bar {
-    -fx-background-color: linear-gradient(to right, #FFD700, #FFA500);
+.exp-bar .bar, .health-bar .bar {
+    -fx-background-color: -fx-accent-color;
     -fx-background-radius: 10;
 }
-
-.health-bar .bar {
-    -fx-background-color: linear-gradient(to right, #FF6B6B, #4ECDC4);
-    -fx-background-radius: 10;
-}
-
 .exp-bar .track, .health-bar .track {
-    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-background-color: #e0e0e0;
     -fx-background-radius: 10;
 }
 
 /* === BUTTONS === */
-.primary-button {
-    -fx-background-color: linear-gradient(to bottom, #4CAF50, #45a049);
-    -fx-text-fill: white;
+.primary-button, .secondary-button, .danger-button {
+    -fx-background-color: transparent;
+    -fx-border-width: 1.5px;
     -fx-font-weight: bold;
-    -fx-padding: 12 24;
-    -fx-background-radius: 25;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
     -fx-cursor: hand;
     -fx-font-size: 14px;
+    -fx-transition: all 0.2s ease-in-out;
 }
+.primary-button { -fx-border-color: -fx-accent-color; -fx-text-fill: -fx-accent-color; }
+.secondary-button { -fx-border-color: #b0b0b0; -fx-text-fill: #555555; }
+.danger-button { -fx-border-color: -fx-danger-color; -fx-text-fill: -fx-danger-color; }
 
-.primary-button:hover {
-    -fx-background-color: linear-gradient(to bottom, #45a049, #3d8b40);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
+.primary-button:hover { -fx-background-color: -fx-accent-color; -fx-text-fill: white; }
+.secondary-button:hover { -fx-background-color: #b0b0b0; -fx-text-fill: white; }
+.danger-button:hover { -fx-background-color: -fx-danger-color; -fx-text-fill: white; }
 
-.secondary-button {
-    -fx-background-color: linear-gradient(to bottom, #6c757d, #5a6268);
-    -fx-text-fill: white;
-    -fx-padding: 10 20;
-    -fx-background-radius: 20;
-    -fx-cursor: hand;
-}
-
-.danger-button {
-    -fx-background-color: linear-gradient(to bottom, #F44336, #d32f2f);
-    -fx-text-fill: white;
-    -fx-padding: 10 20;
-    -fx-background-radius: 20;
-    -fx-cursor: hand;
-}
 
 /* === FORM ELEMENTS === */
 .modern-textfield, .modern-textarea {
-    -fx-background-color: white;
+    -fx-background-color: #fdfdfd;
     -fx-border-color: #e0e0e0;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-padding: 12;
     -fx-font-size: 14px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-effect: none; /* Rimuoviamo l'ombra per un look più piatto */
 }
-
 .modern-textfield:focused, .modern-textarea:focused {
-    -fx-border-color: #4CAF50;
-    -fx-border-width: 2;
+    -fx-border-color: -fx-accent-color;
+    -fx-border-width: 1.5;
 }
-
 .modern-combobox {
     -fx-background-color: white;
     -fx-border-color: #e0e0e0;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-effect: none;
 }
 
 /* === LIST STYLES === */
 .habit-list {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-radius: 12;
 }
-
 .habit-list .list-cell {
     -fx-background-color: white;
-    -fx-background-radius: 10;
+    -fx-background-radius: 8px;
     -fx-padding: 15;
     -fx-border-color: transparent;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-effect: none;
+    -fx-border-width: 1px;
+    -fx-border-color: #eeeeee;
 }
-
 .habit-list .list-cell:selected {
-    -fx-background-color: linear-gradient(to right, #4CAF50, #45a049);
+    -fx-background-color: -fx-accent-color;
+}
+.habit-list .list-cell:selected .text {
+    -fx-fill: white; /* Assicura che il testo sia bianco quando la cella è selezionata */
 }
 
 /* === LABELS === */
-.form-title, .equipment-title {
-    -fx-font-size: 28px;
+.form-title, .equipment-title, .section-title, .stat-value-large {
     -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
+    -fx-text-fill: -fx-text-base-color;
 }
-
-.section-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #34495e;
-}
+.form-title { -fx-font-size: 28px; }
+.section-title { -fx-font-size: 24px; }
+.stat-value-large { -fx-font-size: 32px; }
 
 .stat-label {
     -fx-font-size: 12px;
-    -fx-text-fill: #7f8c8d;
-    -fx-font-weight: bold;
-}
-
-.stat-value-large {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
+    -fx-text-fill: #757575;
+    -fx-font-weight: normal;
 }
 
 /* === ANIMATIONS === */
-.animated-button {
-    -fx-transition: all 0.3s ease;
-}
-
-.pulse {
-    -fx-effect: dropshadow(three-pass-box, rgba(76, 175, 80, 0.6), 20, 0, 0, 0);
-}
+/* Rimuoviamo la classe .pulse per semplicità */
 
 /* === EQUIPMENT SPECIFIC === */
 .character-preview {
-    -fx-background-color: linear-gradient(to bottom, #667eea, #764ba2);
+    -fx-background-color: #e9ecef; /* Sfondo neutro */
     -fx-padding: 25;
     -fx-background-radius: 15;
     -fx-alignment: center;
 }
-
 .character-avatar {
     -fx-font-size: 64px;
-}
-
-.equipment-tips {
-    -fx-background-color: rgba(255,255,255,0.9);
-    -fx-padding: 20;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-text-fill: -fx-text-base-color;
 }

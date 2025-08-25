@@ -17,13 +17,6 @@
          <HBox styleClass="section-header">
             <Label text="Le Tue Abitudini" styleClass="section-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="addHabitButton" text="+ Nuova Abitudine" 
-                    styleClass="primary-button, add-button" 
-                    onAction="#handleAddHabit">
-               <effect>
-                  <DropShadow color="#4CAF50" radius="8"/>
-               </effect>
-            </Button>
          </HBox>
          
          <ListView fx:id="habitListView" styleClass="habit-list">
@@ -41,6 +34,13 @@
                     styleClass="action-button, edit-button" 
                     onAction="#handleEditHabit" disable="true"/>
             <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="addHabitButton" text="+ Nuova Abitudine"
+                    styleClass="primary-button, add-button"
+                    onAction="#handleAddHabit">
+               <effect>
+                  <DropShadow color="#4CAF50" radius="8"/>
+               </effect>
+            </Button>
             <Label fx:id="statusLabel" styleClass="status-label"/>
          </HBox>
       </VBox>

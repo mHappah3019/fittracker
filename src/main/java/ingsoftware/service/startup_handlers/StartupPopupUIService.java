@@ -26,8 +26,17 @@ public class StartupPopupUIService extends PopupUIService {
 
     public void showfirstAccessPopup(LifePointsDTO result) {
         Platform.runLater(() -> {
-            Stage popup = buildFirstAccessStage(result);
+            boolean isLevelDecreased = result.isLevelDecreased();
+            Stage popup;
+
+            if (isLevelDecreased) {
+                popup = buildLevelDecreasedStage(result);
+            }
+            else {
+                popup = buildFirstAccessStage(result);
+            }
             animateAndShow(popup);
+
         });
     }
 
@@ -45,7 +54,11 @@ public class StartupPopupUIService extends PopupUIService {
         root.getChildren().add(welcomeLabel);
         
         // Life points information
-        Label lifePointsLabel = new Label("💚 Punti Vita: " + lifePointsDTO.getNewlifePoints());
+        int oldLifePoints = lifePointsDTO.getOldLifePoints();
+        int newLifePoints = lifePointsDTO.getNewlifePoints();
+        Label lifePointsLabel = new Label( (oldLifePoints == newLifePoints)?
+                ("💚 Punti Vita: " + lifePointsDTO.getOldLifePoints()) :
+                ("💚 Punti Vita: " + lifePointsDTO.getOldLifePoints() + " → " + lifePointsDTO.getNewlifePoints()));
         lifePointsLabel.getStyleClass().add("life-points-label");
         lifePointsLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #4CAF50;");
         root.getChildren().add(lifePointsLabel);
@@ -61,12 +74,12 @@ public class StartupPopupUIService extends PopupUIService {
         Scene scene = new Scene(root);
         
         // Try to load CSS, fallback to inline styles if not found
-        java.net.URL cssResource = getClass().getResource("/ingsoftware/styles/styles.css");
+        java.net.URL cssResource = getClass().getResource("/ingsoftware/styles/style.css");
         if (cssResource != null) {
             scene.getStylesheets().add(cssResource.toExternalForm());
         } else {
             // Fallback styling
-            root.setStyle("-fx-background-color: white; -fx-border-color: #2E8B57; -fx-border-width: 2px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+            root.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1px; -fx-border-radius: 8px; -fx-background-radius: 8px;");
         }
         
         Stage stage = new Stage(StageStyle.UNDECORATED);
@@ -79,6 +92,14 @@ public class StartupPopupUIService extends PopupUIService {
         stage.setX((screen.getWidth() - 320) / 2);
         stage.setY((screen.getHeight() - 200) / 2);
         
+        return stage;
+    }
+
+    private Stage buildLevelDecreasedStage(LifePointsDTO lifePointsDTO) {
+        //generate a simple popup and return
+        Stage stage = new Stage();
+        stage.setTitle("FitTracker");
+        stage.initModality(Modality.APPLICATION_MODAL);
         return stage;
     }
 }
