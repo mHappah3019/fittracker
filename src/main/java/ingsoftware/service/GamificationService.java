@@ -2,6 +2,7 @@ package ingsoftware.service;
 
 import ingsoftware.model.*;
 import ingsoftware.model.DTO.LifePointsDTO;
+import ingsoftware.model.enum_helpers.HabitDifficulty;
 import ingsoftware.service.strategy.ExperienceStrategyFactory;
 import ingsoftware.service.strategy.GamificationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,21 +41,38 @@ public class GamificationService {
     public LifePointsDTO updateUserLifePoints(User user, LocalDate today) {
         // Salva i punti vita iniziali
         int oldLifePoints = user.getLifePoints();
+        int totalLifePointsDelta = 0;
         boolean isLevelDecreased = false;
         
         LocalDate lastAccess = user.getLastAccessDate();
 
+        // Recupera tutte le abitudini dell'utente una sola volta
+        List<Habit> allUserHabits = habitService.findAllByUserId(user.getId());
+
         if (lastAccess != null) {
             long daysSinceLastAccess = ChronoUnit.DAYS.between(lastAccess, today);
 
-            processCompletedHabitsForDate(user, lastAccess);
+            // Calcola delta per abitudini completate
+            totalLifePointsDelta += calculateCompletedHabitsPoints(allUserHabits, lastAccess);
 
+            // Calcola penalità per inattività
             if (daysSinceLastAccess > 1) {
                 long inactiveDays = daysSinceLastAccess - 1;
-                int totalPenalty = (int) (inactiveDays * INACTIVITY_PENALTY_PER_DAY);
-                user.addLifePoints(totalPenalty);
-                isLevelDecreased = checkAndHandleLifePointsDepletion(user);
+                int inactivityPenalty = (int) (inactiveDays * INACTIVITY_PENALTY_PER_DAY);
+                totalLifePointsDelta += inactivityPenalty;
             }
+        }
+
+        // Applica il moltiplicatore basato sulla difficoltà media delle abitudini
+        if (totalLifePointsDelta != 0) {
+            double difficultyMultiplier = calculateDifficultyMultiplier(allUserHabits);
+            totalLifePointsDelta = (int) Math.round(totalLifePointsDelta * difficultyMultiplier);
+        }
+
+        // Applica tutti i cambiamenti insieme
+        if (totalLifePointsDelta != 0) {
+            user.addLifePoints(totalLifePointsDelta);
+            isLevelDecreased = checkAndHandleLifePointsDepletion(user);
         }
 
         // Crea e restituisce il DTO con i valori vecchi e nuovi
@@ -64,20 +82,46 @@ public class GamificationService {
 
 
     /**
-     * Calcola e assegna punti per le abitudini che l'utente ha completato in una data specifica.
+     * Calcola un moltiplicatore basato sulla difficoltà media delle abitudini dell'utente.
+     * Utilizza il penaltyMultiplier di ogni difficoltà per calcolare un moltiplicatore medio.
+     * 
+     * @param habits Lista delle abitudini dell'utente
+     * @return Il moltiplicatore da applicare ai punti vita
      */
-    private void processCompletedHabitsForDate(User user, LocalDate completedDate) {
-        List<Habit> allUserHabits = habitService.findAllByUserId(user.getId());
+    private double calculateDifficultyMultiplier(List<Habit> habits) {
+        if (habits.isEmpty()) {
+            return 1.0; // Moltiplicatore neutro se non ci sono abitudini
+        }
+
+        // Calcola il moltiplicatore medio basato sui penaltyMultiplier delle difficoltà
+        double averageMultiplier = habits.stream()
+                .mapToDouble(habit -> habit.getDifficulty().getPenaltyMultiplier())
+                .average()
+                .orElse(1.0); // Default a MEDIUM (1.0) se non ci sono abitudini
+
+        return averageMultiplier;
+    }
+
+    /**
+     * Calcola i punti per le abitudini che l'utente ha completato in una data specifica.
+     * Non modifica direttamente l'utente, restituisce solo il delta dei punti.
+     * 
+     * @param allUserHabits Lista di tutte le abitudini dell'utente
+     * @param completedDate La data per cui calcolare i punti delle abitudini completate
+     * @return Il delta dei punti vita da aggiungere (può essere positivo o negativo)
+     */
+
+    private int calculateCompletedHabitsPoints(List<Habit> allUserHabits, LocalDate completedDate) {
         List<Habit> completedHabits = allUserHabits.stream()
                 .filter(habit -> habit.getLastCompletedDate() != null &&
                         habit.getLastCompletedDate().equals(completedDate))
                 .toList();
 
-        if (!completedHabits.isEmpty()) {
-            int delta = calculator.compute(completedHabits, 75.0);
-            user.addLifePoints(delta);
-            checkAndHandleLifePointsDepletion(user);
+        if (completedHabits.isEmpty()) {
+            return INACTIVITY_PENALTY_PER_DAY;
         }
+
+        return calculator.compute(completedHabits, 75.0);
     }
 
 
