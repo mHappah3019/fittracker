@@ -33,14 +33,14 @@ public class HabitListController {
     private final ApplicationEventPublisher eventPublisher;
     private final HabitCompletionService habitCompletionService;
     private final HabitService habitService;
-    private final PostCompletionMediator postMediator;
+    private final PostCompletionMediatorImpl postMediator;
     private final FxWeaver fxWeaver;
 
     // Constructor injection
     public HabitListController(ApplicationEventPublisher eventPublisher,
                               HabitCompletionService habitCompletionService,
                               HabitService habitService,
-                              PostCompletionMediator postMediator,
+                              PostCompletionMediatorImpl postMediator,
                               FxWeaver fxWeaver) {
         this.eventPublisher = eventPublisher;
         this.habitCompletionService = habitCompletionService;

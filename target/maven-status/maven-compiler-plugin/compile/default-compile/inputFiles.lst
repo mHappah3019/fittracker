@@ -53,8 +53,9 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\post_complet
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\post_completion\AnalyticsLoggerService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\post_completion\CompletionPopupUIService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\PostCompletionMediator.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailyStreakNotificationHandler.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailySummaryHandler.java
+C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailyStreakNotificationService.java
+C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailySummaryService.java
+C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DataLoaderService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\StartupPopupUIService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\StartupMediator.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\BaseGamificationStrategy.java

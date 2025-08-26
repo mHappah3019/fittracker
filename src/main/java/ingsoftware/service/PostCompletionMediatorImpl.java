@@ -1,6 +1,7 @@
 package ingsoftware.service;
 
 import ingsoftware.model.DTO.CompletionResultDTO;
+import ingsoftware.service.mediator.PostCompletionMediator;
 import ingsoftware.service.post_completion.*;
 import javafx.application.Platform;
 import org.slf4j.Logger;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 @Component
-public class PostCompletionMediator {
+public class PostCompletionMediatorImpl implements PostCompletionMediator {
 
-    private static final Logger logger = LoggerFactory.getLogger(PostCompletionMediator.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostCompletionMediatorImpl.class);
 
 
     //– Dipendenze opzionali (iniettate via costruttore o setter)
@@ -21,7 +22,7 @@ public class PostCompletionMediator {
     private final AchievementService achievementSvc;
     private final AnalyticsLoggerService analyticsSvc;
 
-    public PostCompletionMediator(
+    public PostCompletionMediatorImpl(
             CompletionPopupUIService popupUI,
             AchievementService achievementSvc,
             AnalyticsLoggerService analyticsSvc) {

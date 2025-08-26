@@ -2,7 +2,7 @@
 package ingsoftware.service.jobs;
 
 import ingsoftware.repository.UserRepository;
-import ingsoftware.service.StartupMediator;
+import ingsoftware.service.StartupMediatorImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,9 +16,9 @@ public class MidnightRolloverJob {
     private static final int PAGE_SIZE = 500;
 
     private final UserRepository userRepository;
-    private final StartupMediator startupMediator;
+    private final StartupMediatorImpl startupMediator;
 
-    public MidnightRolloverJob(UserRepository userRepository, StartupMediator startupMediator) {
+    public MidnightRolloverJob(UserRepository userRepository, StartupMediatorImpl startupMediator) {
         this.userRepository = userRepository;
         this.startupMediator = startupMediator;
     }

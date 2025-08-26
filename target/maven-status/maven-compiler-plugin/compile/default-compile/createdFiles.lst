@@ -1,6 +1,5 @@
 ingsoftware\model\enum_helpers\HabitFrequencyType.class
 ingsoftware\model\UserEquipment.class
-ingsoftware\service\startup_handlers\DailyStreakNotificationHandler.class
 ingsoftware\repository\UserRepository.class
 ingsoftware\repository\HabitCompletionRepository.class
 ingsoftware\service\EventService.class
@@ -26,7 +25,6 @@ ingsoftware\exception\UserNotFoundException.class
 ingsoftware\service\EquipmentService.class
 ingsoftware\exception\DuplicateHabitException.class
 ingsoftware\exception\StartupException.class
-ingsoftware\service\startup_handlers\DailySummaryHandler.class
 ingsoftware\service\strategy\BaseGamificationStrategy.class
 ingsoftware\service\strategy\EquipmentBoostedStrategy.class
 ingsoftware\controller\strictly_view\EquipmentRowManager.class
@@ -41,6 +39,7 @@ ingsoftware\service\PostCompletionMediator.class
 ingsoftware\model\User.class
 ingsoftware\service\mediator\PostCompletionMediator.class
 ingsoftware\service\PopupUIService.class
+ingsoftware\service\startup_handlers\DataLoaderService.class
 ingsoftware\controller\AbstractHabitFormController.class
 ingsoftware\service\HabitCompletionService$1.class
 ingsoftware\model\enum_helpers\EquipmentType.class
@@ -49,7 +48,9 @@ ingsoftware\exception\GamificationException.class
 ingsoftware\model\enum_helpers\HabitFrequency.class
 ingsoftware\model\HabitCompletion.class
 ingsoftware\controller\HabitListController.class
+ingsoftware\service\startup_handlers\DailyStreakNotificationService.class
 ingsoftware\util\AlertHelper.class
+ingsoftware\service\startup_handlers\DailySummaryService.class
 ingsoftware\model\Habit.class
 ingsoftware\controller\EditHabitController.class
 ingsoftware\config\PopupConfig.class
