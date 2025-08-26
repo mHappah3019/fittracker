@@ -39,24 +39,35 @@ public class EquipmentController {
 
     private Long currentUserId;
 
+    @FXML
+    private void initialize() {
+        // Don't do anything that requires currentUserId here
+        logger.debug("EquipmentController initialized, waiting for user ID to be set");
+    }
+
     public void setCurrentUserId(Long userId) {
         this.currentUserId = userId;
+        initializeView();
     }
 
     @FXML
-    private void initialize() {
+    private void initializeView() {
         try {
+
             Map<EquipmentType, ObservableList<Equipment>> byType = equipmentService.getAllEquipmentGroupedByType();
             equipmentService.refreshCache(currentUserId);
 
-            byType.forEach((type, list) -> {
-                EquipmentRowManager rowManager = new EquipmentRowManager(type, list);
-                equipmentRows.put(type, rowManager);
-                equipmentContainer.getChildren().add(rowManager.getNode());
+            // Usa l'ordine personalizzato dall'enum
+            for (EquipmentType type : EquipmentType.getOrderedValues()) {
+                if (byType.containsKey(type)) {
+                    EquipmentRowManager rowManager = new EquipmentRowManager(type, byType.get(type));
+                    equipmentRows.put(type, rowManager);
+                    equipmentContainer.getChildren().add(rowManager.getNode());
 
-                // Carica l'equipaggiamento corrente
-                loadCurrentEquipment(rowManager, type);
-            });
+                    // Carica l'equipaggiamento corrente
+                    loadCurrentEquipment(rowManager, type);
+                }
+            }
 
         } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
@@ -75,9 +86,12 @@ public class EquipmentController {
     private void loadCurrentEquipment(EquipmentRowManager rowManager, EquipmentType type) {
         try {
             Optional<Equipment> current = equipmentService.findEquippedByUserAndType(currentUserId, type);
+            logger.debug("Caricando equipaggiamento corrente per il tipo: {} - Utente ID: {}", type, String.valueOf(currentUserId));
             rowManager.setSelectedEquipment(current.orElse(rowManager.getSelectedEquipment()));
         } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Errore durante il caricamento dell'equipaggiamento corrente per il tipo {}: {}", type, e.getMessage(), e);
         }
     }
 

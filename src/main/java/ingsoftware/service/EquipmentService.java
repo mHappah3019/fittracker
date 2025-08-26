@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//TODO: riformattare per leggibilità
+
 @Service
 public class EquipmentService {
 
@@ -109,6 +111,9 @@ public class EquipmentService {
     }
 
     public Map<EquipmentType, Equipment> getFullEquipmentSet(Long userId) {
+        if (activeEquipmentByTypeCache.isEmpty() && userId != null) {
+            refreshCache(userId);
+        }
         return activeEquipmentByTypeCache;
     }
 

@@ -98,8 +98,14 @@ public class Equipment {
         Equipment equipment = (Equipment) o;
         return Objects.equals(id, equipment.id);
     }
+
+    // Aggiungi questo metodo alla classe Equipment
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public String toString() {
+        if (noneOption) {
+            return "⭕ " + name;
+        }
+        return getTypeIcon() + " " + name + " (" + getMultiplierDisplay() + ")";
     }
+
 }

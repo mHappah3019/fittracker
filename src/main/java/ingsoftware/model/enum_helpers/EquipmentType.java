@@ -17,6 +17,15 @@ public enum EquipmentType {
         this.iconPath = iconPath;
     }
 
+    public static EquipmentType[] getOrderedValues() {
+        return new EquipmentType[] {
+                ARMOR,    // Armatura
+                SHIELD,   // Scudo
+                WEAPON,   // Arma
+                MISC      // Miscelaneous
+        };
+    }
+
     // **METODI PUBBLICI**
 
     public String getDisplayName() {
