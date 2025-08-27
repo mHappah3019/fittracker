@@ -6,6 +6,8 @@ import ingsoftware.service.mediator.StartupMediator;
 import ingsoftware.service.startup_handlers.DailySummaryService;
 import ingsoftware.service.startup_handlers.StartupPopupUIService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,7 +15,9 @@ import java.time.LocalDate;
 
 @Component
 public class StartupMediatorImpl implements StartupMediator {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(PostCompletionMediatorImpl.class);
+
     private final GamificationService gamificationService;
     private final UserService userService;
     private final StartupPopupUIService popupUIService;
@@ -30,17 +34,19 @@ public class StartupMediatorImpl implements StartupMediator {
 
     @Transactional
     public void handleApplicationStartup(Long userId) {
-        User user = userService.findUserOrThrow(userId);
+        try {
+            User user = userService.findUserOrThrow(userId);
 
-        //TODO:
+            if (userService.isFirstAccessOfDay(user, LocalDate.now())) {
+                LifePointsDTO result = updatesForNewDay(user);
+                popupUIService.showfirstAccessPopup(result);
+                dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
+            }
 
-        if (userService.isFirstAccessOfDay(user, LocalDate.now())) {
-            LifePointsDTO result = updatesForNewDay(user);
-            popupUIService.showfirstAccessPopup(result);
-            dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
+            dailySummaryService.onAccess(user, LocalDate.now());
+        } catch (Exception e) {
+            logger.error("Errore durante l'avvio dell'applicazione");
         }
-
-        dailySummaryService.onAccess(user, LocalDate.now());
     }
 
 
