@@ -5,6 +5,7 @@ import ingsoftware.model.User;
 import ingsoftware.service.mediator.StartupMediator;
 import ingsoftware.service.startup_handlers.DailySummaryService;
 import ingsoftware.service.startup_handlers.StartupPopupUIService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class StartupMediatorImpl implements StartupMediator {
         this.dailySummaryService = dailySummaryService;
     }
 
+    @Transactional
     public void handleApplicationStartup(Long userId) {
         User user = userService.findUserOrThrow(userId);
 
@@ -37,9 +39,6 @@ public class StartupMediatorImpl implements StartupMediator {
             popupUIService.showfirstAccessPopup(result);
             dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
         }
-
-        LifePointsDTO result = new LifePointsDTO(false, 20, 30);
-        popupUIService.showfirstAccessPopup(result);
 
         dailySummaryService.onAccess(user, LocalDate.now());
     }

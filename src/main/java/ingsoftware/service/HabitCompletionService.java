@@ -1,12 +1,13 @@
 package ingsoftware.service;
 
+import ingsoftware.dao.HabitCompletionDAO;
 import ingsoftware.exception.*;
 import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.model.Habit;
 import ingsoftware.model.HabitCompletion;
 import ingsoftware.model.User;
 import ingsoftware.model.builder.HabitCompletionBuilder;
-import ingsoftware.repository.HabitCompletionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class HabitCompletionService {
     @Autowired
     private HabitService habitService;
     @Autowired
-    private HabitCompletionRepository completionRepository;
+    private HabitCompletionDAO completionDAO;
     @Autowired
     private GamificationService gamificationService;
     @Autowired
@@ -29,6 +30,7 @@ public class HabitCompletionService {
      * Implementazione effettiva del completamento dell'abitudine.
      * Questo metodo è privato e viene chiamato da completeHabit che gestisce le eccezioni.
      */
+    @Transactional
     public CompletionResultDTO completeHabit(Long habitId, Long userId) throws BusinessException {
         LocalDate today = LocalDate.now();
 
@@ -46,7 +48,7 @@ public class HabitCompletionService {
                 .withStreak(streak)
                 .build();
 
-        HabitCompletion savedCompletion = completionRepository.save(completion);
+        HabitCompletion savedCompletion = completionDAO.save(completion);
 
         double xpGained = calculateAndUpdateXP(habit, user);
         int newLevel = calculateAndUpdateLevel(user);
@@ -78,7 +80,7 @@ public class HabitCompletionService {
     }
 
     private void verifyNotAlreadyCompletedToday(Long userId, Long habitId, LocalDate today) {
-        boolean alreadyCompleted = completionRepository.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today);
+        boolean alreadyCompleted = completionDAO.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today);
         if (alreadyCompleted) {
             throw new HabitAlreadyCompletedException("Abitudine già completata oggi");
         }

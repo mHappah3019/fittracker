@@ -1,8 +1,8 @@
 package ingsoftware.service;
 
+import ingsoftware.dao.UserDAO;
 import ingsoftware.exception.UserNotFoundException;
 import ingsoftware.model.User;
-import ingsoftware.repository.UserRepository;
 import ingsoftware.service.startup_handlers.DataLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import java.time.LocalDate;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserDAO userDAO;
     private final DataLoaderService dataLoaderService;
 
     @Autowired
-    public UserService(UserRepository userRepository, DataLoaderService dataLoaderService) {
-        this.userRepository = userRepository;
+    public UserService(UserDAO userDAO, DataLoaderService dataLoaderService) {
+        this.userDAO = userDAO;
         this.dataLoaderService = dataLoaderService;
     }
 
@@ -30,20 +30,20 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-        userRepository.save(user);
+        userDAO.save(user);
     }
 
     public User findUserOrThrow(Long userId) {
-        return userRepository.findById(userId)
+        return userDAO.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     public boolean checkDefaultUser() {
-        return userRepository.count() == 0;
+        return userDAO.findAll().isEmpty();
     }
 
     public boolean existsById(Long id) {
-        return userRepository.existsById(id);
+        return userDAO.existsById(id);
     }
     
     /**

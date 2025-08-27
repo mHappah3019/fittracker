@@ -1,12 +1,12 @@
 
 package ingsoftware.service;
 
+import ingsoftware.dao.EquipmentDAO;
+import ingsoftware.dao.UserDAO;
+import ingsoftware.dao.UserEquipmentDAO;
 import ingsoftware.model.Equipment;
 import ingsoftware.model.UserEquipment;
 import ingsoftware.model.enum_helpers.EquipmentType;
-import ingsoftware.repository.EquipmentRepository;
-import ingsoftware.repository.UserRepository;
-import ingsoftware.repository.UserEquipmentRepository;
 import jakarta.transaction.Transactional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,19 +22,19 @@ import java.util.stream.Collectors;
 public class EquipmentService {
 
     @Autowired
-    private EquipmentRepository equipmentRepository;
+    private EquipmentDAO equipmentDAO;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDAO userDAO;
     
     @Autowired
-    private UserEquipmentRepository userEquipmentRepository;
+    private UserEquipmentDAO userEquipmentDAO;
 
     private final Map<EquipmentType, Equipment> activeEquipmentByTypeCache = new EnumMap<>(EquipmentType.class);
 
 
     public Map<EquipmentType, ObservableList<Equipment>> getAllEquipmentGroupedByType() {
-        List<Equipment> availableEquipment = equipmentRepository.findByAvailableTrue();
+        List<Equipment> availableEquipment = equipmentDAO.findByAvailableTrue();
 
         // Aggiungi l'opzione "NONE" per ogni tipo di equipaggiamento usando il nuovo metodo statico
         for (EquipmentType type : EquipmentType.values()) {
@@ -64,12 +64,12 @@ public class EquipmentService {
 
 
     public Map<EquipmentType, Equipment> findAllEquippedByUser(Long userId) {
-        List<UserEquipment> equippedUserEquipments = userEquipmentRepository.findByUserIdAndEquippedTrue(userId);
+        List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
 
         // Utilizziamo uno Stream per processare la lista e gestire l'Optional in modo pulito.
         // Usiamo EnumMap per efficienza con chiavi enum.
         return equippedUserEquipments.stream()
-                .map(ue -> equipmentRepository.findById(ue.getEquipmentId()).orElse(null)) // Carica l'equipaggiamento tramite ID
+                .map(ue -> equipmentDAO.findById(ue.getEquipmentId()).orElse(null)) // Carica l'equipaggiamento tramite ID
                 .filter(Objects::nonNull) // Filtra gli equipaggiamenti non trovati
                 .filter(e -> e.getType().isPresent()) // Filtra solo gli equipaggiamenti che hanno un tipo.
                 .collect(Collectors.toMap(
@@ -82,11 +82,11 @@ public class EquipmentService {
 
     @Transactional
     public Equipment equip(Long userId, Long equipmentId) {
-        Equipment equipment = equipmentRepository.findById(equipmentId)
+        Equipment equipment = equipmentDAO.findById(equipmentId)
                 .orElseThrow(() -> new RuntimeException("Equipaggiamento non trovato"));
 
         // Verifica se l'utente possiede questo equipaggiamento
-        UserEquipment userEquipment = userEquipmentRepository.findByUserIdAndEquipmentId(userId, equipmentId)
+        UserEquipment userEquipment = userEquipmentDAO.findByUserIdAndEquipmentId(userId, equipmentId)
                 .orElseThrow(() -> new RuntimeException("L'utente non possiede questo equipaggiamento"));
 
         // Rimuovi eventuali equipaggiamenti attivi dello stesso tipo
@@ -96,17 +96,17 @@ public class EquipmentService {
 
         // Equipaggia il nuovo equipaggiamento
         userEquipment.equip();
-        userEquipmentRepository.save(userEquipment);
+        userEquipmentDAO.save(userEquipment);
         
         return equipment;
     }
 
     @Transactional
     public void unequip(Long userId, EquipmentType type) {
-        userEquipmentRepository.findEquippedByUserIdAndType(userId, type)
+        userEquipmentDAO.findEquippedByUserIdAndType(userId, type)
                 .ifPresent(userEquipment -> {
                     userEquipment.unequip();
-                    userEquipmentRepository.save(userEquipment);
+                    userEquipmentDAO.save(userEquipment);
                 });
     }
 
@@ -118,8 +118,8 @@ public class EquipmentService {
     }
 
     public Optional<Equipment> findEquippedByUserAndType(Long currentUserId, EquipmentType type) {
-        return userEquipmentRepository.findEquippedByUserIdAndType(currentUserId, type)
-                .flatMap(ue -> equipmentRepository.findById(ue.getEquipmentId()));
+        return userEquipmentDAO.findEquippedByUserIdAndType(currentUserId, type)
+                .flatMap(ue -> equipmentDAO.findById(ue.getEquipmentId()));
     }
 
     /**
@@ -131,18 +131,18 @@ public class EquipmentService {
      */
     @Transactional
     public void initializeUserEquipment(Long userId) {
-        if (!userRepository.existsById(userId)) {
+        if (!userDAO.existsById(userId)) {
             throw new RuntimeException("Utente con ID " + userId + " non trovato.");
         }
 
-        List<Equipment> allCatalogEquipment = equipmentRepository.findAll();
+        List<Equipment> allCatalogEquipment = equipmentDAO.findAll();
 
         for (Equipment equipment : allCatalogEquipment) {
             // Assegna l'equipaggiamento solo se l'utente non lo possiede già
             // Questo previene la creazione di duplicati se il metodo viene chiamato più volte
-            if (!userEquipmentRepository.existsByUserIdAndEquipmentId(userId, equipment.getId())) {
+            if (!userEquipmentDAO.existsByUserIdAndEquipmentId(userId, equipment.getId())) {
                 UserEquipment userEquipment = new UserEquipment(userId, equipment.getId());
-                userEquipmentRepository.save(userEquipment);
+                userEquipmentDAO.save(userEquipment);
             }
         }
     }
@@ -153,20 +153,20 @@ public class EquipmentService {
      * Ottiene tutti gli equipaggiamenti posseduti da un utente
      */
     public List<UserEquipment> getUserEquipments(Long userId) {
-        return userEquipmentRepository.findByUserId(userId);
+        return userEquipmentDAO.findByUserId(userId);
     }
     
     /**
      * Ottiene tutti gli equipaggiamenti equipaggiati da un utente
      */
     public List<UserEquipment> getEquippedItems(Long userId) {
-        return userEquipmentRepository.findByUserIdAndEquippedTrue(userId);
+        return userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
     }
     
     /**
      * Verifica se un utente possiede un equipaggiamento specifico
      */
     public boolean userOwnsEquipment(Long userId, Long equipmentId) {
-        return userEquipmentRepository.existsByUserIdAndEquipmentId(userId, equipmentId);
+        return userEquipmentDAO.existsByUserIdAndEquipmentId(userId, equipmentId);
     }
 }

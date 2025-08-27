@@ -1,10 +1,8 @@
 // Java
 package ingsoftware.service.jobs;
 
-import ingsoftware.repository.UserRepository;
+import ingsoftware.dao.UserDAO;
 import ingsoftware.service.StartupMediatorImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,11 @@ public class MidnightRolloverJob {
 
     private static final int PAGE_SIZE = 500;
 
-    private final UserRepository userRepository;
+    private final UserDAO userDAO;
     private final StartupMediatorImpl startupMediator;
 
-    public MidnightRolloverJob(UserRepository userRepository, StartupMediatorImpl startupMediator) {
-        this.userRepository = userRepository;
+    public MidnightRolloverJob(UserDAO userDAO, StartupMediatorImpl startupMediator) {
+        this.userDAO = userDAO;
         this.startupMediator = startupMediator;
     }
 
@@ -31,10 +29,9 @@ public class MidnightRolloverJob {
     }
 
     private void processAllActiveUsers() {
-        int page = 0;
+        int offset = 0;
         while (true) {
-            Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-            List<Long> ids = userRepository.findAllActiveUserIds(pageable);
+            List<Long> ids = userDAO.findAllActiveUserIds(offset, PAGE_SIZE);
             if (ids.isEmpty()) break;
 
             for (Long userId : ids) {
@@ -45,7 +42,7 @@ public class MidnightRolloverJob {
                     System.out.println("Error during application startup for user " + userId + ": " + ex.getMessage());
                 }
             }
-            page++;
+            offset += PAGE_SIZE;
         }
     }
 }

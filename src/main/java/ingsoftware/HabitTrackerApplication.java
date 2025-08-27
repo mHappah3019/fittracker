@@ -14,10 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 // Importa il controller che userai nella scena principale
 // import ingsoftware.controller.HabitListController; // Non più necessario, useremo MainDashboardController
 import ingsoftware.controller.MainDashboardController;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication // Assicurati che questo copra tutti i tuoi package
-@EnableJpaRepositories(basePackages = "ingsoftware.repository")
 public class HabitTrackerApplication extends Application {
 
     private ConfigurableApplicationContext springContext;
@@ -44,7 +42,7 @@ public class HabitTrackerApplication extends Application {
                 if (beanName.toLowerCase().contains("habit") ||
                         beanName.toLowerCase().contains("controller") ||
                         beanName.toLowerCase().contains("service") || // Aggiunto per debugging dei servizi
-                        beanName.toLowerCase().contains("repository")) { // Aggiunto per debugging dei repository
+                        beanName.toLowerCase().contains("dao")) { // Aggiunto per debugging dei DAO
                     System.out.println("   - " + beanName);
                 }
             }

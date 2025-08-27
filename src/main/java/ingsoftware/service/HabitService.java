@@ -1,11 +1,10 @@
 package ingsoftware.service;
 
 
+import ingsoftware.dao.HabitDAO;
 import ingsoftware.exception.*;
 import ingsoftware.model.Habit;
 import ingsoftware.model.builder.HabitBuilder;
-import ingsoftware.repository.HabitRepository;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class HabitService {
     private static final Logger logger = LoggerFactory.getLogger(HabitService.class);
 
     @Autowired
-    private HabitRepository habitRepository;
+    private HabitDAO habitDAO;
 
     /**
      * Salva un'abitudine (crea nuova o aggiorna esistente)
@@ -62,13 +61,13 @@ public class HabitService {
         
         logger.debug("Verifica duplicati: userId={}, name={}", userId, name);
         
-        Optional<Habit> existing = habitRepository.findByUserIdAndName(userId, name);
+        Optional<Habit> existing = habitDAO.findByUserIdAndName(userId, name);
         if (existing.isPresent()) {
             logger.warn("Tentativo di creare un'abitudine duplicata: nome={}, userId={}", name, userId);
             throw new DuplicateHabitException("Abitudine con questo nome già esistente");
         }
 
-        Habit savedHabit = habitRepository.save(habit);
+        Habit savedHabit = habitDAO.save(habit);
         logger.info("Abitudine creata con successo: id={}, nome={}", 
                 savedHabit != null ? savedHabit.getId() : "null", 
                 savedHabit != null ? savedHabit.getName() : "null");
@@ -98,7 +97,7 @@ public class HabitService {
 
             logger.debug("Verifica duplicati per aggiornamento: userId={}, newName={}", userId, newName);
 
-            Optional<Habit> duplicateHabit = habitRepository.findByUserIdAndName(userId, newName);
+            Optional<Habit> duplicateHabit = habitDAO.findByUserIdAndName(userId, newName);
 
             if (duplicateHabit.isPresent() && !duplicateHabit.get().getId().equals(habitId)) {
                 // Se un'abitudine duplicata è stata trovata E il suo ID è diverso dall'abitudine che si sta aggiornando,
@@ -117,11 +116,11 @@ public class HabitService {
         existingHabit.setUpdatedAt(LocalDateTime.now());
 
         // 5. Save the updated entity
-        return habitRepository.save(existingHabit);
+        return habitDAO.save(existingHabit);
     }
 
     public List<Habit> findAllByUserId(Long id) {
-        return habitRepository.findAllByUserId(id);
+        return habitDAO.findAllByUserId(id);
     }
     
     /**
@@ -131,7 +130,7 @@ public class HabitService {
      * @throws HabitNotFoundException se l'ID specificato non esiste
      */
     public Habit findHabitOrThrow(Long habitId) {
-        return habitRepository.findById(habitId)
+        return habitDAO.findById(habitId)
                 .orElseThrow(() -> new HabitNotFoundException(habitId));
     }
     
@@ -141,12 +140,12 @@ public class HabitService {
      * @return L'abitudine salvata
      */
     public Habit saveHabit(Habit habit) {
-        return habitRepository.save(habit);
+        return habitDAO.save(habit);
     }
 
 
     public void deleteHabit(Long id) {
-        habitRepository.deleteById(id);
+        habitDAO.deleteById(id);
     }
 }
 
