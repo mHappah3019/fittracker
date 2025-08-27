@@ -1,11 +1,8 @@
 ingsoftware\model\enum_helpers\HabitFrequencyType.class
 ingsoftware\model\UserEquipment.class
-ingsoftware\repository\UserRepository.class
 ingsoftware\dao\AbstractJpaDAO.class
-ingsoftware\repository\HabitCompletionRepository.class
 ingsoftware\service\EventService.class
 ingsoftware\service\HabitCompletionService.class
-ingsoftware\repository\HabitRepository.class
 ingsoftware\dao\UserEquipmentDAO.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
@@ -37,7 +34,6 @@ ingsoftware\controller\strictly_view\EquipmentRowManager.class
 ingsoftware\service\strategy\EventBonusStrategy.class
 ingsoftware\model\Badge.class
 ingsoftware\exception\EquipmentNotFoundException.class
-ingsoftware\repository\EquipmentRepository.class
 ingsoftware\dao\HabitDAO.class
 ingsoftware\model\DTO\LifePointsDTO.class
 ingsoftware\service\mediator\StartupMediator.class
@@ -75,7 +71,6 @@ ingsoftware\service\post_completion\AchievementService.class
 ingsoftware\model\builder\HabitCompletionBuilder.class
 ingsoftware\service\post_completion\CompletionPopupUIService.class
 ingsoftware\controller\MainDashboardController.class
-ingsoftware\repository\UserEquipmentRepository.class
 ingsoftware\service\LifePointCalculator.class
 ingsoftware\model\DTO\CompletionResultDTO.class
 ingsoftware\controller\HabitListController$1.class

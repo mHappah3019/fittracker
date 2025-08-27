@@ -6,12 +6,12 @@ import ingsoftware.exception.*;
 import ingsoftware.model.Habit;
 import ingsoftware.model.builder.HabitBuilder;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +33,7 @@ public class HabitService {
      * @throws HabitNotFoundException se l'ID specificato non esiste
      * @throws DuplicateHabitException se esiste già un'abitudine con lo stesso nome per l'utente
      */
+    @Transactional
     public Habit saveHabit(Long habitId, HabitBuilder builder) throws RuntimeException {
         Habit tempHabit = builder.build(); // Build once to avoid creating multiple instances
         

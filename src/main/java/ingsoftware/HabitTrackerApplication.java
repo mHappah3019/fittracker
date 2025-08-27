@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 
 // Importa il controller che userai nella scena principale
 // import ingsoftware.controller.HabitListController; // Non più necessario, useremo MainDashboardController

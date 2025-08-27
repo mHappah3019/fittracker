@@ -57,9 +57,7 @@ public class EquipmentService {
 
     public void refreshCache(Long userId) {
         activeEquipmentByTypeCache.clear();
-        findAllEquippedByUser(userId).forEach(
-                (type, equipment) -> activeEquipmentByTypeCache.put(type, equipment)
-        );
+        activeEquipmentByTypeCache.putAll(findAllEquippedByUser(userId));
     }
 
 
@@ -75,7 +73,7 @@ public class EquipmentService {
                 .collect(Collectors.toMap(
                         e -> e.getType().get(), // Estrae il tipo dall'Optional per usarlo come chiave.
                         e -> e,                 // Usa l'equipaggiamento stesso come valore.
-                        (existing, replacement) -> existing, // Se ci sono duplicati per tipo, mantiene il primo trovato.
+                        (existing, _) -> existing, // Se ci sono duplicati per tipo, mantiene il primo trovato.
                         () -> new EnumMap<>(EquipmentType.class) // Specifica che la mappa risultante deve essere un EnumMap.
                 ));
     }
