@@ -3,6 +3,7 @@ package ingsoftware.service;
 import ingsoftware.model.DTO.LifePointsDTO;
 import ingsoftware.model.User;
 import ingsoftware.service.mediator.StartupMediator;
+import ingsoftware.service.startup_handlers.DailyStreakNotificationService;
 import ingsoftware.service.startup_handlers.DailySummaryService;
 import ingsoftware.service.startup_handlers.StartupPopupUIService;
 import jakarta.transaction.Transactional;
@@ -22,14 +23,16 @@ public class StartupMediatorImpl implements StartupMediator {
     private final UserService userService;
     private final StartupPopupUIService popupUIService;
     private final DailySummaryService dailySummaryService;
+    private final DailyStreakNotificationService dailyStreakNotificationService;
 
     public StartupMediatorImpl(GamificationService gamificationService,
                                UserService userService,
-                               StartupPopupUIService popupUIService, DailySummaryService dailySummaryService) {
+                               StartupPopupUIService popupUIService, DailySummaryService dailySummaryService, DailyStreakNotificationService dailyStreakNotificationService) {
         this.gamificationService = gamificationService;
         this.userService = userService;
         this.popupUIService = popupUIService;
         this.dailySummaryService = dailySummaryService;
+        this.dailyStreakNotificationService = dailyStreakNotificationService;
     }
 
     @Transactional
@@ -43,6 +46,7 @@ public class StartupMediatorImpl implements StartupMediator {
                 dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
             }
 
+            dailyStreakNotificationService.onAccess(user, LocalDate.now());
             dailySummaryService.onAccess(user, LocalDate.now());
         } catch (Exception e) {
             logger.error("Errore durante l'avvio dell'applicazione");

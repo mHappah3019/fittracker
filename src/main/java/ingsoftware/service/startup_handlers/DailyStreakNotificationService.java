@@ -15,7 +15,7 @@ public class DailyStreakNotificationService {
     public DailyStreakNotificationService() {
     }
 
-    public void onFirstAccessOfDay(User user, LocalDate previousAccessDate) {
+    public void onAccess(User user, LocalDate previousAccessDate) {
         // In a real implementation, this could:
         // - Send a push notification
         // - Award bonus points or badges

@@ -4,6 +4,8 @@ package ingsoftware.model.DTO;
 import ingsoftware.model.HabitCompletion;
 import ingsoftware.model.User;
 
+
+//TODO: dovrei mantenere questo DTO o inserire tutte le informazioni in HabitCompletion e quindi utilizzare HabitCompletionBuilder in maniera più estesa?
 /**
  * Contiene l'HabitCompletion e altri risultati immediati dell'operazione di completamento.
  */

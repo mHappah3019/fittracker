@@ -98,6 +98,9 @@ public class HabitBuilder {
     }
 
     private void validateRequired() {
+        if (userId == null) {
+            throw new IllegalArgumentException("L'id utente è obbligatorio");
+        }
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Il nome dell'abitudine è obbligatorio");
         }
@@ -112,6 +115,9 @@ public class HabitBuilder {
     private void validateBusinessRules() {
         if (name.length() > 100) {
             throw new IllegalArgumentException("Il nome non può superare i 100 caratteri");
+        }
+        if  (description.length() > 255) {
+            throw new IllegalArgumentException("La descrizione non può superare i 255 caratteri");
         }
     }
 }
