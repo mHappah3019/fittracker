@@ -2,7 +2,9 @@
 package ingsoftware.service.jobs;
 
 import ingsoftware.dao.UserDAO;
-import ingsoftware.service.StartupMediatorImpl;
+import ingsoftware.service.mediator.StartupMediatorImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 public class MidnightRolloverJob {
 
     private static final int PAGE_SIZE = 500;
+    private static final Logger log = LoggerFactory.getLogger(MidnightRolloverJob.class);
 
     private final UserDAO userDAO;
     private final StartupMediatorImpl startupMediator;
@@ -39,7 +42,7 @@ public class MidnightRolloverJob {
                     // Deve essere idempotente: aggiorna solo se è davvero il primo accesso del giorno
                     startupMediator.handleApplicationStartup(userId);
                 } catch (Exception ex) {
-                    System.out.println("Error during application startup for user " + userId + ": " + ex.getMessage());
+                    log.info("Error during application startup for user {}: {}", userId, ex.getMessage());
                 }
             }
             offset += PAGE_SIZE;

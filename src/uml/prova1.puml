@@ -1,0 +1,73 @@
+@startuml
+skinparam ArrowColor Black
+
+package "Strategy & Decorator Pattern" {
+  interface GamificationStrategy {
+    +calculateExperience(baseExperience: double, user: User): double
+  }
+
+  class BaseGamificationStrategy {
+    +calculateExperience(baseExperience: double, user: User): double
+  }
+
+  class ExponentialExperienceStrategy {
+    -wrapped: GamificationStrategy
+    +ExponentialExperienceStrategy(wrapped: GamificationStrategy)
+    +calculateExperience(baseExperience: double, user: User): double
+  }
+
+  class EquipmentBoostedStrategy {
+    -wrapped: GamificationStrategy
+    -equipmentService: EquipmentService
+    +EquipmentBoostedStrategy(wrapped: GamificationStrategy, equipmentService: EquipmentService)
+    +calculateExperience(baseExperience: double, user: User): double
+  }
+
+  class EventBonusStrategy {
+    -wrapped: GamificationStrategy
+    +EventBonusStrategy(wrapped: GamificationStrategy, eventService: EventService)
+    +calculateExperience(baseExperience: double, user: User): double
+  }
+
+  class ExperienceStrategyFactory {
+    -equipmentService: EquipmentService
+    -eventService: EventService
+    +createStrategy(): GamificationStrategy
+    -createBaseStrategy(): GamificationStrategy
+    -applyExponentialBonus(strategy: GamificationStrategy): GamificationStrategy
+    -applyEquipmentBonus(strategy: GamificationStrategy): GamificationStrategy
+    -applyEventBonusIfActive(strategy: GamificationStrategy): GamificationStrategy
+  }
+
+  class GamificationService {
+    -experienceStrategyFactory: ExperienceStrategyFactory
+    +calculateHabitXP(habit: Habit, user: User): double
+    +checkUpdateUserLevel(user: User): int
+  }
+
+  class HabitCompletionService {
+    -habitService: HabitService
+    -completionRepository: HabitCompletionRepository
+    -gamificationService: GamificationService
+    -userService: UserService
+    +completeHabit(habitId: Long, userId: Long): CompletionResultDTO
+  }
+
+  GamificationStrategy <|.. BaseGamificationStrategy
+  GamificationStrategy <|.. ExponentialExperienceStrategy
+  GamificationStrategy <|.. EquipmentBoostedStrategy
+  GamificationStrategy <|.. EventBonusStrategy
+
+  ExponentialExperienceStrategy o--> GamificationStrategy : decorates >
+  EquipmentBoostedStrategy o--> GamificationStrategy : decorates >
+  EventBonusStrategy o--> GamificationStrategy : decorates >
+
+  ExperienceStrategyFactory ..> BaseGamificationStrategy : creates
+  ExperienceStrategyFactory ..> ExponentialExperienceStrategy : creates
+  ExperienceStrategyFactory ..> EquipmentBoostedStrategy : creates
+  ExperienceStrategyFactory ..> EventBonusStrategy : creates
+
+  GamificationService --> ExperienceStrategyFactory : uses
+
+  HabitCompletionService --> GamificationService : uses
+@enduml

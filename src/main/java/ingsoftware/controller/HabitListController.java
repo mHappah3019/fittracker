@@ -6,6 +6,7 @@ import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.model.Habit;
 import ingsoftware.service.*;
 import ingsoftware.service.events.HabitCompletionEvent;
+import ingsoftware.service.mediator.PostCompletionMediatorImpl;
 import ingsoftware.util.AlertHelper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

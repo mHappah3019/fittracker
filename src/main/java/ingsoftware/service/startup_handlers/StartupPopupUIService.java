@@ -95,6 +95,7 @@ public class StartupPopupUIService extends PopupUIService {
         return stage;
     }
 
+    //TODO: implement this method
     private Stage buildLevelDecreasedStage(LifePointsDTO lifePointsDTO) {
         //generate a simple popup and return
         Stage stage = new Stage();

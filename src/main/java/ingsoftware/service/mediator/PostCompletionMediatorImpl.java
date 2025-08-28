@@ -1,7 +1,6 @@
-package ingsoftware.service;
+package ingsoftware.service.mediator;
 
 import ingsoftware.model.DTO.CompletionResultDTO;
-import ingsoftware.service.mediator.PostCompletionMediator;
 import ingsoftware.service.post_completion.*;
 import javafx.application.Platform;
 import org.slf4j.Logger;

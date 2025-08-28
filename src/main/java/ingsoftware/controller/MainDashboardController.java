@@ -1,7 +1,7 @@
 package ingsoftware.controller;
 
 import ingsoftware.model.User;
-import ingsoftware.service.StartupMediatorImpl;
+import ingsoftware.service.mediator.StartupMediatorImpl;
 import ingsoftware.service.UserService;
 import ingsoftware.util.AlertHelper;
 import javafx.application.Platform;

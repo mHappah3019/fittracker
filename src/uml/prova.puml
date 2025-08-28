@@ -1,0 +1,66 @@
+@startuml Service Package with Mediator Pattern
+
+skinparam packageStyle folder
+skinparam backgroundColor white
+skinparam arrowColor black
+skinparam packageBorderColor black
+skinparam classBackgroundColor lightBlue
+skinparam interfaceBackgroundColor lightGreen
+skinparam noteBackgroundColor lightyellow
+
+' Impostazione per layout orizzontale
+package "controller" {}
+
+package "service" {
+    interface "PostCompletionMediator" as PCM
+    class "PostCompletionMediatorImpl" as PCMI
+
+    interface "StartupMediator" as SM
+    class "StartupMediatorImpl" as SMI
+
+    class "UserService" as US
+    class "HabitService" as HS
+    class "HabitCompletionService" as HCS
+    class "GamificationService" as GS
+    class "EventService" as ES
+    class "EquipmentService" as EQS
+
+    ' Post Completion Services
+    class "AchievementService" as AS
+    class "AnalyticsLoggerService" as ALS
+    class "CompletionPopupUIService" as CPUIS
+
+    ' Startup Services
+    class "StartupPopupUIService" as SPUIS
+    class "DailySummaryService" as DSS
+    class "DailyStreakNotificationService" as DSNS
+
+}
+
+' Implementazioni
+PCMI ..up|> PCM
+SMI ..up|> SM
+
+' Relazioni del PostCompletionMediator
+PCMI --> AS : coordinates
+PCMI --> ALS : coordinates
+PCMI --> CPUIS : coordinates
+HCS --> PCM : uses
+
+' Relazioni del StartupMediator
+SMI --> US : coordinates
+SMI --> GS : coordinates
+SMI --> SPUIS : coordinates
+SMI --> DSS : coordinates
+SMI --> DSNS : coordinates
+
+' Altre relazioni principali
+HCS --> HS : uses
+HCS --> US : uses
+HCS --> GS : uses
+HS --> US : uses
+"controller" --> SM : uses
+
+
+
+@enduml

@@ -1,8 +1,9 @@
-package ingsoftware.service;
+package ingsoftware.service.mediator;
 
 import ingsoftware.model.DTO.LifePointsDTO;
 import ingsoftware.model.User;
-import ingsoftware.service.mediator.StartupMediator;
+import ingsoftware.service.GamificationService;
+import ingsoftware.service.UserService;
 import ingsoftware.service.startup_handlers.DailyStreakNotificationService;
 import ingsoftware.service.startup_handlers.DailySummaryService;
 import ingsoftware.service.startup_handlers.StartupPopupUIService;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Component
 public class StartupMediatorImpl implements StartupMediator {
 
-    private static final Logger logger = LoggerFactory.getLogger(PostCompletionMediatorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StartupMediatorImpl.class);
 
     private final GamificationService gamificationService;
     private final UserService userService;
