@@ -23,11 +23,15 @@ public class Equipment {
     public static Equipment createNoneOption() {
         Equipment none = new Equipment();
         none.setName("Nessuno");
-        none.available = false;
-        none.noneOption = true;
+        none.setAvailable(false);
+        none.setNoneOption(true);
         return none;
     }
-    
+
+    private void setNoneOption(boolean b) {
+        this.noneOption = b;
+    }
+
     // Metodo per verificare se è l'opzione "Nessuno"
     public boolean isNoneOption() {
         return noneOption;

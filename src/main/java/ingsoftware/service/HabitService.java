@@ -9,7 +9,6 @@ import ingsoftware.model.builder.HabitBuilder;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,8 +20,11 @@ public class HabitService {
     
     private static final Logger logger = LoggerFactory.getLogger(HabitService.class);
 
-    @Autowired
-    private HabitDAO habitDAO;
+    private final HabitDAO habitDAO;
+
+    public HabitService(HabitDAO habitDAO) {
+        this.habitDAO = habitDAO;
+    }
 
     /**
      * Salva un'abitudine (crea nuova o aggiorna esistente)

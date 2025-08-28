@@ -116,7 +116,7 @@ public class HabitBuilder {
         if (name.length() > 100) {
             throw new IllegalArgumentException("Il nome non può superare i 100 caratteri");
         }
-        if  (description.length() > 255) {
+        if  (description != null && description.length() > 255) {
             throw new IllegalArgumentException("La descrizione non può superare i 255 caratteri");
         }
     }

@@ -1,4 +1,3 @@
-
 package ingsoftware.service;
 
 import ingsoftware.dao.EquipmentDAO;
@@ -10,33 +9,37 @@ import ingsoftware.model.enum_helpers.EquipmentType;
 import jakarta.transaction.Transactional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO: riformattare per leggibilità
 
 @Service
 public class EquipmentService {
 
-    @Autowired
-    private EquipmentDAO equipmentDAO;
-
-    @Autowired
-    private UserDAO userDAO;
-    
-    @Autowired
-    private UserEquipmentDAO userEquipmentDAO;
+    private final EquipmentDAO equipmentDAO;
+    private final UserDAO userDAO;
+    private final UserEquipmentDAO userEquipmentDAO;
 
     private final Map<EquipmentType, Equipment> activeEquipmentByTypeCache = new EnumMap<>(EquipmentType.class);
 
+    public EquipmentService(EquipmentDAO equipmentDAO, UserDAO userDAO, UserEquipmentDAO userEquipmentDAO) {
+        this.equipmentDAO = equipmentDAO;
+        this.userDAO = userDAO;
+        this.userEquipmentDAO = userEquipmentDAO;
+    }
 
+
+    /**
+     * Retrieves all available equipment grouped by type, including "None" options for each type.
+     * 
+     * @return Map of equipment types to their corresponding observable lists of equipment
+     */
     public Map<EquipmentType, ObservableList<Equipment>> getAllEquipmentGroupedByType() {
         List<Equipment> availableEquipment = equipmentDAO.findByAvailableTrue();
 
-        // Aggiungi l'opzione "NONE" per ogni tipo di equipaggiamento usando il nuovo metodo statico
+        // Add "NONE" option for each equipment type using the static method
         for (EquipmentType type : EquipmentType.values()) {
             Equipment noneEquipment = Equipment.createNoneOption();
             noneEquipment.setName("Nessun " + type.getDisplayName());
@@ -45,9 +48,9 @@ public class EquipmentService {
         }
 
         return availableEquipment.stream()
-                .filter(e -> e.getType().isPresent()) // Assicura che l'equipaggiamento abbia un tipo
+                .filter(e -> e.getType().isPresent()) // Ensure equipment has a type
                 .collect(Collectors.groupingBy(
-                        e -> e.getType().get(),      // Raggruppa per EquipmentType
+                        e -> e.getType().get(),      // Group by EquipmentType
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 FXCollections::observableArrayList
@@ -55,50 +58,77 @@ public class EquipmentService {
                 ));
     }
 
-    public void refreshCache(Long userId) {
-        activeEquipmentByTypeCache.clear();
-        activeEquipmentByTypeCache.putAll(findAllEquippedByUser(userId));
-    }
-
-
+    /**
+     * Finds all equipment currently equipped by a specific user.
+     * 
+     * @param userId The ID of the user
+     * @return Map of equipment types to their equipped equipment
+     */
     public Map<EquipmentType, Equipment> findAllEquippedByUser(Long userId) {
         List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
 
-        // Utilizziamo uno Stream per processare la lista e gestire l'Optional in modo pulito.
-        // Usiamo EnumMap per efficienza con chiavi enum.
+        // Use Stream to process the list and handle Optional cleanly
+        // Use EnumMap for efficiency with enum keys
         return equippedUserEquipments.stream()
-                .map(ue -> equipmentDAO.findById(ue.getEquipmentId()).orElse(null)) // Carica l'equipaggiamento tramite ID
-                .filter(Objects::nonNull) // Filtra gli equipaggiamenti non trovati
-                .filter(e -> e.getType().isPresent()) // Filtra solo gli equipaggiamenti che hanno un tipo.
+                .map(ue -> equipmentDAO.findById(ue.getEquipmentId()).orElse(null)) // Load equipment by ID
+                .filter(Objects::nonNull) // Filter out equipment not found
+                .filter(e -> e.getType().isPresent()) // Filter only equipment that has a type
                 .collect(Collectors.toMap(
-                        e -> e.getType().get(), // Estrae il tipo dall'Optional per usarlo come chiave.
-                        e -> e,                 // Usa l'equipaggiamento stesso come valore.
-                        (existing, _) -> existing, // Se ci sono duplicati per tipo, mantiene il primo trovato.
-                        () -> new EnumMap<>(EquipmentType.class) // Specifica che la mappa risultante deve essere un EnumMap.
+                        e -> e.getType().get(), // Extract type from Optional to use as key
+                        e -> e,                 // Use equipment itself as value
+                        (existing, _) -> existing, // If duplicates by type, keep the first found
+                        () -> new EnumMap<>(EquipmentType.class) // Specify result map as EnumMap
                 ));
     }
 
+    /**
+     * Finds equipment equipped by a user for a specific equipment type.
+     * 
+     * @param currentUserId The ID of the user
+     * @param type The equipment type to search for
+     * @return Optional containing the equipped equipment, if any
+     */
+    public Optional<Equipment> findEquippedByUserAndType(Long currentUserId, EquipmentType type) {
+        return userEquipmentDAO.findEquippedByUserIdAndType(currentUserId, type)
+                .flatMap(ue -> equipmentDAO.findById(ue.getEquipmentId()));
+    }
+
+    /**
+     * Equips a specific equipment item for a user.
+     * Automatically unequips any existing equipment of the same type.
+     * 
+     * @param userId The ID of the user
+     * @param equipmentId The ID of the equipment to equip
+     * @return The equipped Equipment object
+     * @throws RuntimeException if equipment is not found or user doesn't own it
+     */
     @Transactional
     public Equipment equip(Long userId, Long equipmentId) {
         Equipment equipment = equipmentDAO.findById(equipmentId)
                 .orElseThrow(() -> new RuntimeException("Equipaggiamento non trovato"));
 
-        // Verifica se l'utente possiede questo equipaggiamento
+        // Verify that the user owns this equipment
         UserEquipment userEquipment = userEquipmentDAO.findByUserIdAndEquipmentId(userId, equipmentId)
                 .orElseThrow(() -> new RuntimeException("L'utente non possiede questo equipaggiamento"));
 
-        // Rimuovi eventuali equipaggiamenti attivi dello stesso tipo
+        // Remove any active equipment of the same type
         EquipmentType equipmentType = equipment.getType()
                 .orElseThrow(() -> new IllegalStateException("L'equipaggiamento deve avere un tipo per essere equipaggiato"));
         unequip(userId, equipmentType);
 
-        // Equipaggia il nuovo equipaggiamento
+        // Equip the new equipment
         userEquipment.equip();
         userEquipmentDAO.save(userEquipment);
         
         return equipment;
     }
 
+    /**
+     * Unequips equipment of a specific type for a user.
+     * 
+     * @param userId The ID of the user
+     * @param type The type of equipment to unequip
+     */
     @Transactional
     public void unequip(Long userId, EquipmentType type) {
         userEquipmentDAO.findEquippedByUserIdAndType(userId, type)
@@ -108,6 +138,23 @@ public class EquipmentService {
                 });
     }
 
+
+    /**
+     * Refreshes the equipment cache for a specific user.
+     * 
+     * @param userId The ID of the user whose cache should be refreshed
+     */
+    public void refreshCache(Long userId) {
+        activeEquipmentByTypeCache.clear();
+        activeEquipmentByTypeCache.putAll(findAllEquippedByUser(userId));
+    }
+
+    /**
+     * Gets the full equipment set for a user, using cache when possible.
+     * 
+     * @param userId The ID of the user
+     * @return Map of equipment types to their equipped equipment
+     */
     public Map<EquipmentType, Equipment> getFullEquipmentSet(Long userId) {
         if (activeEquipmentByTypeCache.isEmpty() && userId != null) {
             refreshCache(userId);
@@ -115,17 +162,17 @@ public class EquipmentService {
         return activeEquipmentByTypeCache;
     }
 
-    public Optional<Equipment> findEquippedByUserAndType(Long currentUserId, EquipmentType type) {
-        return userEquipmentDAO.findEquippedByUserIdAndType(currentUserId, type)
-                .flatMap(ue -> equipmentDAO.findById(ue.getEquipmentId()));
-    }
+    // ========================================
+    // User Equipment Management Methods
+    // ========================================
 
     /**
-     * Inizializza l'inventario di un utente assegnandogli tutti gli equipaggiamenti disponibili.
-     * Questo metodo è utile in fase di sviluppo o per semplificare l'acquisizione iniziale.
-     * Deve essere chiamato una sola volta per utente.
+     * Initializes a user's equipment inventory by assigning all available equipment.
+     * This method is useful during development or to simplify initial acquisition.
+     * Should be called only once per user.
      *
-     * @param userId L'ID dell'utente da inizializzare.
+     * @param userId The ID of the user to initialize
+     * @throws RuntimeException if the user is not found
      */
     @Transactional
     public void initializeUserEquipment(Long userId) {
@@ -136,35 +183,12 @@ public class EquipmentService {
         List<Equipment> allCatalogEquipment = equipmentDAO.findAll();
 
         for (Equipment equipment : allCatalogEquipment) {
-            // Assegna l'equipaggiamento solo se l'utente non lo possiede già
-            // Questo previene la creazione di duplicati se il metodo viene chiamato più volte
+            // Assign equipment only if the user doesn't already own it
+            // This prevents duplicate creation if the method is called multiple times
             if (!userEquipmentDAO.existsByUserIdAndEquipmentId(userId, equipment.getId())) {
                 UserEquipment userEquipment = new UserEquipment(userId, equipment.getId());
                 userEquipmentDAO.save(userEquipment);
             }
         }
-    }
-
-
-    
-    /**
-     * Ottiene tutti gli equipaggiamenti posseduti da un utente
-     */
-    public List<UserEquipment> getUserEquipments(Long userId) {
-        return userEquipmentDAO.findByUserId(userId);
-    }
-    
-    /**
-     * Ottiene tutti gli equipaggiamenti equipaggiati da un utente
-     */
-    public List<UserEquipment> getEquippedItems(Long userId) {
-        return userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
-    }
-    
-    /**
-     * Verifica se un utente possiede un equipaggiamento specifico
-     */
-    public boolean userOwnsEquipment(Long userId, Long equipmentId) {
-        return userEquipmentDAO.existsByUserIdAndEquipmentId(userId, equipmentId);
     }
 }

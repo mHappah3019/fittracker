@@ -23,7 +23,6 @@ public class EquipmentRowManager {
     private final ChoiceBox<Equipment> choiceBox;
     private final Label slotLabel;
     private final ImageView preview;
-    private final EquipmentType type;
 
     /**
      * Costruttore che inizializza tutti i componenti UI necessari per una riga di equipaggiamento.
@@ -32,7 +31,6 @@ public class EquipmentRowManager {
      * @param items La lista di equipaggiamenti disponibili per questo tipo
      */
     public EquipmentRowManager(EquipmentType type, ObservableList<Equipment> items) {
-        this.type = type;
         this.slotLabel = new Label(type.getDisplayName());
         this.choiceBox = createChoiceBox(items);
         this.preview = new ImageView();
@@ -59,7 +57,7 @@ public class EquipmentRowManager {
      * Configura il listener per il ChoiceBox per aggiornare l'anteprima quando viene selezionato un nuovo equipaggiamento.
      */
     private void setupChoiceBox() {
-        choiceBox.getSelectionModel().selectedItemProperty().addListener((obs, old, selected) -> {
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((_, _, _) -> {
             //updatePreview(selected);
         });
     }
@@ -115,14 +113,5 @@ public class EquipmentRowManager {
     public Equipment getSelectedEquipment() {
         return choiceBox.getValue();
     }
-
-    /**
-     * Restituisce il tipo di equipaggiamento associato a questa riga.
-     *
-     * @return
-    public EquipmentType getType() {
-    return type;
-    } Il tipo di equipaggiamento
-     */
 }
 

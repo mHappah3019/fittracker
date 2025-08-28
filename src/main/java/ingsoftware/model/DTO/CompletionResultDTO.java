@@ -2,8 +2,6 @@
 package ingsoftware.model.DTO;
 
 import ingsoftware.model.HabitCompletion;
-import ingsoftware.model.User;
-
 
 /**
  * Contiene l'HabitCompletion e altri risultati immediati dell'operazione di completamento.
@@ -32,15 +30,9 @@ public class CompletionResultDTO {
         return xpGained;
     }
 
-    public User getUser() {
-        return null;
-    }
 
     public int getStreak() {
         return completion.getStreak();
     }
 
-    public int getLevel() {
-        return 0;
-    }
 }

@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -17,6 +19,7 @@ import ingsoftware.controller.MainDashboardController;
 @SpringBootApplication // Assicurati che questo copra tutti i tuoi package
 public class HabitTrackerApplication extends Application {
 
+    private static final Logger log = LoggerFactory.getLogger(HabitTrackerApplication.class);
     private ConfigurableApplicationContext springContext;
 
     public static void main(String[] args) {
@@ -42,16 +45,16 @@ public class HabitTrackerApplication extends Application {
                         beanName.toLowerCase().contains("controller") ||
                         beanName.toLowerCase().contains("service") || // Aggiunto per debugging dei servizi
                         beanName.toLowerCase().contains("dao")) { // Aggiunto per debugging dei DAO
-                    System.out.println("   - " + beanName);
+                    log.info("   - {}", beanName);
                 }
             }
 
             // CONTROLLA SPECIFICAMENTE IL CONTROLLER (utile per debugging)
             try {
                 Object controller = springContext.getBean("mainDashboardController"); // Modificato da habitListController
-                System.out.println("✅ MainDashboardController trovato: " + controller.getClass()); // Modificato
+                log.info("✅ MainDashboardController trovato: {}", controller.getClass()); // Modificato
             } catch (Exception e) {
-                System.out.println("❌ MainDashboardController NON trovato: " + e.getMessage()); // Modificato
+                log.info("❌ MainDashboardController NON trovato: {}", e.getMessage()); // Modificato
             }
 
             // Carica la vista principale (Dashboard)
@@ -77,8 +80,7 @@ public class HabitTrackerApplication extends Application {
             controller.setCurrentUser(1L); // ID utente di test
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Errore nel caricamento dell'interfaccia: " + e.getMessage());
+            log.error("Errore nel caricamento dell'interfaccia: {}", e.getMessage());
         }
     }
 

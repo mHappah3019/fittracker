@@ -2,13 +2,9 @@ package ingsoftware.service;
 
 import ingsoftware.model.*;
 import ingsoftware.model.DTO.LifePointsDTO;
-import ingsoftware.model.enum_helpers.HabitDifficulty;
 import ingsoftware.service.strategy.ExperienceStrategyFactory;
 import ingsoftware.service.strategy.GamificationStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -16,19 +12,20 @@ import java.util.List;
 @Service
 public class GamificationService {
 
-
-    @Autowired
-    private HabitService habitService;
-
-    @Autowired
-    private LifePointCalculator calculator;
-
-    @Autowired
-    private ExperienceStrategyFactory strategyFactory;
-
+    private final HabitService habitService;
+    private final LifePointCalculator calculator;
+    private final ExperienceStrategyFactory strategyFactory;
 
     private static final double XP_PER_LEVEL = 100.0;
     final int INACTIVITY_PENALTY_PER_DAY = -10;
+
+    public GamificationService(HabitService habitService,
+                               LifePointCalculator calculator,
+                               ExperienceStrategyFactory strategyFactory) {
+        this.habitService = habitService;
+        this.calculator = calculator;
+        this.strategyFactory = strategyFactory;
+    }
 
     public double calculateHabitXP(Habit habit, User user) {
         GamificationStrategy strategy = strategyFactory.createStrategy();
