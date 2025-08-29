@@ -32,7 +32,6 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\exception\StartupExc
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\exception\UserNotFoundException.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\HabitTrackerApplication.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\HabitTrackerLauncher.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\JavaFxApplicationRunner.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\MainApplication.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\model\Badge.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\model\builder\HabitBuilder.java
@@ -66,7 +65,6 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\post_complet
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\post_completion\CompletionPopupUIService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailyStreakNotificationService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DailySummaryService.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\DataLoaderService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\startup_handlers\StartupPopupUIService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\BaseGamificationStrategy.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\EquipmentBoostedStrategy.java

@@ -1,9 +1,7 @@
 package ingsoftware.service;
 
 import ingsoftware.dao.UserDAO;
-import ingsoftware.exception.UserNotFoundException;
 import ingsoftware.model.User;
-import ingsoftware.service.startup_handlers.DataLoaderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +27,6 @@ class UserServiceTest {
 
     @Mock
     private UserDAO userDAO;
-    
-    @Mock
-    private DataLoaderService dataLoaderService;
 
     @InjectMocks
     private UserService userService;

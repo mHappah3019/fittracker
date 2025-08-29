@@ -3,7 +3,6 @@ package ingsoftware.service;
 import ingsoftware.dao.UserDAO;
 import ingsoftware.exception.UserNotFoundException;
 import ingsoftware.model.User;
-import ingsoftware.service.startup_handlers.DataLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,7 @@ public class UserService {
     private final UserDAO userDAO;
 
     @Autowired
-    public UserService(UserDAO userDAO, DataLoaderService dataLoaderService) {
+    public UserService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 

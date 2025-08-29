@@ -45,7 +45,6 @@ ingsoftware\controller\UserStatsController.class
 ingsoftware\model\User.class
 ingsoftware\service\mediator\PostCompletionMediator.class
 ingsoftware\service\PopupUIService.class
-ingsoftware\service\startup_handlers\DataLoaderService.class
 ingsoftware\controller\AbstractHabitFormController.class
 ingsoftware\dao\impl\HabitCompletionDAOImpl.class
 ingsoftware\service\HabitCompletionService$1.class
