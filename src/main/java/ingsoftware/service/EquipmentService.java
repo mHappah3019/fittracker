@@ -37,7 +37,7 @@ public class EquipmentService {
      * @return Map of equipment types to their corresponding observable lists of equipment
      */
     public Map<EquipmentType, ObservableList<Equipment>> getAllEquipmentGroupedByType() {
-        List<Equipment> availableEquipment = equipmentDAO.findByAvailableTrue();
+        List<Equipment> availableEquipment = new ArrayList<>(equipmentDAO.findByAvailableTrue());
 
         // Add "NONE" option for each equipment type using the static method
         for (EquipmentType type : EquipmentType.values()) {
@@ -88,7 +88,7 @@ public class EquipmentService {
      * @param type The equipment type to search for
      * @return Optional containing the equipped equipment, if any
      */
-    public Optional<Equipment> findEquippedByUserAndType(Long currentUserId, EquipmentType type) {
+    public Optional<Equipment> findEquippedByUserIdAndType(Long currentUserId, EquipmentType type) {
         return userEquipmentDAO.findEquippedByUserIdAndType(currentUserId, type)
                 .flatMap(ue -> equipmentDAO.findById(ue.getEquipmentId()));
     }

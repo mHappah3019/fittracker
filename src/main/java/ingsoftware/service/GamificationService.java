@@ -30,7 +30,7 @@ public class GamificationService {
     public double calculateHabitXP(Habit habit, User user) {
         GamificationStrategy strategy = strategyFactory.createStrategy();
 
-        int baseXP = habit.getDifficulty().getBaseXP();
+        double baseXP = habit.getDifficulty().getBaseXP();
 
         return strategy.calculateExperience(baseXP, user);
     }
@@ -114,11 +114,8 @@ public class GamificationService {
                         habit.getLastCompletedDate().equals(completedDate))
                 .toList();
 
-        if (completedHabits.isEmpty()) {
-            return INACTIVITY_PENALTY_PER_DAY;
-        }
 
-        return calculator.compute(completedHabits, 75.0);
+        return calculator.compute(completedHabits, allUserHabits);
     }
 
 

@@ -22,4 +22,8 @@ public class LifePointsDTO {
     public int getOldLifePoints() {
         return oldLifePoints;
     }
+
+    public int getNewLifePoints() {
+        return newlifePoints;
+    }
 }

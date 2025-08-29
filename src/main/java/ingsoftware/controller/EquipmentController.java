@@ -85,7 +85,7 @@ public class EquipmentController {
      */
     private void loadCurrentEquipment(EquipmentRowManager rowManager, EquipmentType type) {
         try {
-            Optional<Equipment> current = equipmentService.findEquippedByUserAndType(currentUserId, type);
+            Optional<Equipment> current = equipmentService.findEquippedByUserIdAndType(currentUserId, type);
             logger.debug("Caricando equipaggiamento corrente per il tipo: {} - Utente ID: {}", type, String.valueOf(currentUserId));
             rowManager.setSelectedEquipment(current.orElse(rowManager.getSelectedEquipment()));
         } catch (EquipmentNotFoundException e) {
