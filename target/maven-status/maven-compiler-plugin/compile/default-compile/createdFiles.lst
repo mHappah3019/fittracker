@@ -6,7 +6,9 @@ ingsoftware\service\HabitCompletionService.class
 ingsoftware\dao\UserEquipmentDAO.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
+ingsoftware\service\mediator\PostCompletionMediatorImpl.class
 ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell.class
+ingsoftware\HabitTrackerLauncher.class
 ingsoftware\model\enum_helpers\HabitDifficulty.class
 ingsoftware\controller\CreateHabitController.class
 ingsoftware\model\builder\HabitBuilder.class
@@ -14,6 +16,7 @@ ingsoftware\service\strategy\GamificationStrategy.class
 ingsoftware\controller\EquipmentController.class
 ingsoftware\exception\HabitCompletionException.class
 ingsoftware\service\strategy\ExponentialExperienceStrategy.class
+ingsoftware\service\mediator\StartupMediatorImpl.class
 ingsoftware\service\GamificationService.class
 ingsoftware\dao\impl\UserEquipmentDAOImpl.class
 ingsoftware\exception\HabitAlreadyCompletedException.class
@@ -21,6 +24,7 @@ ingsoftware\service\post_completion\AnalyticsLoggerService.class
 ingsoftware\dao\EquipmentDAO.class
 ingsoftware\HabitTrackerApplication.class
 ingsoftware\model\Equipment.class
+ingsoftware\MainApplication.class
 ingsoftware\dao\HabitCompletionDAO.class
 ingsoftware\exception\UserNotFoundException.class
 ingsoftware\service\EquipmentService.class
@@ -47,7 +51,6 @@ ingsoftware\dao\impl\HabitCompletionDAOImpl.class
 ingsoftware\service\HabitCompletionService$1.class
 ingsoftware\model\enum_helpers\EquipmentType.class
 ingsoftware\dao\BaseDAO.class
-ingsoftware\service\PostCompletionMediatorImpl.class
 ingsoftware\service\UserService.class
 ingsoftware\exception\GamificationException.class
 ingsoftware\model\enum_helpers\HabitFrequency.class
@@ -58,7 +61,6 @@ ingsoftware\util\AlertHelper.class
 ingsoftware\dao\impl\EquipmentDAOImpl.class
 ingsoftware\service\startup_handlers\DailySummaryService.class
 ingsoftware\model\Habit.class
-ingsoftware\service\StartupMediatorImpl.class
 ingsoftware\controller\EditHabitController.class
 ingsoftware\config\PopupConfig.class
 ingsoftware\service\startup_handlers\StartupPopupUIService.class

@@ -6,6 +6,7 @@ import ingsoftware.model.User;
 import ingsoftware.service.startup_handlers.DataLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -13,12 +14,10 @@ import java.time.LocalDate;
 public class UserService {
 
     private final UserDAO userDAO;
-    private final DataLoaderService dataLoaderService;
 
     @Autowired
     public UserService(UserDAO userDAO, DataLoaderService dataLoaderService) {
         this.userDAO = userDAO;
-        this.dataLoaderService = dataLoaderService;
     }
 
     public boolean isFirstAccessOfDay(User user, LocalDate date) {
@@ -29,6 +28,7 @@ public class UserService {
         return lastAccess.isBefore(date);
     }
 
+    @Transactional
     public void saveUser(User user) {
         userDAO.save(user);
     }
@@ -42,21 +42,18 @@ public class UserService {
         return userDAO.findAll().isEmpty();
     }
 
-    public boolean existsById(Long id) {
-        return userDAO.existsById(id);
-    }
     
-    /**
-     * Ottiene l'utente di default (il primo utente nel database)
-     */
-    public User getDefaultUser() {
-        return dataLoaderService.getDefaultUser();
-    }
-    
-    /**
-     * Ottiene l'ID dell'utente di default
-     */
-    public Long getDefaultUserId() {
-        return dataLoaderService.getDefaultUserId();
-    }
+//    /**
+//     * Ottiene l'utente di default (il primo utente nel database)
+//     */
+//    public User getDefaultUser() {
+//        return dataLoaderService.getDefaultUser();
+//    }
+//
+//    /**
+//     * Ottiene l'ID dell'utente di default
+//     */
+//    public Long getDefaultUserId() {
+//        return dataLoaderService.getDefaultUserId();
+//    }
 }

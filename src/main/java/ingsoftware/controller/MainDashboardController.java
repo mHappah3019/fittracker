@@ -1,6 +1,7 @@
 package ingsoftware.controller;
 
 import ingsoftware.model.User;
+import ingsoftware.service.EquipmentService;
 import ingsoftware.service.mediator.StartupMediatorImpl;
 import ingsoftware.service.UserService;
 import ingsoftware.util.AlertHelper;
@@ -27,12 +28,14 @@ public class MainDashboardController {
     // Dependencies
     private final FxWeaver fxWeaver;
     private final UserService userService;
+    private final EquipmentService equipmentService;
     private final StartupMediatorImpl startupMediator;
 
     // Constructor injection
-    public MainDashboardController(StartupMediatorImpl startupMediator, UserService userService, FxWeaver fxWeaver) {
+    public MainDashboardController(StartupMediatorImpl startupMediator, UserService userService, EquipmentService equipmentService, FxWeaver fxWeaver) {
         this.startupMediator = startupMediator;
         this.userService = userService;
+        this.equipmentService = equipmentService;
         this.fxWeaver = fxWeaver;
     }
 
@@ -49,14 +52,40 @@ public class MainDashboardController {
 
     @FXML
     public void initialize() {
-        checkAndCreateDefaultUser(currentUserId) ;
-        Platform.runLater(() -> startupMediator.handleApplicationStartup(currentUserId));
+        logger.info("🔧 Inizializzazione MainDashboardController...");
+        // L'inizializzazione vera e propria avverrà in setCurrentUser
+        // quando l'ID utente sarà disponibile
     }
 
     public void setCurrentUser(Long userId) {
+        logger.info("👤 Impostazione utente corrente: {}", userId);
         this.currentUserId = userId;
-        userStatsController.setCurrentUser(userId);
-        habitListController.setCurrentUser(userId);
+        
+        // Verifica e crea l'utente di default se necessario
+        checkAndCreateDefaultUser(userId);
+        
+        // Imposta l'utente nei controller figli se sono disponibili
+        if (userStatsController != null) {
+            userStatsController.setCurrentUser(userId);
+        } else {
+            logger.warn("⚠️ userStatsController non ancora inizializzato");
+        }
+        
+        if (habitListController != null) {
+            habitListController.setCurrentUser(userId);
+        } else {
+            logger.warn("⚠️ habitListController non ancora inizializzato");
+        }
+        
+        // Avvia il mediator di startup
+        Platform.runLater(() -> {
+            try {
+                startupMediator.handleApplicationStartup(userId);
+                logger.info("✅ Startup mediator eseguito con successo");
+            } catch (Exception e) {
+                logger.error("❌ Errore durante l'esecuzione del startup mediator", e);
+            }
+        });
     }
 
     @FXML
@@ -89,11 +118,21 @@ public class MainDashboardController {
 
 
     private void checkAndCreateDefaultUser(Long userId) {
-        if (userService.checkDefaultUser()) {
-            User defaultUser = new User();
-            defaultUser.setLevel(1);
-            defaultUser.setId(userId);
-            userService.saveUser(defaultUser);
+        try {
+            if (userService.checkDefaultUser()) {
+                logger.info("🆕 Creazione utente di default con ID: {}", userId);
+                User defaultUser = new User();
+                defaultUser.setLevel(1);
+                defaultUser.setId(userId);
+                userService.saveUser(defaultUser);
+                equipmentService.initializeUserEquipment(userId);
+                logger.info("✅ Utente di default creato con successo");
+            } else {
+                logger.info("👤 Utente esistente trovato");
+            }
+        } catch (Exception e) {
+            logger.error("❌ Errore durante la verifica/creazione dell'utente di default", e);
+            showErrorMessage("Errore durante l'inizializzazione dell'utente: " + e.getMessage());
         }
     }
 }

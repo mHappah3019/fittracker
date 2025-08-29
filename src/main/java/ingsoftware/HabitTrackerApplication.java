@@ -9,78 +9,102 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 // Importa il controller che userai nella scena principale
-// import ingsoftware.controller.HabitListController; // Non più necessario, useremo MainDashboardController
 import ingsoftware.controller.MainDashboardController;
+import net.rgielen.fxweaver.core.FxWeaver;
 
-@SpringBootApplication // Assicurati che questo copra tutti i tuoi package
+@SpringBootApplication
 public class HabitTrackerApplication extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(HabitTrackerApplication.class);
-    private ConfigurableApplicationContext springContext;
+    private static ConfigurableApplicationContext springContext;
 
     public static void main(String[] args) {
-        // Avvia l'applicazione JavaFX
-        launch(args);
+        try {
+            log.info("🚀 Avvio Habit Tracker Application...");
+            
+            // Configura Spring Boot per applicazione desktop (non web)
+            SpringApplication app = new SpringApplication(HabitTrackerApplication.class);
+            app.setWebApplicationType(WebApplicationType.NONE);
+            
+            // Avvia prima Spring Boot, poi JavaFX
+            springContext = app.run(args);
+            log.info("✅ Contesto Spring Boot avviato con successo");
+            
+            // Avvia JavaFX
+            Application.launch(HabitTrackerApplication.class, args);
+            
+        } catch (Exception e) {
+            log.error("❌ Errore durante l'avvio dell'applicazione: {}", e.getMessage(), e);
+            if (springContext != null) {
+                springContext.close();
+            }
+            System.exit(1);
+        }
     }
 
     @Override
-    public void init() throws Exception {
-        // Inizializza il contesto Spring prima di JavaFX
-        // Passa la classe principale come sorgente di configurazione a Spring
-        springContext = SpringApplication.run(HabitTrackerApplication.class);
+    public void init() {
+        // Il contesto Spring è già stato creato nel main
+        if (springContext == null) {
+            log.error("Spring context non inizializzato!");
+            throw new RuntimeException("Spring context non disponibile");
+        }
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
+            log.info("🚀 Avvio dell'interfaccia JavaFX...");
+            
+            // Ottieni FxWeaver dal contesto Spring
+            FxWeaver fxWeaver = springContext.getBean(FxWeaver.class);
+            
             // LOG TUTTI I BEAN DISPONIBILI (utile per debugging)
-            System.out.println("🔍 Bean Spring disponibili:");
+            log.debug("🔍 Bean Spring disponibili:");
             String[] beanNames = springContext.getBeanDefinitionNames();
             for (String beanName : beanNames) {
                 if (beanName.toLowerCase().contains("habit") ||
                         beanName.toLowerCase().contains("controller") ||
-                        beanName.toLowerCase().contains("service") || // Aggiunto per debugging dei servizi
-                        beanName.toLowerCase().contains("dao")) { // Aggiunto per debugging dei DAO
-                    log.info("   - {}", beanName);
+                        beanName.toLowerCase().contains("service") ||
+                        beanName.toLowerCase().contains("dao")) {
+                    log.debug("   - {}", beanName);
                 }
             }
 
-            // CONTROLLA SPECIFICAMENTE IL CONTROLLER (utile per debugging)
-            try {
-                Object controller = springContext.getBean("mainDashboardController"); // Modificato da habitListController
-                log.info("✅ MainDashboardController trovato: {}", controller.getClass()); // Modificato
-            } catch (Exception e) {
-                log.info("❌ MainDashboardController NON trovato: {}", e.getMessage()); // Modificato
-            }
-
-            // Carica la vista principale (Dashboard)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ingsoftware/MainDashboardView.fxml")); // Modificato
-            // Imposta il controller factory per permettere a Spring di iniettare le dipendenze
-            loader.setControllerFactory(springContext::getBean);
-
-            Parent root = loader.load();
+            // Usa FxWeaver per caricare la vista principale
+            Parent root = fxWeaver.loadView(MainDashboardController.class);
+            MainDashboardController controller = fxWeaver.getBean(MainDashboardController.class);
 
             // Configura la finestra principale
-            Scene scene = new Scene(root, 1200, 800);
-            //scene.getStylesheets().add(getClass().getResource("/ingsoftware/styles/styles.css").toExternalForm());
+           Scene scene = new Scene(root, 1200, 800);
+            
+            // Carica CSS se disponibile
+            try {
+                 scene.getStylesheets().add(getClass().getResource("/ingsoftware/styles/styles.css").toExternalForm());
+            } catch (Exception e) {
+                log.warn("File CSS non trovato, continuando senza stili personalizzati");
+            }
 
             primaryStage.setTitle("🎯 Habit Tracker - La Tua Avventura Quotidiana");
             primaryStage.setScene(scene);
             primaryStage.setMinWidth(800);
             primaryStage.setMinHeight(600);
             primaryStage.centerOnScreen();
-            primaryStage.show();
-
-            // Passa l'ID utente al controller (per testing usa un ID fisso)
-            MainDashboardController controller = loader.getController(); // Modificato il tipo di controller
+            
+            // Imposta l'utente corrente PRIMA di mostrare la finestra
             controller.setCurrentUser(1L); // ID utente di test
+            
+            primaryStage.show();
+            log.info("✅ Interfaccia JavaFX avviata con successo");
 
         } catch (Exception e) {
-            log.error("Errore nel caricamento dell'interfaccia: {}", e.getMessage());
+            log.error("❌ Errore nel caricamento dell'interfaccia: {}", e.getMessage(), e);
+            throw e;
         }
     }
 
