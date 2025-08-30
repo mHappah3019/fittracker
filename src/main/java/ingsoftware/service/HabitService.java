@@ -36,17 +36,17 @@ public class HabitService {
      * @throws DuplicateHabitException se esiste già un'abitudine con lo stesso nome per l'utente
      */
     @Transactional
-    public Habit saveHabit(Long habitId, HabitBuilder builder) throws RuntimeException {
+    public void saveHabit(Long habitId, HabitBuilder builder) throws RuntimeException {
         Habit tempHabit = builder.build(); // Build once to avoid creating multiple instances
         
         if (habitId == null) {
             // CREAZIONE
             logger.info("Tentativo di creazione di una nuova abitudine con nome: {}", tempHabit.getName());
-            return createHabit(builder);
+            createHabit(builder);
         } else {
             // MODIFICA
             logger.info("Tentativo di aggiornamento dell'abitudine con ID: {}", habitId);
-            return updateHabit(habitId, builder);
+            updateHabit(habitId, builder);
         }
     }
 

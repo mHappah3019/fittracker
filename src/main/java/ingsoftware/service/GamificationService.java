@@ -35,47 +35,82 @@ public class GamificationService {
         return strategy.calculateExperience(baseXP, user);
     }
 
+
     public LifePointsDTO updateUserLifePoints(User user, LocalDate today) {
         // Salva i punti vita iniziali
         int oldLifePoints = user.getLifePoints();
+
+        // Calcola il delta dei punti vita
+        int totalLifePointsDelta = calculateLifePointsDelta(user, today);
+
+        // Applica i cambiamenti e gestisci la diminuzione di livello se necessario
+        boolean isLevelDecreased = applyLifePointsChanges(user, totalLifePointsDelta);
+
+        // Crea e restituisce il DTO con i valori vecchi e nuovi
+        return new LifePointsDTO(isLevelDecreased, user.getLifePoints(), oldLifePoints);
+    }
+
+    /**
+     * Calcola il delta totale dei punti vita basato sulle abitudini completate e l'inattività
+     */
+    private int calculateLifePointsDelta(User user, LocalDate today) {
         int totalLifePointsDelta = 0;
-        boolean isLevelDecreased = false;
-        
         LocalDate lastAccess = user.getLastAccessDate();
 
         // Recupera tutte le abitudini dell'utente una sola volta
         List<Habit> allUserHabits = habitService.findAllByUserId(user.getId());
 
         if (lastAccess != null) {
-            long daysSinceLastAccess = ChronoUnit.DAYS.between(lastAccess, today);
-
-            // Calcola delta per abitudini completate
+            // Aggiungi punti per abitudini completate
             totalLifePointsDelta += calculateCompletedHabitsPoints(allUserHabits, lastAccess);
 
-            // Calcola penalità per inattività
-            if (daysSinceLastAccess > 1) {
-                long inactiveDays = daysSinceLastAccess - 1;
-                int inactivityPenalty = (int) (inactiveDays * INACTIVITY_PENALTY_PER_DAY);
-                totalLifePointsDelta += inactivityPenalty;
-            }
+            // Sottrai punti per inattività
+            totalLifePointsDelta += calculateInactivityPenalty(lastAccess, today);
         }
 
-        // Applica il moltiplicatore basato sulla difficoltà media delle abitudini
+        // Applica il moltiplicatore di difficoltà se necessario
         if (totalLifePointsDelta != 0) {
-            double difficultyMultiplier = calculateDifficultyMultiplier(allUserHabits);
-            totalLifePointsDelta = (int) Math.round(totalLifePointsDelta * difficultyMultiplier);
+            totalLifePointsDelta = applyDifficultyMultiplier(totalLifePointsDelta, allUserHabits);
         }
 
-        // Applica tutti i cambiamenti insieme
-        if (totalLifePointsDelta != 0) {
-            user.addLifePoints(totalLifePointsDelta);
-            isLevelDecreased = checkAndHandleLifePointsDepletion(user);
-        }
-
-        // Crea e restituisce il DTO con i valori vecchi e nuovi
-        int newLifePoints = user.getLifePoints();
-        return new LifePointsDTO(isLevelDecreased, newLifePoints, oldLifePoints);
+        return totalLifePointsDelta;
     }
+
+    /**
+     * Calcola la penalità per i giorni di inattività
+     */
+    private int calculateInactivityPenalty(LocalDate lastAccess, LocalDate today) {
+        long daysSinceLastAccess = ChronoUnit.DAYS.between(lastAccess, today);
+
+        if (daysSinceLastAccess > 1) {
+            long inactiveDays = daysSinceLastAccess - 1;
+            return (int) (inactiveDays * INACTIVITY_PENALTY_PER_DAY);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Applica il moltiplicatore di difficoltà al delta dei punti vita
+     */
+    private int applyDifficultyMultiplier(int pointsDelta, List<Habit> habits) {
+        double difficultyMultiplier = calculateDifficultyMultiplier(habits);
+        return (int) Math.round(pointsDelta * difficultyMultiplier);
+    }
+
+    /**
+     * Applica i cambiamenti ai punti vita dell'utente e gestisce la diminuzione di livello se necessario
+     * @return true se il livello è diminuito, false altrimenti
+     */
+    private boolean applyLifePointsChanges(User user, int totalLifePointsDelta) {
+        if (totalLifePointsDelta == 0) {
+            return false;
+        }
+
+        user.addLifePoints(totalLifePointsDelta);
+        return checkAndHandleLevelDecrease(user);
+    }
+
 
 
     /**
@@ -141,7 +176,7 @@ public class GamificationService {
      * @return true if level was decreased, false otherwise
      */
 
-    public boolean checkAndHandleLifePointsDepletion(User user) {
+    public boolean checkAndHandleLevelDecrease(User user) {
         if (user.getLifePoints() <= 0) {
             int currentLevel = user.getLevel();
             if (currentLevel > 1) {

@@ -122,7 +122,6 @@ public class HabitListController {
             // 4) Notifica altri componenti
             eventPublisher.publishEvent(new HabitCompletionEvent(this));
 
-            
             // Riabilita pulsante
             completeHabitButton.setDisable(false);
         });

@@ -200,7 +200,7 @@ class GamificationServiceTest {
         testUser.setLevel(2);
 
         // Act
-        boolean result = gamificationService.checkAndHandleLifePointsDepletion(testUser);
+        boolean result = gamificationService.checkAndHandleLevelDecrease(testUser);
 
         // Assert
         assertTrue(result, "Dovrebbe restituire true quando il livello diminuisce");
@@ -215,7 +215,7 @@ class GamificationServiceTest {
         testUser.setLevel(1);
 
         // Act
-        boolean result = gamificationService.checkAndHandleLifePointsDepletion(testUser);
+        boolean result = gamificationService.checkAndHandleLevelDecrease(testUser);
 
         // Assert
         assertFalse(result, "Non dovrebbe diminuire il livello se già al livello 1");
