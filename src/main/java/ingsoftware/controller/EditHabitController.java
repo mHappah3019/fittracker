@@ -1,6 +1,7 @@
 package ingsoftware.controller;
 
 import ingsoftware.exception.BusinessException;
+import ingsoftware.model.builder.HabitBuilder;
 import ingsoftware.service.HabitService;
 import ingsoftware.util.AlertHelper;
 import javafx.fxml.FXML;
@@ -24,6 +25,26 @@ public class EditHabitController extends AbstractHabitFormController {
     public void initialize() {
         super.initialize(); // Chiama l'initialize della classe base
         // Logica di init specifica per la modifica, se serve
+    }
+
+    @Override
+    protected void handleSave() {
+        try {
+
+            HabitBuilder formBuilder = createHabitBuilderFromForm();
+            habitService.updateHabit(habitToEdit.getId(), formBuilder);
+
+            if (onSaveCallback != null) {
+                onSaveCallback.run();
+            }
+            closeWindow();
+
+        } catch (BusinessException e) {
+            showFormError(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Errore imprevisto durante il salvataggio", e);
+            showFormError("Errore imprevisto. Riprova.");
+        }
     }
 
 

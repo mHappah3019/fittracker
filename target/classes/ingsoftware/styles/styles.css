@@ -95,9 +95,6 @@
 .habit-list .list-cell:selected {
     -fx-background-color: -fx-accent-color;
 }
-.habit-list .list-cell:selected .text {
-    -fx-fill: white; /* Assicura che il testo sia bianco quando la cella è selezionata */
-}
 
 /* === LABELS === */
 .form-title, .equipment-title, .section-title, .stat-value-large {

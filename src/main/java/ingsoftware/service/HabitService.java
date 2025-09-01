@@ -54,6 +54,7 @@ public class HabitService {
     /**
      * Crea una nuova abitudine
      */
+    @Transactional
     public Habit createHabit(HabitBuilder builder) throws BusinessException {
         Habit habit = builder.build();
         logger.debug("Creazione abitudine: nome={}, userId={}", habit.getName(), habit.getUserId());
@@ -80,6 +81,7 @@ public class HabitService {
     /**
      * Aggiorna un'abitudine esistente utilizzando HabitBuilder
      */
+    @Transactional
     public Habit updateHabit(Long habitId, HabitBuilder builder) throws BusinessException {
         logger.debug("Aggiornamento abitudine: id={}", habitId);
 
