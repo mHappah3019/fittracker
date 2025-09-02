@@ -1,10 +1,12 @@
 package ingsoftware.service.strategy;
 
 import ingsoftware.model.Equipment;
+import ingsoftware.model.UserEquipment;
 import ingsoftware.model.enum_helpers.EquipmentType;
 import ingsoftware.model.User;
 import ingsoftware.service.EquipmentService;
 
+import java.util.List;
 import java.util.Map;
 
 public class EquipmentBoostedStrategy implements GamificationStrategy {
@@ -21,13 +23,13 @@ public class EquipmentBoostedStrategy implements GamificationStrategy {
     public double calculateExperience(double baseExperience, User user) {
         double baseResult = baseStrategy.calculateExperience(baseExperience, user);
 
-        Map<EquipmentType, Equipment> activeEquipments = equipmentService.getFullEquipmentSet(user.getId());
+        List<Equipment> activeEquipments = equipmentService.getFullEquipmentSet(user.getId());
         if (activeEquipments == null || activeEquipments.isEmpty()) {
             return baseResult;
         }
 
         double totalMultiplier = 1.0;
-        for (Equipment equipment : activeEquipments.values()) {
+        for (Equipment equipment : activeEquipments) {
             totalMultiplier *= equipment.getExperienceMultiplier();
         }
 

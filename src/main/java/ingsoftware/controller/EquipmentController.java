@@ -55,7 +55,6 @@ public class EquipmentController {
         try {
 
             Map<EquipmentType, ObservableList<Equipment>> byType = equipmentService.getAllEquipmentGroupedByType();
-            equipmentService.refreshCache(currentUserId);
 
             // Usa l'ordine personalizzato dall'enum
             for (EquipmentType type : EquipmentType.getOrderedValues()) {
@@ -116,7 +115,6 @@ public class EquipmentController {
                 }
             });
 
-            equipmentService.refreshCache(currentUserId);
             showSuccessMessage("Equipaggiamento salvato con successo!");
             close();
 

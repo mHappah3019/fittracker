@@ -137,4 +137,5 @@ public class UserEquipment {
                 ", equippedDate=" + equippedDate +
                 '}';
     }
+
 }

@@ -4,6 +4,7 @@ import ingsoftware.dao.EquipmentDAO;
 import ingsoftware.dao.UserDAO;
 import ingsoftware.dao.UserEquipmentDAO;
 import ingsoftware.model.Equipment;
+import ingsoftware.model.User;
 import ingsoftware.model.UserEquipment;
 import ingsoftware.model.enum_helpers.EquipmentType;
 import jakarta.transaction.Transactional;
@@ -21,8 +22,6 @@ public class EquipmentService {
     private final EquipmentDAO equipmentDAO;
     private final UserDAO userDAO;
     private final UserEquipmentDAO userEquipmentDAO;
-
-    private final Map<EquipmentType, Equipment> activeEquipmentByTypeCache = new EnumMap<>(EquipmentType.class);
 
     public EquipmentService(EquipmentDAO equipmentDAO, UserDAO userDAO, UserEquipmentDAO userEquipmentDAO) {
         this.equipmentDAO = equipmentDAO;
@@ -139,35 +138,22 @@ public class EquipmentService {
     }
 
 
-    /**
-     * Refreshes the equipment cache for a specific user.
-     * 
-     * @param userId The ID of the user whose cache should be refreshed
-     */
-    public void refreshCache(Long userId) {
-        activeEquipmentByTypeCache.clear();
-        activeEquipmentByTypeCache.putAll(findAllEquippedByUser(userId));
-    }
 
     /**
-     * Clears the equipment cache completely.
-     * Useful for testing or when switching users.
-     */
-    public void clearCache() {
-        activeEquipmentByTypeCache.clear();
-    }
-
-    /**
-     * Gets the full equipment set for a user, using cache when possible.
+     * Gets the full equipment set for a user as a list of Equipment objects.
+     * This method performs a join between UserEquipment and Equipment tables
+     * to return only the Equipment objects that are currently equipped by the user.
      * 
      * @param userId The ID of the user
-     * @return Map of equipment types to their equipped equipment
+     * @return List of Equipment objects that are currently equipped by the user
      */
-    public Map<EquipmentType, Equipment> getFullEquipmentSet(Long userId) {
-        if (activeEquipmentByTypeCache.isEmpty() && userId != null) {
-            refreshCache(userId);
-        }
-        return activeEquipmentByTypeCache;
+    public List<Equipment> getFullEquipmentSet(Long userId) {
+        List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
+        
+        return equippedUserEquipments.stream()
+                .map(ue -> equipmentDAO.findById(ue.getEquipmentId()).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     // ========================================
