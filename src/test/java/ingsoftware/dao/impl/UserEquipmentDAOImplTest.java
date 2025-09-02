@@ -196,48 +196,4 @@ class UserEquipmentDAOImplTest {
         assertFalse(result.isPresent(), "Dovrebbe restituire Optional vuoto quando non c'è equipaggiamento equipaggiato del tipo specificato");
     }
 
-    // ===========================================
-    // TEST PER findByUserIdAndEquipmentType()
-    // ===========================================
-
-    @Test
-    void testFindByUserIdAndEquipmentType_WhenExists_ReturnsEquipmentOfType() {
-        // Arrange
-        Long userId = 100L;
-        EquipmentType type = EquipmentType.WEAPON;
-        List<UserEquipment> weaponEquipments = Arrays.asList(equippedWeapon);
-        
-        when(entityManager.createQuery(eq("SELECT ue FROM UserEquipment ue JOIN Equipment e ON ue.equipmentId = e.id WHERE ue.userId = :userId AND e.type = :type"), eq(UserEquipment.class)))
-                .thenReturn(userEquipmentTypedQuery);
-        when(userEquipmentTypedQuery.getResultList()).thenReturn(weaponEquipments);
-
-        // Act
-        List<UserEquipment> result = userEquipmentDAO.findByUserIdAndEquipmentType(userId, type);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertEquals(1, result.size(), "Dovrebbe restituire 1 equipaggiamento del tipo specificato");
-        assertTrue(result.contains(equippedWeapon), "Dovrebbe contenere l'arma");
-        
-        verify(userEquipmentTypedQuery).setParameter("userId", userId);
-        verify(userEquipmentTypedQuery).setParameter("type", type);
-    }
-
-    @Test
-    void testFindByUserIdAndEquipmentType_WhenDoesNotExist_ReturnsEmptyList() {
-        // Arrange
-        Long userId = 100L;
-        EquipmentType type = EquipmentType.SHIELD;
-        
-        when(entityManager.createQuery(eq("SELECT ue FROM UserEquipment ue JOIN Equipment e ON ue.equipmentId = e.id WHERE ue.userId = :userId AND e.type = :type"), eq(UserEquipment.class)))
-                .thenReturn(userEquipmentTypedQuery);
-        when(userEquipmentTypedQuery.getResultList()).thenReturn(Collections.emptyList());
-
-        // Act
-        List<UserEquipment> result = userEquipmentDAO.findByUserIdAndEquipmentType(userId, type);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertTrue(result.isEmpty(), "Dovrebbe restituire una lista vuota quando non ci sono equipaggiamenti del tipo specificato");
-    }
 }

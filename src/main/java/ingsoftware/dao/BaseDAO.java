@@ -10,4 +10,5 @@ public interface BaseDAO<T, ID> {
     void delete(T entity);
     void deleteById(ID id);
     boolean existsById(ID id);
+    long count();
 }

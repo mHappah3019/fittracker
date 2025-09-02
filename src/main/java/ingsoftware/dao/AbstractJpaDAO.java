@@ -78,6 +78,15 @@ public abstract class AbstractJpaDAO<T, ID> implements BaseDAO<T, ID> {
         return query.getSingleResult() > 0;
     }
 
+    @Override
+    public long count() {
+        // Query JPQL esplicita per contare tutte le entità
+        TypedQuery<Long> query = entityManager.createQuery(
+                "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e",
+                Long.class);
+        return query.getSingleResult();
+    }
+
     // Metodo helper per determinare se un'entità è nuova
     protected abstract boolean isNew(T entity);
 }

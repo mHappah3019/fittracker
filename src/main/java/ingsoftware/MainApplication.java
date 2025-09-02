@@ -15,7 +15,6 @@ public class MainApplication {
 */
 
 // Classe di backup per test senza JavaFX
-@SpringBootApplication
 public class MainApplication {
     public static void main(String[] args) {
         System.out.println("⚠️ ATTENZIONE: Stai usando MainApplication invece di HabitTrackerApplication");

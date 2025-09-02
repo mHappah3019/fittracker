@@ -150,6 +150,14 @@ public class EquipmentService {
     }
 
     /**
+     * Clears the equipment cache completely.
+     * Useful for testing or when switching users.
+     */
+    public void clearCache() {
+        activeEquipmentByTypeCache.clear();
+    }
+
+    /**
      * Gets the full equipment set for a user, using cache when possible.
      * 
      * @param userId The ID of the user
