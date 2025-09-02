@@ -96,7 +96,7 @@ class EquipmentDAOImplTest {
     // ===========================================
 
     @Test
-    void testFindByAvailableTrue_WhenEquipmentExists_ReturnsAvailableEquipment() {
+    void testFindByAvailableTrue_WhenEquipmentExists_ReturnsAvailableEquipments() {
         // Arrange
         List<Equipment> availableEquipment = Arrays.asList(weaponEquipment, armorEquipment);
         when(entityManager.createQuery(eq("SELECT e FROM Equipment e WHERE e.available = true"), eq(Equipment.class)))
@@ -133,93 +133,6 @@ class EquipmentDAOImplTest {
         assertTrue(result.isEmpty(), "Dovrebbe restituire una lista vuota quando non ci sono equipaggiamenti disponibili");
         
         verify(entityManager).createQuery("SELECT e FROM Equipment e WHERE e.available = true", Equipment.class);
-        verify(typedQuery).getResultList();
-    }
-
-    // ===========================================
-    // TEST PER findByTypeAndAvailableTrue()
-    // ===========================================
-
-    @Test
-    void testFindByTypeAndAvailableTrue_WhenEquipmentOfTypeExists_ReturnsFilteredEquipment() {
-        // Arrange
-        List<Equipment> weaponEquipmentList = Arrays.asList(this.weaponEquipment);
-        when(entityManager.createQuery(eq("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true"), eq(Equipment.class)))
-                .thenReturn(typedQuery);
-        when(typedQuery.getResultList()).thenReturn(weaponEquipmentList);
-
-        // Act
-        List<Equipment> result = equipmentDAO.findByTypeAndAvailableTrue(EquipmentType.WEAPON);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertEquals(1, result.size(), "Dovrebbe restituire 1 arma disponibile");
-        assertTrue(result.contains(this.weaponEquipment), "Dovrebbe contenere l'arma del tipo richiesto");
-        
-        // Verifica che la query sia stata eseguita correttamente con il parametro
-        verify(entityManager).createQuery("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true", Equipment.class);
-        verify(typedQuery).setParameter("type", EquipmentType.WEAPON);
-        verify(typedQuery).getResultList();
-    }
-
-    @Test
-    void testFindByTypeAndAvailableTrue_WhenNoEquipmentOfType_ReturnsEmptyList() {
-        // Arrange
-        when(entityManager.createQuery(eq("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true"), eq(Equipment.class)))
-                .thenReturn(typedQuery);
-        when(typedQuery.getResultList()).thenReturn(Collections.emptyList());
-
-        // Act
-        List<Equipment> result = equipmentDAO.findByTypeAndAvailableTrue(EquipmentType.SHIELD);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertTrue(result.isEmpty(), "Dovrebbe restituire una lista vuota quando non ci sono equipaggiamenti del tipo richiesto");
-        
-        verify(entityManager).createQuery("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true", Equipment.class);
-        verify(typedQuery).setParameter("type", EquipmentType.SHIELD);
-        verify(typedQuery).getResultList();
-    }
-
-    @Test
-    void testFindByTypeAndAvailableTrue_WithArmorType_ReturnsArmorEquipment() {
-        // Arrange
-        List<Equipment> armorEquipmentList = Arrays.asList(armorEquipment);
-        when(entityManager.createQuery(eq("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true"), eq(Equipment.class)))
-                .thenReturn(typedQuery);
-        when(typedQuery.getResultList()).thenReturn(armorEquipmentList);
-
-        // Act
-        List<Equipment> result = equipmentDAO.findByTypeAndAvailableTrue(EquipmentType.ARMOR);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertEquals(1, result.size(), "Dovrebbe restituire 1 armatura disponibile");
-        assertTrue(result.contains(armorEquipment), "Dovrebbe contenere l'armatura del tipo richiesto");
-        
-        // Verifica che la query sia stata eseguita correttamente
-        verify(entityManager).createQuery("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true", Equipment.class);
-        verify(typedQuery).setParameter("type", EquipmentType.ARMOR);
-        verify(typedQuery).getResultList();
-    }
-
-    @Test
-    void testFindByTypeAndAvailableTrue_WithNullType_ExecutesQueryWithNullParameter() {
-        // Arrange
-        when(entityManager.createQuery(eq("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true"), eq(Equipment.class)))
-                .thenReturn(typedQuery);
-        when(typedQuery.getResultList()).thenReturn(Collections.emptyList());
-
-        // Act
-        List<Equipment> result = equipmentDAO.findByTypeAndAvailableTrue(null);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertTrue(result.isEmpty(), "Dovrebbe restituire una lista vuota per tipo null");
-        
-        // Verifica che la query sia stata eseguita con parametro null
-        verify(entityManager).createQuery("SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true", Equipment.class);
-        verify(typedQuery).setParameter("type", null);
         verify(typedQuery).getResultList();
     }
 }

@@ -8,7 +8,6 @@ import ingsoftware.service.*;
 import ingsoftware.service.events.HabitCompletionEvent;
 import ingsoftware.service.mediator.PostCompletionMediatorImpl;
 import ingsoftware.util.AlertHelper;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,8 +21,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Controller
 public class HabitListController {
@@ -101,50 +98,29 @@ public class HabitListController {
 
         completeHabitButton.setDisable(true);
 
-        Task<CompletionResultDTO> task = new Task<>() {
-            @Override
-            protected CompletionResultDTO call() {
-                // Solo l'operazione pesante nel background thread
-                return habitCompletionService.completeHabit(selected.getId(), currentUserId);
-            }
-        };
-
-        // Success handler: tutto il flusso post-completion
-        task.setOnSucceeded(_ -> {
-            CompletionResultDTO completion = task.getValue();
+        try {
+            // Esegue il completamento dell'abitudine
+            CompletionResultDTO completion = habitCompletionService.completeHabit(selected.getId(), currentUserId);
             
-            // 2) Aggiorna UI con i dati freschi
+            // Aggiorna UI con i dati freschi
             refreshHabitList();
             
-            // 3) Elaborazioni aggiuntive (rewards, statistiche, etc.)
+            // Elaborazioni aggiuntive (rewards, statistiche, etc.)
             postMediator.handlePostCompletion(completion);
             
-            // 4) Notifica altri componenti
+            // Notifica altri componenti
             eventPublisher.publishEvent(new HabitCompletionEvent(this));
-
-            // Riabilita pulsante
-            completeHabitButton.setDisable(false);
-        });
-
-        // Error handlers
-        task.setOnFailed(_ -> {
-            Throwable exception = task.getException();
             
-            if (exception instanceof BusinessException) {
-                showErrorMessage("Errore nel completamento: " + exception.getMessage());
-                logger.warn("Errore business durante completamento abitudine: {}", exception.getMessage());
-            } else {
-                showErrorMessage("Si è verificato un errore imprevisto durante il completamento dell'abitudine.");
-                logger.error("Errore imprevisto durante completamento abitudine", exception);
-            }
-            
-            // Riabilita pulsante
+        } catch (BusinessException e) {
+            showErrorMessage("Errore nel completamento: " + e.getMessage());
+            logger.warn("Errore business durante completamento abitudine: {}", e.getMessage());
+        } catch (Exception e) {
+            showErrorMessage("Si è verificato un errore imprevisto durante il completamento dell'abitudine.");
+            logger.error("Errore imprevisto durante completamento abitudine", e);
+        } finally {
+            // Riabilita sempre il pulsante
             completeHabitButton.setDisable(false);
-        });
-
-        // Avvia il task
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.submit(task);
+        }
     }
     
     // --- METODI DI SUPPORTO E UI ---

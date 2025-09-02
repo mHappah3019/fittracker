@@ -26,30 +26,6 @@ public class HabitService {
         this.habitDAO = habitDAO;
     }
 
-    /**
-     * Salva un'abitudine (crea nuova o aggiorna esistente)
-     * @param habitId ID dell'abitudine da aggiornare, o null per creazione
-     * @param builder Builder contenente i dati dell'abitudine
-     * @return L'abitudine salvata
-     * @throws IllegalArgumentException se i dati non sono validi
-     * @throws HabitNotFoundException se l'ID specificato non esiste
-     * @throws DuplicateHabitException se esiste già un'abitudine con lo stesso nome per l'utente
-     */
-    @Transactional
-    public void saveHabit(Long habitId, HabitBuilder builder) throws RuntimeException {
-        Habit tempHabit = builder.build(); // Build once to avoid creating multiple instances
-        
-        if (habitId == null) {
-            // CREAZIONE
-            logger.info("Tentativo di creazione di una nuova abitudine con nome: {}", tempHabit.getName());
-            createHabit(builder);
-        } else {
-            // MODIFICA
-            logger.info("Tentativo di aggiornamento dell'abitudine con ID: {}", habitId);
-            updateHabit(habitId, builder);
-        }
-    }
-
 
     /**
      * Crea una nuova abitudine

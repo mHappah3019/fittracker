@@ -62,28 +62,6 @@ public abstract class AbstractHabitFormController {
     @FXML
     protected abstract void handleSave();
 
-//    @FXML
-//    protected void handleSave() {
-//        try {
-//
-//            HabitBuilder formBuilder = createHabitBuilderFromForm();
-//            habitService.saveHabit(habitToEdit != null ? habitToEdit.getId() : null, formBuilder);
-//
-//            if (onSaveCallback != null) {
-//                onSaveCallback.run();
-//            }
-//            closeWindow();
-//
-//        } catch (BusinessException e) {
-//            showFormError(e.getMessage());
-//        } catch (Exception e) {
-//            logger.error("Errore imprevisto durante il salvataggio", e);
-//            showFormError("Errore imprevisto. Riprova.");
-//        }
-//    }
-
-
-
 
     @FXML
     protected void handleCancel() {

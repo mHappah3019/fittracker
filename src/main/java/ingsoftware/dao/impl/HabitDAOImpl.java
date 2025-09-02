@@ -46,17 +46,4 @@ public class HabitDAOImpl extends AbstractJpaDAO<Habit, Long> implements HabitDA
             return Optional.empty();
         }
     }
-
-    @Override
-    public boolean existsByIdAndUserIdAndLastCompletedDate(Long habitId, Long userId, LocalDate today) {
-        // Query JPQL esplicita con COUNT
-        TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT COUNT(h) FROM Habit h " +
-                        "WHERE h.id = :habitId AND h.userId = :userId AND h.lastCompletedDate = :today",
-                Long.class);
-        query.setParameter("habitId", habitId);
-        query.setParameter("userId", userId);
-        query.setParameter("today", today);
-        return query.getSingleResult() > 0;
-    }
 }

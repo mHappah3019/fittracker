@@ -74,6 +74,5 @@ ingsoftware\service\post_completion\CompletionPopupUIService.class
 ingsoftware\controller\MainDashboardController.class
 ingsoftware\service\LifePointCalculator.class
 ingsoftware\model\DTO\CompletionResultDTO.class
-ingsoftware\controller\HabitListController$1.class
 ingsoftware\service\events\HabitCompletionEvent.class
 ingsoftware\controller\strictly_view\HabitListViewManager.class

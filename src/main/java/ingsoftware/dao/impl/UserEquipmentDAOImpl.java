@@ -41,15 +41,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
         return query.getResultList();
     }
 
-    @Override
-    public List<UserEquipment> findByUserIdAndEquippedFalse(Long userId) {
-        // Query JPQL esplicita
-        TypedQuery<UserEquipment> query = entityManager.createQuery(
-                "SELECT ue FROM UserEquipment ue WHERE ue.userId = :userId AND ue.equipped = false",
-                UserEquipment.class);
-        query.setParameter("userId", userId);
-        return query.getResultList();
-    }
 
     @Override
     public Optional<UserEquipment> findByUserIdAndEquipmentId(Long userId, Long equipmentId) {
@@ -85,18 +76,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
         }
     }
 
-    @Override
-    public List<UserEquipment> findByUserIdAndEquipmentType(Long userId, EquipmentType type) {
-        // Query JPQL esplicita con JOIN
-        TypedQuery<UserEquipment> query = entityManager.createQuery(
-                "SELECT ue FROM UserEquipment ue " +
-                        "JOIN Equipment e ON ue.equipmentId = e.id " +
-                        "WHERE ue.userId = :userId AND e.type = :type",
-                UserEquipment.class);
-        query.setParameter("userId", userId);
-        query.setParameter("type", type);
-        return query.getResultList();
-    }
 
     @Override
     public boolean existsByUserIdAndEquipmentId(Long userId, Long equipmentId) {
