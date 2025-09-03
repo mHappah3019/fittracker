@@ -56,25 +56,23 @@ public class HabitListController {
     private HabitListViewManager listViewManager;
 
 
+    // FXML initialization - sets up list view manager and event handlers
     @FXML
     public void initialize() {
         // Configurazione iniziale della vista
         listViewManager = new HabitListViewManager(habitListView, editHabitButton, completeHabitButton);
-
         listViewManager.setupDoubleClickHandler(this::handleCompleteHabit);
-
-        //refreshHabitList();
     }
 
 
-    // --- GESTIONE AZIONI UTENTE ---
-
+    // Opens the create habit window when add button is clicked
     @FXML
     private void handleAddHabit() {
         // Lancia la finestra di creazione, passando un "callback" per l'aggiornamento
         openHabitWindow(CreateHabitController.class, null, this::refreshHabitList);
     }
     
+    // Opens the edit habit window for the selected habit
     @FXML
     private void handleEditHabit() {
         Habit selected = listViewManager.getSelectedHabit();
@@ -87,7 +85,7 @@ public class HabitListController {
         openHabitWindow(EditHabitController.class, selected, this::refreshHabitList);
     }
 
-
+    // Completes the selected habit and triggers post-completion processing
     @FXML
     private void handleCompleteHabit() {
         Habit selected = listViewManager.getSelectedHabit();
@@ -122,10 +120,9 @@ public class HabitListController {
             completeHabitButton.setDisable(false);
         }
     }
-    
-    // --- METODI DI SUPPORTO E UI ---
 
 
+    // Refreshes the habit list by fetching latest data from service
     private void refreshHabitList() {
         try {
             List<Habit> habits = habitService.findAllByUserId(currentUserId);
@@ -137,7 +134,7 @@ public class HabitListController {
     }
 
 
-    //Metodo generico che accetta la CLASSE del controller da caricare
+    //Generic method to open habit windows create/update
     private <T extends AbstractHabitFormController> void openHabitWindow(Class<T> controllerClass, Habit habit, Runnable onSaveCallback) {
         try {
             Parent root = fxWeaver.loadView(controllerClass);

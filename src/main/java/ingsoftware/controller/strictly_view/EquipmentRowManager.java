@@ -24,12 +24,6 @@ public class EquipmentRowManager {
     private final Label slotLabel;
     private final ImageView preview;
 
-    /**
-     * Costruttore che inizializza tutti i componenti UI necessari per una riga di equipaggiamento.
-     *
-     * @param type Il tipo di equipaggiamento per questa riga
-     * @param items La lista di equipaggiamenti disponibili per questo tipo
-     */
     public EquipmentRowManager(EquipmentType type, ObservableList<Equipment> items) {
         this.slotLabel = new Label(type.getDisplayName());
         this.choiceBox = createChoiceBox(items);
@@ -40,12 +34,6 @@ public class EquipmentRowManager {
         styleComponents();
     }
 
-    /**
-     * Crea e configura il ChoiceBox per la selezione dell'equipaggiamento.
-     *
-     * @param items La lista di equipaggiamenti disponibili
-     * @return Il ChoiceBox configurato
-     */
     private ChoiceBox<Equipment> createChoiceBox(ObservableList<Equipment> items) {
         ChoiceBox<Equipment> cb = new ChoiceBox<>(items);
         // Qui si potrebbe aggiungere un StringConverter personalizzato
@@ -53,20 +41,12 @@ public class EquipmentRowManager {
         return cb;
     }
 
-    /**
-     * Configura il listener per il ChoiceBox per aggiornare l'anteprima quando viene selezionato un nuovo equipaggiamento.
-     */
     private void setupChoiceBox() {
         choiceBox.getSelectionModel().selectedItemProperty().addListener((_, _, _) -> {
             //updatePreview(selected);
         });
     }
 
-    /**
-     * Aggiorna l'anteprima dell'immagine in base all'equipaggiamento selezionato.
-     *
-     * @param equipment L'equipaggiamento selezionato
-     */
     private void updatePreview(Equipment equipment) {
         if (equipment != null && !equipment.isNoneOption() && equipment.getIconPath() != null) {
             preview.setImage(new Image(equipment.getIconPath()));
@@ -75,9 +55,6 @@ public class EquipmentRowManager {
         }
     }
 
-    /**
-     * Applica stili e dimensioni ai componenti UI.
-     */
     private void styleComponents() {
         slotLabel.setMinWidth(80);
         choiceBox.setMinWidth(200);
@@ -87,29 +64,14 @@ public class EquipmentRowManager {
         container.setPadding(new Insets(5));
     }
 
-    /**
-     * Imposta l'equipaggiamento attualmente selezionato.
-     *
-     * @param equipment L'equipaggiamento da selezionare
-     */
     public void setSelectedEquipment(Equipment equipment) {
         choiceBox.setValue(equipment);
     }
 
-    /**
-     * Restituisce il nodo principale che rappresenta questa riga di equipaggiamento.
-     *
-     * @return Il nodo HBox contenente tutti i componenti della riga
-     */
     public Node getNode() {
         return container;
     }
 
-    /**
-     * Restituisce l'equipaggiamento attualmente selezionato.
-     *
-     * @return L'equipaggiamento selezionato
-     */
     public Equipment getSelectedEquipment() {
         return choiceBox.getValue();
     }

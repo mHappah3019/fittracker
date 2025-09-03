@@ -25,7 +25,6 @@ public class MainDashboardController {
 
     private static final Logger logger = LoggerFactory.getLogger(MainDashboardController.class);
 
-    // Dependencies
     private final FxWeaver fxWeaver;
     private final UserService userService;
     private final EquipmentService equipmentService;
@@ -50,6 +49,7 @@ public class MainDashboardController {
 
     private Long currentUserId;
 
+    // FXML initialization - actual setup happens when user is set
     @FXML
     public void initialize() {
         logger.info("🔧 Inizializzazione MainDashboardController...");
@@ -57,6 +57,7 @@ public class MainDashboardController {
         // quando l'ID utente sarà disponibile
     }
 
+    // Sets current user and initializes all child controllers with user data
     public void setCurrentUser(Long userId) {
         logger.info("👤 Impostazione utente corrente: {}", userId);
         this.currentUserId = userId;
@@ -88,6 +89,7 @@ public class MainDashboardController {
         });
     }
 
+    // Opens the equipment window
     @FXML
     private void handleOpenEquipment() {
         try {
@@ -111,12 +113,13 @@ public class MainDashboardController {
         }
     }
 
-    // Metodi per mostrare messaggi all'utente
+    // Shows error messages to the user via alert dialogs
     private void showErrorMessage(String message) {
         AlertHelper.showErrorAlert(message);
     }
 
 
+    // Checks if default user exists and creates one if needed
     private void checkAndCreateDefaultUser(Long userId) {
         try {
             if (userService.checkDefaultUser()) {

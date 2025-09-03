@@ -21,12 +21,15 @@ public class EditHabitController extends AbstractHabitFormController {
         super(habitService);
     }
 
+    // Override of AbstractHabitFormController
     @FXML
     public void initialize() {
-        super.initialize(); // Chiama l'initialize della classe base
-        // Logica di init specifica per la modifica, se serve
+        super.initialize();
     }
 
+    // Override method called when the user clicks on the Save button.
+    // Calls createHabitBuilderFromForm() to get a HabitBuilder from the form fields,
+    // then calls habitService.createHabit() to "update" the habit and save it in the database.
     @Override
     protected void handleSave() {
         try {
@@ -48,6 +51,7 @@ public class EditHabitController extends AbstractHabitFormController {
     }
 
 
+    // Override method called when the user clicks on the Delete button.
     @FXML
     private void handleDelete() {
         if (habitToEdit == null) {

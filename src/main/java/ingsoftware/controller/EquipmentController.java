@@ -19,125 +19,161 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controller for managing user equipment selection and configuration.
+ * Handles the equipment view where users can equip/unequip different types of gear.
+ */
 @Controller
 @FxmlView("/ingsoftware/EquipmentView.fxml")
 public class EquipmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(EquipmentController.class);
 
-    // Dependencies
+    // Service dependencies
     private final EquipmentService equipmentService;
+
+    // UI components
+    @FXML 
+    private VBox equipmentContainer;
 
     // Constructor injection
     public EquipmentController(EquipmentService equipmentService) {
         this.equipmentService = equipmentService;
     }
 
-    @FXML private VBox equipmentContainer;
-
     private final Map<EquipmentType, EquipmentRowManager> equipmentRows = new HashMap<>();
-
     private Long currentUserId;
+
 
     @FXML
     private void initialize() {
-        // Don't do anything that requires currentUserId here
-        logger.debug("EquipmentController initialized, waiting for user ID to be set");
+        logger.debug("EquipmentController initialized");
     }
 
+    /**
+     * Sets the current user ID and initializes the equipment view.
+     */
     public void setCurrentUserId(Long userId) {
         this.currentUserId = userId;
         initializeView();
     }
 
+    /**
+     * Initializes the equipment view by loading all equipment types and creating UI rows.
+     * This method populates the equipment container with selectable equipment options.
+     */
     @FXML
     private void initializeView() {
         try {
+            Map<EquipmentType, ObservableList<Equipment>> equipmentByType = 
+                equipmentService.getAllEquipmentGroupedByType();
 
-            Map<EquipmentType, ObservableList<Equipment>> byType = equipmentService.getAllEquipmentGroupedByType();
-
-            // Usa l'ordine personalizzato dall'enum
+            // Use the custom order defined in the enum
             for (EquipmentType type : EquipmentType.getOrderedValues()) {
-                if (byType.containsKey(type)) {
-                    EquipmentRowManager rowManager = new EquipmentRowManager(type, byType.get(type));
-                    equipmentRows.put(type, rowManager);
-                    equipmentContainer.getChildren().add(rowManager.getNode());
-
-                    // Carica l'equipaggiamento corrente
-                    loadCurrentEquipment(rowManager, type);
+                if (equipmentByType.containsKey(type)) {
+                    createEquipmentRow(type, equipmentByType.get(type));
                 }
             }
 
         } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
         } catch (Exception e) {
-            logger.error("Errore durante l'inizializzazione del controller equipaggiamento", e);
-            showErrorMessage("Errore durante il caricamento dell'equipaggiamento. Riprova più tardi.");
+            logger.error("Error during equipment controller initialization", e);
+            showErrorMessage("Error loading equipment. Please try again later.");
         }
     }
 
     /**
-     * Carica l'equipaggiamento corrente per un determinato tipo.
-     *
-     * @param rowManager Il manager della riga di equipaggiamento
-     * @param type Il tipo di equipaggiamento
+     * Creates and adds an equipment row for the specified type.
+     */
+    private void createEquipmentRow(EquipmentType type, ObservableList<Equipment> equipmentList) {
+        EquipmentRowManager rowManager = new EquipmentRowManager(type, equipmentList);
+        equipmentRows.put(type, rowManager);
+        equipmentContainer.getChildren().add(rowManager.getNode());
+        
+        // Load the currently equipped item for this type
+        loadCurrentEquipment(rowManager, type);
+    }
+
+    /**
+     * Sets the row manager's selection to the user's current equipment or keeps the default.
      */
     private void loadCurrentEquipment(EquipmentRowManager rowManager, EquipmentType type) {
         try {
-            Optional<Equipment> current = equipmentService.findEquippedByUserIdAndType(currentUserId, type);
-            logger.debug("Caricando equipaggiamento corrente per il tipo: {} - Utente ID: {}", type, String.valueOf(currentUserId));
-            rowManager.setSelectedEquipment(current.orElse(rowManager.getSelectedEquipment()));
+            Optional<Equipment> currentEquipment = equipmentService.findEquippedByUserIdAndType(currentUserId, type);
+            logger.debug("Loading current equipment for type: {} - User ID: {}", type, currentUserId);
+            
+            Equipment selectedEquipment = currentEquipment.orElse(rowManager.getSelectedEquipment());
+            rowManager.setSelectedEquipment(selectedEquipment);
+            
         } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
         } catch (Exception e) {
-            logger.error("Errore durante il caricamento dell'equipaggiamento corrente per il tipo {}: {}", type, e.getMessage(), e);
+            logger.error("Error loading current equipment for type {}: {}", type, e.getMessage(), e);
         }
     }
 
+    /**
+     *  Processes each equipment type and either equips or unequips items based on user selection.
+     *  Called when the user clicks 'Save'.
+     */
     @FXML
     private void onSaveEquipment() {
         if (currentUserId == null) {
-            logger.warn("Tentativo di salvare equipaggiamento senza un utente corrente impostato");
-            showWarningMessage("Nessun utente selezionato. Effettua nuovamente il login.");
+            logger.warn("Attempted to save equipment without a current user set");
+            showWarningMessage("No user selected. Please log in again.");
             return;
         }
 
         try {
-            equipmentRows.forEach((type, rowManager) -> {
-                Equipment selected = rowManager.getSelectedEquipment();
-                // Se l'utente ha selezionato "Nessuno", disattiva l'equipaggiamento corrente di quel tipo
-                if (selected != null && selected.isNoneOption()) {
-                    // Chiama il servizio per disequipaggiare l'equipaggiamento corrente di quel tipo
-                    equipmentService.unequip(currentUserId, type);
-
-                } else if (selected != null && !selected.isNoneOption()) {
-                    equipmentService.equip(currentUserId, selected.getId());
-                }
-            });
-
-            showSuccessMessage("Equipaggiamento salvato con successo!");
+            processEquipmentSelections();
+            showSuccessMessage("Equipment saved successfully!");
             close();
 
         } catch (EquipmentNotFoundException e) {
             showErrorMessage(e.getMessage());
         } catch (Exception e) {
-            logger.error("Errore durante il salvataggio dell'equipaggiamento per l'utente {}", currentUserId, e);
+            logger.error("Error saving equipment for user {}", currentUserId, e);
             showErrorMessage(e.getMessage());
         }
     }
 
+    /**
+     * Processes all equipment selections and applies equip/unequip operations.
+     */
+    private void processEquipmentSelections() {
+        equipmentRows.forEach((type, rowManager) -> {
+            Equipment selectedEquipment = rowManager.getSelectedEquipment();
+            
+            if (selectedEquipment != null) {
+                if (selectedEquipment.isNoneOption()) {
+                    // User selected "None" - unequip current equipment of this type
+                    equipmentService.unequip(currentUserId, type);
+                } else {
+                    // User selected actual equipment - equip it
+                    equipmentService.equip(currentUserId, selectedEquipment.getId());
+                }
+            }
+        });
+    }
+
+    /**
+     * Handles the cancel button click - closes the dialog without saving.
+     */
     @FXML
     public void onCancel() {
         close();
     }
 
+    /**
+     * Closes the equipment dialog window.
+     */
     @FXML
     public void close() {
         Stage stage = (Stage) equipmentContainer.getScene().getWindow();
         stage.close();
     }
 
-    // Metodi per mostrare messaggi all'utente
     private void showSuccessMessage(String message) {
         AlertHelper.showSuccessAlert(message);
     }

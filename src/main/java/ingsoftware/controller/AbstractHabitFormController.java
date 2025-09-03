@@ -12,12 +12,12 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// NOTA: Questa classe è astratta e non ha l'annotazione @Controller o @FxmlView
+
 public abstract class AbstractHabitFormController {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractHabitFormController.class);
 
-    // --- Dependencies ---
+    //Dependencies
     protected final HabitService habitService;
 
     // Constructor injection
@@ -25,7 +25,7 @@ public abstract class AbstractHabitFormController {
         this.habitService = habitService;
     }
 
-    // --- Componenti FXML Condivisi ---
+    // FXML components
     @FXML protected Label titleLabel;
     @FXML protected TextField nameField;
     @FXML protected TextArea descriptionArea;
@@ -34,11 +34,11 @@ public abstract class AbstractHabitFormController {
     @FXML protected Button saveButton;
     @FXML protected Label errorLabel;
 
-    // --- Stato Interno ---
     protected Long currentUserId;
     protected Habit habitToEdit;
     protected Runnable onSaveCallback;
 
+    // Initialize method called after all the FXML components are initialized
     @FXML
     public void initialize() {
         difficultyComboBox.getItems().setAll(HabitDifficulty.values());
@@ -46,6 +46,7 @@ public abstract class AbstractHabitFormController {
         errorLabel.setVisible(false);
     }
 
+    // Method used to set dialog and form data for the controller
     public void setData(Long userId, Habit habit, Runnable onSaveCallback) {
         this.currentUserId = userId;
         this.habitToEdit = habit;
@@ -59,6 +60,7 @@ public abstract class AbstractHabitFormController {
         }
     }
 
+    // Save button handler
     @FXML
     protected abstract void handleSave();
 
@@ -68,6 +70,7 @@ public abstract class AbstractHabitFormController {
         closeWindow();
     }
 
+    // Populate form fields based on existing habit data
     protected void populateForm() {
         nameField.setText(habitToEdit.getName());
         descriptionArea.setText(habitToEdit.getDescription());

@@ -19,6 +19,9 @@ public class CreateHabitController extends AbstractHabitFormController {
         super(habitService);
     }
 
+    // Override method called when the user clicks on the Save button.
+    // Calls createHabitBuilderFromForm() to get a HabitBuilder from the form fields,
+    // then calls habitService.createHabit() to create the habit and save it in the database.
     @Override
     protected void handleSave() {
         try {

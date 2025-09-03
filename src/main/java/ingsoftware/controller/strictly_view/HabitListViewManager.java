@@ -7,6 +7,9 @@ import javafx.scene.control.ListView;
 
 import java.util.List;
 
+/**
+ * Gestisce la lista delle abitudini nella vista principale.
+ */
 public class HabitListViewManager {
 
     private final ListView<Habit> habitListView;
@@ -51,20 +54,10 @@ public class HabitListViewManager {
         return habitListView.getSelectionModel().getSelectedItem();
     }
 
-
-    /**
-     * Updates the habit list with the provided habits.
-     * The responsibility of fetching habits is now delegated to the calling controller.
-     */
     public void updateHabitList(List<Habit> habits) {
         habitListView.getItems().setAll(habits);
     }
 
-    /**
-     * Classe interna per la visualizzazione personalizzata delle abitudini nella ListView.
-     * Essendo strettamente correlata alla gestione della vista delle abitudini,
-     * è logico mantenerla all'interno del manager.
-     */
     static class HabitListCell extends ListCell<Habit> {
         @Override
         protected void updateItem(Habit habit, boolean empty) {
