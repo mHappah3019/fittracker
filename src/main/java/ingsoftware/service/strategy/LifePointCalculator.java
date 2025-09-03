@@ -1,4 +1,4 @@
-package ingsoftware.service;
+package ingsoftware.service.strategy;
 
 import ingsoftware.model.Habit;
 import org.springframework.stereotype.Component;

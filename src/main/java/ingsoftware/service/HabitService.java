@@ -27,9 +27,8 @@ public class HabitService {
     }
 
 
-    /**
-     * Crea una nuova abitudine
-     */
+    // Creates a new habit using the builder pattern with duplicate name validation
+    // Throws DuplicateHabitException if a habit with the same name already exists for the user
     @Transactional
     public Habit createHabit(HabitBuilder builder) throws BusinessException {
         Habit habit = builder.build();
@@ -54,9 +53,8 @@ public class HabitService {
         return savedHabit;
     }
 
-    /**
-     * Aggiorna un'abitudine esistente utilizzando HabitBuilder
-     */
+    // Updates an existing habit using HabitBuilder with duplicate name checking
+    // Validates that the new name doesn't conflict with other user habits
     @Transactional
     public Habit updateHabit(Long habitId, HabitBuilder builder) throws BusinessException {
         logger.debug("Aggiornamento abitudine: id={}", habitId);
@@ -100,31 +98,26 @@ public class HabitService {
         return habitDAO.save(existingHabit);
     }
 
+    // Retrieves all habits belonging to a specific user
+    // Returns empty list if user has no habits
     public List<Habit> findAllByUserId(Long id) {
         return habitDAO.findAllByUserId(id);
     }
     
-    /**
-     * Trova un'abitudine per ID o lancia un'eccezione se non esiste
-     * @param habitId ID dell'abitudine da trovare
-     * @return L'abitudine trovata
-     * @throws HabitNotFoundException se l'ID specificato non esiste
-     */
+    // Finds a habit by ID or throws HabitNotFoundException if not found
+    // Handle exception handling in controller layer
     public Habit findHabitOrThrow(Long habitId) {
         return habitDAO.findById(habitId)
                 .orElseThrow(() -> new HabitNotFoundException(habitId));
     }
     
-    /**
-     * Salva un'abitudine esistente
-     * @param habit L'abitudine da salvare
-     * @return L'abitudine salvata
-     */
+    // Persists an existing habit to the database
+    // Used for updating habit state like completion dates and streaks
     public Habit saveHabit(Habit habit) {
         return habitDAO.save(habit);
     }
 
-
+    // Permanently removes a habit from the database by ID
     public void deleteHabit(Long id) {
         habitDAO.deleteById(id);
     }

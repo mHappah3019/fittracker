@@ -54,7 +54,6 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\Gamification
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\HabitCompletionService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\HabitService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\jobs\MidnightRolloverJob.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\LifePointCalculator.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\mediator\PostCompletionMediator.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\mediator\PostCompletionMediatorImpl.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\mediator\StartupMediator.java
@@ -72,5 +71,6 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\Eve
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\ExperienceStrategyFactory.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\ExponentialExperienceStrategy.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\GamificationStrategy.java
+C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\strategy\LifePointCalculator.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\UserService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\util\AlertHelper.java

@@ -30,11 +30,8 @@ public class EquipmentService {
     }
 
 
-    /**
-     * Retrieves all available equipment grouped by type, including "None" options for each type.
-     * 
-     * @return Map of equipment types to their corresponding observable lists of equipment
-     */
+    // Retrieves all available equipment grouped by type, including "None" options for each type
+    // Returns observable lists suitable for JavaFX UI components
     public Map<EquipmentType, ObservableList<Equipment>> getAllEquipmentGroupedByType() {
         List<Equipment> availableEquipment = new ArrayList<>(equipmentDAO.findByAvailableTrue());
 
@@ -57,12 +54,8 @@ public class EquipmentService {
                 ));
     }
 
-    /**
-     * Finds all equipment currently equipped by a specific user.
-     * 
-     * @param userId The ID of the user
-     * @return Map of equipment types to their equipped equipment
-     */
+    // Finds all equipment currently equipped by a specific user
+    // Returns map of equipment types to their equipped equipment
     public Map<EquipmentType, Equipment> findAllEquippedByUser(Long userId) {
         List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
 
@@ -80,27 +73,15 @@ public class EquipmentService {
                 ));
     }
 
-    /**
-     * Finds equipment equipped by a user for a specific equipment type.
-     * 
-     * @param currentUserId The ID of the user
-     * @param type The equipment type to search for
-     * @return Optional containing the equipped equipment, if any
-     */
+    // Finds equipment equipped by a user for a specific equipment type
+    // Returns Optional containing the equipped equipment, if any
     public Optional<Equipment> findEquippedByUserIdAndType(Long currentUserId, EquipmentType type) {
         return userEquipmentDAO.findEquippedByUserIdAndType(currentUserId, type)
                 .flatMap(ue -> equipmentDAO.findById(ue.getEquipmentId()));
     }
 
-    /**
-     * Equips a specific equipment item for a user.
-     * Automatically unequips any existing equipment of the same type.
-     * 
-     * @param userId The ID of the user
-     * @param equipmentId The ID of the equipment to equip
-     * @return The equipped Equipment object
-     * @throws RuntimeException if equipment is not found or user doesn't own it
-     */
+    // Equips a specific equipment item for a user, automatically unequipping same type
+    // Validates user ownership and throws RuntimeException if equipment not found or not owned
     @Transactional
     public Equipment equip(Long userId, Long equipmentId) {
         Equipment equipment = equipmentDAO.findById(equipmentId)
@@ -122,12 +103,8 @@ public class EquipmentService {
         return equipment;
     }
 
-    /**
-     * Unequips equipment of a specific type for a user.
-     * 
-     * @param userId The ID of the user
-     * @param type The type of equipment to unequip
-     */
+    // Unequips equipment of a specific type for a user
+    // Does nothing if no equipment of that type is currently equipped
     @Transactional
     public void unequip(Long userId, EquipmentType type) {
         userEquipmentDAO.findEquippedByUserIdAndType(userId, type)
@@ -139,14 +116,8 @@ public class EquipmentService {
 
 
 
-    /**
-     * Gets the full equipment set for a user as a list of Equipment objects.
-     * This method performs a join between UserEquipment and Equipment tables
-     * to return only the Equipment objects that are currently equipped by the user.
-     * 
-     * @param userId The ID of the user
-     * @return List of Equipment objects that are currently equipped by the user
-     */
+    // Gets the full equipment set for a user as a list of Equipment objects
+    // Performs join between UserEquipment and Equipment tables for currently equipped items
     public List<Equipment> getFullEquipmentSet(Long userId) {
         List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
         
@@ -160,14 +131,8 @@ public class EquipmentService {
     // User Equipment Management Methods
     // ========================================
 
-    /**
-     * Initializes a user's equipment inventory by assigning all available equipment.
-     * This method is useful during development or to simplify initial acquisition.
-     * Should be called only once per user.
-     *
-     * @param userId The ID of the user to initialize
-     * @throws RuntimeException if the user is not found
-     */
+    // Initializes a user's equipment inventory by assigning all available equipment
+    // Useful for development or initial setup, should be called only once per user
     @Transactional
     public void initializeUserEquipment(Long userId) {
         if (!userDAO.existsById(userId)) {

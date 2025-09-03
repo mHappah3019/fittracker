@@ -5,6 +5,7 @@ import ingsoftware.model.DTO.LifePointsDTO;
 import ingsoftware.model.enum_helpers.HabitDifficulty;
 import ingsoftware.service.strategy.ExperienceStrategyFactory;
 import ingsoftware.service.strategy.GamificationStrategy;
+import ingsoftware.service.strategy.LifePointCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

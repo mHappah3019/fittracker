@@ -28,10 +28,8 @@ public class HabitCompletionService {
         this.userService = userService;
     }
 
-    /**
-     * Implementazione effettiva del completamento dell'abitudine.
-     * Questo metodo è privato e viene chiamato da completeHabit che gestisce le eccezioni.
-     */
+    // Processes habit completion including streak updates, XP calculation, and level progression
+    // Validates completion isn't duplicate and returns result data for Post-completion logic
     @Transactional
     public CompletionResultDTO completeHabit(Long habitId, Long userId) throws BusinessException {
         LocalDate today = LocalDate.now();
@@ -58,14 +56,18 @@ public class HabitCompletionService {
         return new CompletionResultDTO(savedCompletion, xpGained, newLevel);
     }
 
-    /* ---------- METODI DI SUPPORTO ---------- */
+    /* ---------- SUPPORT METHODS ---------- */
 
+    // Calculates if user leveled up and persists the level change
+    // Returns new level achieved or 0 if no level up occurred
     private int calculateAndUpdateLevel(User user) {
         int newLevel = gamificationService.checkUpdateUserLevel(user);
         userService.saveUser(user);
         return newLevel;
     }
 
+    // Calculates XP gained from habit completion and adds it to user's total
+    // Persists the XP change and returns the amount gained
     private double calculateAndUpdateXP(Habit habit, User user) {
         double xpGained = gamificationService.calculateHabitXP(habit, user);
         user.addTotalXp(xpGained);
@@ -73,6 +75,8 @@ public class HabitCompletionService {
         return xpGained;
     }
 
+    // Validates that the habit hasn't already been completed today
+    // Throws HabitAlreadyCompletedException if duplicate completion is attempted
     private void verifyNotAlreadyCompletedToday(Long userId, Long habitId, LocalDate today) {
         boolean alreadyCompleted = completionDAO.existsByUserIdAndHabitIdAndCompletionDate(userId, habitId, today);
         if (alreadyCompleted) {
@@ -80,6 +84,8 @@ public class HabitCompletionService {
         }
     }
 
+    // Updates habit's streak counter based on completion frequency and timing
+    // Resets streak to 1 if too much time has passed since last completion
     private int updateStreak(Habit habit, LocalDate today) {
         LocalDate lastCompleted = habit.getLastCompletedDate();
         int newStreak = habit.getCurrentStreak();

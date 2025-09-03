@@ -4,6 +4,7 @@ import ingsoftware.model.*;
 import ingsoftware.model.DTO.LifePointsDTO;
 import ingsoftware.service.strategy.ExperienceStrategyFactory;
 import ingsoftware.service.strategy.GamificationStrategy;
+import ingsoftware.service.strategy.LifePointCalculator;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +28,8 @@ public class GamificationService {
         this.strategyFactory = strategyFactory;
     }
 
+    // Calculates XP gained from completing a habit using the current gamification strategy
+    // Applies base XP from difficulty level and any active multipliers or bonuses
     public double calculateHabitXP(Habit habit, User user) {
         GamificationStrategy strategy = strategyFactory.createStrategy();
 
@@ -35,7 +38,8 @@ public class GamificationService {
         return strategy.calculateExperience(baseXP, user);
     }
 
-
+    // Updates user's life points based on completed habits and inactivity penalties
+    // Returns DTO containing old/new values and whether level decreased
     public LifePointsDTO updateUserLifePoints(User user, LocalDate today) {
         // Salva i punti vita iniziali
         int oldLifePoints = user.getLifePoints();
@@ -51,7 +55,8 @@ public class GamificationService {
     }
 
     /**
-     * Calcola il delta totale dei punti vita basato sulle abitudini completate e l'inattività
+     * Calculate the life point changes for a given user based on completed habits and inactivity.
+     * Composed of Completed Habits Points and Inactivity Penalty
      */
     private int calculateLifePointsDelta(User user, LocalDate today) {
         int totalLifePointsDelta = 0;
@@ -77,7 +82,7 @@ public class GamificationService {
     }
 
     /**
-     * Calcola la penalità per i giorni di inattività
+     * Calculate the penalty for inactivity between two dates
      */
     private int calculateInactivityPenalty(LocalDate lastAccess, LocalDate today) {
         long daysSinceLastAccess = ChronoUnit.DAYS.between(lastAccess, today);
@@ -91,7 +96,7 @@ public class GamificationService {
     }
 
     /**
-     * Applica il moltiplicatore di difficoltà al delta dei punti vita
+     * Apply difficulty multiplier based on the average difficulty of the user's habits
      */
     private int applyDifficultyMultiplier(int pointsDelta, List<Habit> habits) {
         double difficultyMultiplier = calculateDifficultyMultiplier(habits);
@@ -99,8 +104,7 @@ public class GamificationService {
     }
 
     /**
-     * Applica i cambiamenti ai punti vita dell'utente e gestisce la diminuzione di livello se necessario
-     * @return true se il livello è diminuito, false altrimenti
+     * Apply life points changes to the user and handle potential level decrease
      */
     private boolean applyLifePointsChanges(User user, int totalLifePointsDelta) {
         if (totalLifePointsDelta == 0) {
@@ -114,11 +118,7 @@ public class GamificationService {
 
 
     /**
-     * Calcola un moltiplicatore basato sulla difficoltà media delle abitudini dell'utente.
-     * Utilizza il penaltyMultiplier di ogni difficoltà per calcolare un moltiplicatore medio.
-     * 
-     * @param habits Lista delle abitudini dell'utente
-     * @return Il moltiplicatore da applicare ai punti vita
+     * Calculate the difficulty multiplier based on the average difficulty of the user's habits
      */
     private double calculateDifficultyMultiplier(List<Habit> habits) {
         if (habits.isEmpty()) {
@@ -135,12 +135,7 @@ public class GamificationService {
     }
 
     /**
-     * Calcola i punti per le abitudini che l'utente ha completato in una data specifica.
-     * Non modifica direttamente l'utente, restituisce solo il delta dei punti.
-     * 
-     * @param allUserHabits Lista di tutte le abitudini dell'utente
-     * @param completedDate La data per cui calcolare i punti delle abitudini completate
-     * @return Il delta dei punti vita da aggiungere (può essere positivo o negativo)
+     * Calculate the life points earned by completing habits on a specific date
      */
 
     private int calculateCompletedHabitsPoints(List<Habit> allUserHabits, LocalDate completedDate) {
@@ -154,6 +149,8 @@ public class GamificationService {
     }
 
 
+    // Checks if user should level up based on total XP and updates their level
+    // Returns new level if leveled up, 0 if no level change occurred
     public int checkUpdateUserLevel(User user) {
         int newLevel = calculateLevel(user.getTotalXp());
         if (newLevel > user.getLevel()) {
@@ -163,19 +160,14 @@ public class GamificationService {
         return 0;
     }
 
-
+    // Calculates user level based on total XP using the standard XP per level formula
+    // Level 1 starts at 0 XP, each subsequent level requires 100 more XP
     private int calculateLevel(double totalXp) {
         return (int) Math.floor(totalXp / XP_PER_LEVEL) + 1;
     }
 
-    /**
-     * Checks if user's lifePoints are <= 0 and decreases level if necessary.
-     * When a user loses a level, lifePoints are reset to 50.
-     * 
-     * @param user The user to check
-     * @return true if level was decreased, false otherwise
-     */
-
+    // Checks if user's life points dropped to zero and handles level decrease
+    // Resets life points to 50 when level decreases, prevents going below level 1
     public boolean checkAndHandleLevelDecrease(User user) {
         if (user.getLifePoints() <= 0) {
             int currentLevel = user.getLevel();

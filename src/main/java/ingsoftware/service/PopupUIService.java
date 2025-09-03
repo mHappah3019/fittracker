@@ -14,9 +14,8 @@ public abstract class PopupUIService {
         this.config=config;
     }
 
-    /**
-     * Mostra un popup di completamento abitudine.
-     */
+    // Displays a popup with fade-in, hold, and fade-out animations
+    // Uses configuration settings for timing and automatically closes when done
     public void animateAndShow(Stage stage) {
 
         FadeTransition fadeIn = new FadeTransition(config.getFadeIn(), stage.getScene().getRoot());
