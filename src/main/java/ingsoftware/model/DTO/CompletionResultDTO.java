@@ -4,7 +4,10 @@ package ingsoftware.model.DTO;
 import ingsoftware.model.HabitCompletion;
 
 /**
- * Contiene l'HabitCompletion e altri risultati immediati dell'operazione di completamento.
+ * DTO for representing the result of completing a habit.
+ *
+ * This DTO encapsulates information about a completed habit,
+ * including details such as the completion itself and any associated rewards or achievements.
  */
 public class CompletionResultDTO {
     private final HabitCompletion completion;

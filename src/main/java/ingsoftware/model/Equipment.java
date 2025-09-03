@@ -1,25 +1,40 @@
 package ingsoftware.model;
+
 import ingsoftware.model.enum_helpers.EquipmentType;
 import jakarta.persistence.*;
-
 import java.util.Objects;
 import java.util.Optional;
 
 @Entity
 @Table(name = "equipments")
 public class Equipment {
+
+    // ========== FIELDS ==========
     
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String name;
     private String description;
     private EquipmentType type;
     private double experienceMultiplier = 1.0;
-    private boolean available = true; // Indica se l'equipaggiamento è disponibile nel catalogo
-    private transient boolean noneOption = false; // Aggiunto per l'opzione "Nessuno"
+    private boolean available = true; // Indicates if equipment is available in catalog
+    private transient boolean noneOption = false; // Added for "None" option
 
-    // Metodo statico per creare l'opzione "Nessuno"
+    // ========== CONSTRUCTORS ==========
+    
+    public Equipment() {
+    }
+
+    // ========== STATIC FACTORY METHODS ==========
+    
+    /**
+     * Creates a special "None" option for equipment selection.
+     * This option represents no equipment equipped.
+     * 
+     * @return Equipment instance representing "None" option
+     */
     public static Equipment createNoneOption() {
         Equipment none = new Equipment();
         none.setName("Nessuno");
@@ -28,16 +43,71 @@ public class Equipment {
         return none;
     }
 
-    private void setNoneOption(boolean b) {
-        this.noneOption = b;
+    // ========== GETTERS ==========
+    
+    public Long getId() {
+        return id;
     }
 
-    // Metodo per verificare se è l'opzione "Nessuno"
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Optional<EquipmentType> getType() {
+        return Optional.ofNullable(type);
+    }
+
+    public double getExperienceMultiplier() {
+        return experienceMultiplier;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
     public boolean isNoneOption() {
         return noneOption;
     }
+
+    // ========== SETTERS ==========
     
-    // Metodi di utilità semplificati
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setType(EquipmentType type) {
+        this.type = type;
+    }
+
+    public void setExperienceMultiplier(double experienceMultiplier) {
+        this.experienceMultiplier = experienceMultiplier;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    private void setNoneOption(boolean noneOption) {
+        this.noneOption = noneOption;
+    }
+
+    // ========== UTILITY METHODS ==========
+    
+    /**
+     * Gets the icon path for this equipment.
+     */
     public String getIconPath() {
         if (noneOption) {
             return "/icons/none-equipment.png";
@@ -45,6 +115,9 @@ public class Equipment {
         return type != null ? type.getIconPath() : "/icons/default-equipment.png";
     }
     
+    /**
+     * Gets the type icon for this equipment.
+     */
     public String getTypeIcon() {
         if (noneOption) {
             return "⭕";
@@ -52,49 +125,15 @@ public class Equipment {
         return type != null ? type.getIcon() : "❓";
     }
     
+    /**
+     * Gets formatted display string for experience multiplier.
+     */
     public String getMultiplierDisplay() {
         return noneOption ? "1.0x" : String.format("%.1fx", experienceMultiplier);
     }
-    // Getter e setter completi
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public void setType(EquipmentType type) {
-        this.type = type;
-    }
-    public Optional<EquipmentType> getType() {
-        return Optional.ofNullable(type);
-    }
-    public double getExperienceMultiplier() {
-        return experienceMultiplier;
-    }
-    public void setExperienceMultiplier(double experienceMultiplier) {
-        this.experienceMultiplier = experienceMultiplier;
-    }
 
-    public boolean isAvailable() {
-        return available;
-    }
+    // ========== OBJECT METHODS ==========
     
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-    // Metodi equals e hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,7 +142,11 @@ public class Equipment {
         return Objects.equals(id, equipment.id);
     }
 
-    // Aggiungi questo metodo alla classe Equipment
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     @Override
     public String toString() {
         if (noneOption) {
@@ -111,5 +154,4 @@ public class Equipment {
         }
         return getTypeIcon() + " " + name + " (" + getMultiplierDisplay() + ")";
     }
-
 }

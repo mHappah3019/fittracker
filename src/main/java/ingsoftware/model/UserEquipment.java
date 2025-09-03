@@ -7,6 +7,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_equipments")
 public class UserEquipment {
+
+    // ========== FIELDS ==========
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +28,9 @@ public class UserEquipment {
     
     @Column(name = "equipped_date")
     private LocalDateTime equippedDate;
+
+    // ========== CONSTRUCTORS ==========
     
-    // Costruttori
     public UserEquipment() {
         this.acquiredDate = LocalDateTime.now();
     }
@@ -45,45 +48,45 @@ public class UserEquipment {
             this.equippedDate = LocalDateTime.now();
         }
     }
+
+    // ========== GETTERS ==========
     
-    // Metodi di utilità
-    public void equip() {
-        this.equipped = true;
-        this.equippedDate = LocalDateTime.now();
-    }
-    
-    public void unequip() {
-        this.equipped = false;
-        this.equippedDate = null;
-    }
-    
-    // Getters e Setters
     public Long getId() {
         return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
     }
     
     public Long getUserId() {
         return userId;
     }
     
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
     public Long getEquipmentId() {
         return equipmentId;
     }
     
-    public void setEquipmentId(Long equipmentId) {
-        this.equipmentId = equipmentId;
-    }
-    
     public boolean isEquipped() {
         return equipped;
+    }
+    
+    public LocalDateTime getAcquiredDate() {
+        return acquiredDate;
+    }
+    
+    public LocalDateTime getEquippedDate() {
+        return equippedDate;
+    }
+
+    // ========== SETTERS ==========
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    
+    public void setEquipmentId(Long equipmentId) {
+        this.equipmentId = equipmentId;
     }
     
     public void setEquipped(boolean equipped) {
@@ -95,23 +98,36 @@ public class UserEquipment {
         }
     }
     
-    public LocalDateTime getAcquiredDate() {
-        return acquiredDate;
-    }
-    
     public void setAcquiredDate(LocalDateTime acquiredDate) {
         this.acquiredDate = acquiredDate;
-    }
-    
-    public LocalDateTime getEquippedDate() {
-        return equippedDate;
     }
     
     public void setEquippedDate(LocalDateTime equippedDate) {
         this.equippedDate = equippedDate;
     }
+
+    // ========== BUSINESS METHODS ==========
     
-    // equals e hashCode
+    /**
+     * Equips this equipment for the user.
+     * Sets equipped status to true and updates equipped date.
+     */
+    public void equip() {
+        this.equipped = true;
+        this.equippedDate = LocalDateTime.now();
+    }
+    
+    /**
+     * Unequips this equipment from the user.
+     * Sets equipped status to false and clears equipped date.
+     */
+    public void unequip() {
+        this.equipped = false;
+        this.equippedDate = null;
+    }
+
+    // ========== OBJECT METHODS ==========
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,5 +153,4 @@ public class UserEquipment {
                 ", equippedDate=" + equippedDate +
                 '}';
     }
-
 }

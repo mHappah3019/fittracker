@@ -1,5 +1,9 @@
 package ingsoftware.model.DTO;
 
+
+/**
+ * DTO for the life points of a user.
+ */
 public class LifePointsDTO {
     private final boolean isLevelDecreased;
     private final int newlifePoints;

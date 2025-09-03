@@ -20,7 +20,6 @@ public class HabitCompletionDAOImpl extends AbstractJpaDAO<HabitCompletion, Long
 
     @Override
     public boolean existsByUserIdAndHabitIdAndCompletionDate(Long userId, Long habitId, LocalDate completionDate) {
-        // Query JPQL esplicita con COUNT
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT COUNT(hc) FROM HabitCompletion hc " +
                         "WHERE hc.userId = :userId AND hc.habitId = :habitId AND hc.completionDate = :completionDate",

@@ -23,7 +23,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
 
     @Override
     public List<UserEquipment> findByUserId(Long userId) {
-        // Query JPQL esplicita
         TypedQuery<UserEquipment> query = entityManager.createQuery(
                 "SELECT ue FROM UserEquipment ue WHERE ue.userId = :userId",
                 UserEquipment.class);
@@ -33,7 +32,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
 
     @Override
     public List<UserEquipment> findByUserIdAndEquippedTrue(Long userId) {
-        // Query JPQL esplicita
         TypedQuery<UserEquipment> query = entityManager.createQuery(
                 "SELECT ue FROM UserEquipment ue WHERE ue.userId = :userId AND ue.equipped = true",
                 UserEquipment.class);
@@ -44,7 +42,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
 
     @Override
     public Optional<UserEquipment> findByUserIdAndEquipmentId(Long userId, Long equipmentId) {
-        // Query JPQL esplicita
         TypedQuery<UserEquipment> query = entityManager.createQuery(
                 "SELECT ue FROM UserEquipment ue WHERE ue.userId = :userId AND ue.equipmentId = :equipmentId",
                 UserEquipment.class);
@@ -60,7 +57,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
 
     @Override
     public Optional<UserEquipment> findEquippedByUserIdAndType(Long userId, EquipmentType type) {
-        // Query JPQL esplicita con JOIN
         TypedQuery<UserEquipment> query = entityManager.createQuery(
                 "SELECT ue FROM UserEquipment ue " +
                         "JOIN Equipment e ON ue.equipmentId = e.id " +
@@ -79,7 +75,6 @@ public class UserEquipmentDAOImpl extends AbstractJpaDAO<UserEquipment, Long> im
 
     @Override
     public boolean existsByUserIdAndEquipmentId(Long userId, Long equipmentId) {
-        // Query JPQL esplicita con COUNT
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT COUNT(ue) FROM UserEquipment ue " +
                         "WHERE ue.userId = :userId AND ue.equipmentId = :equipmentId",

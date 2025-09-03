@@ -35,7 +35,6 @@ public abstract class AbstractJpaDAO<T, ID> implements BaseDAO<T, ID> {
 
     @Override
     public Optional<T> findById(ID id) {
-        // Query JPQL esplicita
         TypedQuery<T> query = entityManager.createQuery(
                 "SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id",
                 entityClass);
@@ -50,7 +49,6 @@ public abstract class AbstractJpaDAO<T, ID> implements BaseDAO<T, ID> {
 
     @Override
     public List<T> findAll() {
-        // Query JPQL esplicita
         TypedQuery<T> query = entityManager.createQuery(
                 "SELECT e FROM " + entityClass.getSimpleName() + " e",
                 entityClass);
@@ -70,7 +68,6 @@ public abstract class AbstractJpaDAO<T, ID> implements BaseDAO<T, ID> {
 
     @Override
     public boolean existsById(ID id) {
-        // Query JPQL esplicita con COUNT
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e WHERE e.id = :id",
                 Long.class);
@@ -80,7 +77,6 @@ public abstract class AbstractJpaDAO<T, ID> implements BaseDAO<T, ID> {
 
     @Override
     public long count() {
-        // Query JPQL esplicita per contare tutte le entità
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e",
                 Long.class);

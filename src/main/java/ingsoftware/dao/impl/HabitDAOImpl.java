@@ -23,7 +23,6 @@ public class HabitDAOImpl extends AbstractJpaDAO<Habit, Long> implements HabitDA
 
     @Override
     public List<Habit> findAllByUserId(Long userId) {
-        // Query JPQL esplicita
         TypedQuery<Habit> query = entityManager.createQuery(
                 "SELECT h FROM Habit h WHERE h.userId = :userId",
                 Habit.class);
@@ -33,7 +32,6 @@ public class HabitDAOImpl extends AbstractJpaDAO<Habit, Long> implements HabitDA
 
     @Override
     public Optional<Habit> findByUserIdAndName(Long userId, String name) {
-        // Query JPQL esplicita
         TypedQuery<Habit> query = entityManager.createQuery(
                 "SELECT h FROM Habit h WHERE h.userId = :userId AND h.name = :name",
                 Habit.class);
