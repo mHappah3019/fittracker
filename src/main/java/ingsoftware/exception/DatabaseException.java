@@ -2,7 +2,6 @@ package ingsoftware.exception;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.jpa.JpaSystemException;
-import org.sqlite.SQLiteException;
 
 import java.sql.SQLException;
 

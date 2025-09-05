@@ -126,7 +126,8 @@ public class MainDashboardController {
                 logger.info("🆕 Creazione utente di default con ID: {}", userId);
                 User defaultUser = new User();
                 defaultUser.setLevel(1);
-                defaultUser.setId(userId);
+                defaultUser.setUsername("default_user_" + userId);
+                userService.resetAutoIncrement();
                 userService.saveUser(defaultUser);
                 equipmentService.initializeUserEquipment(userId);
                 logger.info("✅ Utente di default creato con successo");

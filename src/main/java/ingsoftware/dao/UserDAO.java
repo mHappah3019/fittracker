@@ -11,4 +11,6 @@ import java.util.List;
 public interface UserDAO extends BaseDAO<User, Long> {
     // Retrieves paginated list of active user IDs for efficient batch processing
     List<Long> findAllActiveUserIds(int offset, int limit);
+
+    void resetAutoIncrement();
 }

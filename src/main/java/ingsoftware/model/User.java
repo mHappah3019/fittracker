@@ -103,6 +103,8 @@ public class User {
         this.lifePoints += delta;
         if (this.lifePoints < 0) {
             this.lifePoints = 0;
+        } else if (this.lifePoints > 100) {
+            this.lifePoints = 100;
         }
     }
 }

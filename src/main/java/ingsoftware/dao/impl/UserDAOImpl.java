@@ -28,4 +28,10 @@ public class UserDAOImpl extends AbstractJpaDAO<User, Long> implements UserDAO {
         query.setMaxResults(limit);
         return query.getResultList();
     }
+
+    @Override
+    public void resetAutoIncrement() {
+        // Esegue una query nativa per resettare l'auto-incremento a 1
+        entityManager.createNativeQuery("ALTER TABLE users AUTO_INCREMENT = 1").executeUpdate();
+    }
 }

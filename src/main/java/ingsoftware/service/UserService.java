@@ -49,4 +49,8 @@ public class UserService {
         return userDAO.findAll().isEmpty();
     }
 
+    @Transactional
+    public void resetAutoIncrement() {
+        userDAO.resetAutoIncrement();
+    }
 }
