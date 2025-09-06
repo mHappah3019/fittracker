@@ -161,7 +161,7 @@ public class GamificationService {
     }
 
     // Calculates user level based on total XP using the standard XP per level formula
-    // Level 1 starts at 0 XP, each subsequent level requires 100 more XP
+    // Level 1 starts at 0 XP, higher level requires 100 more XP
     private int calculateLevel(double totalXp) {
         return (int) Math.floor(totalXp / XP_PER_LEVEL) + 1;
     }

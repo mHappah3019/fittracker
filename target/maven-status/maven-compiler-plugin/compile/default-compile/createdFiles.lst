@@ -37,7 +37,6 @@ ingsoftware\service\strategy\BaseGamificationStrategy.class
 ingsoftware\service\strategy\EquipmentBoostedStrategy.class
 ingsoftware\controller\strictly_view\EquipmentRowManager.class
 ingsoftware\service\strategy\EventBonusStrategy.class
-ingsoftware\model\Badge.class
 ingsoftware\exception\EquipmentNotFoundException.class
 ingsoftware\dao\HabitDAO.class
 ingsoftware\model\DTO\LifePointsDTO.class
