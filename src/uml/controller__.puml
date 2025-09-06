@@ -1,0 +1,94 @@
+@startuml
+
+package "ingsoftware.controller" {
+    abstract class AbstractHabitFormController {
+        # HabitService habitService
+        # TextField nameField
+        # TextArea descriptionArea
+        # ComboBox<HabitDifficulty> difficultyComboBox
+        # ComboBox<HabitFrequencyType> frequencyComboBox
+        # Button saveButton
+        # Label errorLabel
+        # Runnable onSaveCallback
+        + initialize()
+        + setData(Long, Habit, Runnable)
+        # {abstract} handleSave()
+        # handleCancel()
+        # populateForm()
+        # closeWindow()
+    }
+
+    class CreateHabitController {
+        # handleSave()
+    }
+
+    class EditHabitController {
+        + initialize()
+        # handleSave()
+        # handleDelete()
+    }
+
+    class EquipmentController {
+        - EquipmentService equipmentService
+        - Map<EquipmentType, EquipmentRowManager> equipmentRows
+        + initialize()
+        - initializeView()
+        - createEquipmentRow(EquipmentType, ObservableList<Equipment>)
+        - loadCurrentEquipment(EquipmentRowManager, EquipmentType)
+        - onSaveEquipment()
+        - processEquipmentSelections()
+        - onCancel()
+    }
+
+
+
+
+    class MainDashboardController {
+        - UserService userService
+        - EquipmentService equipmentService
+        - StartupMediatorImpl startupMediator
+        - UserStatsController userStatsController
+        - HabitListController habitListController
+        + initialize()
+        - handleOpenEquipment()
+        - checkAndCreateDefaultUser(Long)
+    }
+
+    class UserStatsController{
+        - Label levelLabel
+        - ProgressBar experienceBar
+        - Label experienceLabel
+        - ProgressBar healthBar
+        - Label healthLabel
+        + initialize()
+        + handleHabitCompletionEvent()
+        + updateUserStats()
+        - updateUIWithUserData(User)
+        - calculateXpForNextLevel(int)
+    }
+
+    class HabitListController {
+        - final HabitCompletionService habitCompletionService
+        - final HabitService habitService
+        - final PostCompletionMediatorImpl postMediator
+        ' FXML components
+        - ListView<Habit> habitListView
+        - Button completeHabitButton
+        - Button editHabitButton
+        ' Private methods
+        - handleAddHabit()
+        - handleEditHabit()
+        - handleCompleteHabit()
+        - refreshHabitList()
+
+    }
+
+    AbstractHabitFormController <|-- CreateHabitController
+    AbstractHabitFormController <|-- EditHabitController
+    MainDashboardController *-- "1" UserStatsController
+    MainDashboardController *-- "1" HabitListController
+    MainDashboardController --> EquipmentController
+    HabitListController --> AbstractHabitFormController
+}
+
+@enduml

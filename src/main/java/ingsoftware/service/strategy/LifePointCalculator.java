@@ -9,7 +9,7 @@ public class LifePointCalculator {
 
     private static final int BONUS = 10;
     private static final int MALUS = -5;
-    private static final double thresholdPercent = 70.0;
+    public static final double thresholdPercent = 70.0;
 
 
     // Metodo completo con tutti i parametri

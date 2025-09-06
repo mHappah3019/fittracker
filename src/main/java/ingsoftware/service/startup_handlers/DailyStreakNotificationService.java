@@ -1,24 +1,38 @@
 package ingsoftware.service.startup_handlers;
 
+import ingsoftware.model.Habit;
 import ingsoftware.model.User;
+import ingsoftware.service.HabitService;
+import ingsoftware.service.PopupUIService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
- * Handler that notifies users about their habit streaks on first access of the day.
- * This is another example of how the Mediator pattern allows for easy extension.
+ * Handler that notifies users about their habit streaks.
+ * Shows streak milestones and provides encouragement to maintain streaks.
  */
 @Component
 public class DailyStreakNotificationService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DailyStreakNotificationService.class);
+    
+    // Milestone streak values that trigger notifications
+    private static final int[] STREAK_MILESTONES = {7, 30, 100, 365};
+
     public DailyStreakNotificationService() {
+
     }
 
+    /**
+     * Called when user accesses the application.
+     * Checks for streak milestones.
+     */
     public void onAccess(User user, LocalDate previousAccessDate) {
-        // In a real implementation, this could:
-        // - Send a push notification
-        // - Award bonus points or badges
-        // - Provide encouragement to maintain the streak
+        // TODO: implementare logica che mostra non quanto è lunga la streak attuale, ma il countdown
+        //  alla fine della targetStreak (se presente).
     }
 }

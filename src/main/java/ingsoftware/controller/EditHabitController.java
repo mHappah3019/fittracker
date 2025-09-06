@@ -53,7 +53,7 @@ public class EditHabitController extends AbstractHabitFormController {
 
     // Override method called when the user clicks on the Delete button.
     @FXML
-    private void handleDelete() {
+    protected void handleDelete() {
         if (habitToEdit == null) {
             logger.warn("Tentativo di eliminare un'abitudine null");
             showFormError("Nessuna abitudine selezionata per l'eliminazione");

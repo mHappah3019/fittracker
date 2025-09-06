@@ -1,9 +1,16 @@
 package ingsoftware.controller.strictly_view;
 
 import ingsoftware.model.Habit;
+import javafx.animation.PauseTransition;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -59,21 +66,78 @@ public class HabitListViewManager {
     }
 
     static class HabitListCell extends ListCell<Habit> {
+        private PauseTransition streakAnimation;
+        private HBox container;
+        private Label nameLabel;
+        private Label streakLabel;
+        
+        public HabitListCell() {
+            // Crea il layout container
+            container = new HBox();
+            container.setAlignment(Pos.CENTER_LEFT);
+            
+            // Label per il nome dell'abitudine (a sinistra)
+            nameLabel = new Label();
+            
+            // Spacer per spingere la streak a destra
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            // Label per la streak (a destra)
+            streakLabel = new Label();
+            streakLabel.setAlignment(Pos.CENTER_RIGHT);
+            
+            // Aggiungi tutti gli elementi al container
+            container.getChildren().addAll(nameLabel, spacer, streakLabel);
+        }
+        
         @Override
         protected void updateItem(Habit habit, boolean empty) {
             super.updateItem(habit, empty);
 
+            // Cancella l'animazione precedente se esiste
+            if (streakAnimation != null) {
+                streakAnimation.stop();
+            }
+
             if (empty || habit == null) {
                 setText(null);
+                setGraphic(null);
                 setStyle("");
             } else {
-                setText(habit.getName());
-                // Stile basato sullo stato
+                // Imposta il nome dell'abitudine
+                nameLabel.setText(habit.getName());
+                
+                // Stile basato sullo stato (solo per il testo, non per lo sfondo)
+                String textStyle;
                 if (habit.isCompletedToday()) {
-                    setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: bold;");
+                    textStyle = "-fx-text-fill: #4CAF50; -fx-font-weight: bold;";
                 } else {
-                    setStyle("-fx-text-fill: #333333;");
+                    textStyle = "-fx-text-fill: #333333;";
                 }
+                nameLabel.setStyle(textStyle);
+                
+                // Gestisci la visualizzazione della streak
+                int currentStreak = habit.getCurrentStreak();
+                if (currentStreak > 0) {
+                    // Mostra la streak a destra
+                    streakLabel.setText("🔥 " + currentStreak + " giorni");
+                    streakLabel.setStyle("-fx-text-fill: #FF6B35; -fx-font-size: 12px;");
+                    streakLabel.setVisible(true);
+                    
+                    // Animazione che nasconde l'indicatore dopo 5 secondi
+                    streakAnimation = new PauseTransition(Duration.seconds(5));
+                    streakAnimation.setOnFinished(e -> {
+                        streakLabel.setVisible(false);
+                    });
+                    streakAnimation.play();
+                } else {
+                    streakLabel.setVisible(false);
+                }
+                
+                // Usa il container come grafica invece del testo
+                setText(null);
+                setGraphic(container);
             }
         }
     }

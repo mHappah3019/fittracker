@@ -42,12 +42,13 @@ public class StartupMediatorImpl implements StartupMediator {
             User user = userService.findUserOrThrow(userId);
 
             if (userService.isFirstAccessOfDay(user, LocalDate.now())) {
+                LocalDate previousAccessDate = user.getLastAccessDate();
                 LifePointsDTO result = updatesForNewDay(user);
                 popupUIService.showfirstAccessPopup(result);
-                dailySummaryService.onFirstAccessOfDay(user, user.getLastAccessDate());
+                dailySummaryService.onFirstAccessOfDay(user, previousAccessDate);
             }
 
-            dailyStreakNotificationService.onAccess(user, LocalDate.now());
+            dailyStreakNotificationService.onAccess(user, user.getLastAccessDate());
             dailySummaryService.onAccess(user, LocalDate.now());
         } catch (Exception e) {
             logger.error("Errore durante l'avvio dell'applicazione");

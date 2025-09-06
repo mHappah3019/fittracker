@@ -34,4 +34,8 @@ public abstract class PopupUIService {
         seq.play();
     }
 
+    public void showInfoPopup(String riepilogoStreak, String string) {
+        // TODO: Implement info popup logic here
+
+    }
 }

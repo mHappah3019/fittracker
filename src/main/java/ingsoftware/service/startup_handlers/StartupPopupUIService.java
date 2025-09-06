@@ -95,12 +95,13 @@ public class StartupPopupUIService extends PopupUIService {
         return stage;
     }
 
-    //TODO: implement this method
     private Stage buildLevelDecreasedStage(LifePointsDTO lifePointsDTO) {
-        //generate a simple popup and return
+        //generate a simple popup that tells the user that his level has decreased
         Stage stage = new Stage();
         stage.setTitle("FitTracker");
         stage.initModality(Modality.APPLICATION_MODAL);
+        Label label = new Label("Il tuo livello è diminuito. Continua a tracciare le tue abitudini e a migliorarti.");
+        stage.setScene(new Scene(label));
         return stage;
     }
 }
