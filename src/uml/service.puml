@@ -1,0 +1,117 @@
+@startuml
+
+package "ingsoftware.service" {
+    
+    class UserService {
+        - final UserDAO userDAO
+        + UserService(UserDAO)
+        + isFirstAccessOfDay(User, LocalDate): boolean
+        + saveUser(User): void
+        + findUserOrThrow(Long): User
+        + checkDefaultUser(): boolean
+        + resetAutoIncrement(): void
+    }
+    
+    class HabitService {
+        - final HabitDAO habitDAO
+        + HabitService(HabitDAO)
+        + createHabit(HabitBuilder): Habit
+        + updateHabit(Long, HabitBuilder): Habit
+        + findAllByUserId(Long): List<Habit>
+        + findHabitOrThrow(Long): Habit
+        + saveHabit(Habit): Habit
+        + deleteHabit(Long): void
+    }
+    
+    class EquipmentService {
+        - final EquipmentDAO equipmentDAO
+        - final UserDAO userDAO
+        - final UserEquipmentDAO userEquipmentDAO
+        + EquipmentService(EquipmentDAO, UserDAO, UserEquipmentDAO)
+        + getAllEquipmentGroupedByType(): Map<EquipmentType, ObservableList<Equipment>>
+        + findAllEquippedByUser(Long): Map<EquipmentType, Equipment>
+        + findEquippedByUserIdAndType(Long, EquipmentType): Optional<Equipment>
+        + equip(Long, Long): Equipment
+        + unequip(Long, EquipmentType): void
+        + getFullEquipmentSet(Long): List<Equipment>
+        + initializeUserEquipment(Long): void
+    }
+    
+    class GamificationService {
+        - final HabitService habitService
+        - final LifePointCalculator calculator
+        - final ExperienceStrategyFactory strategyFactory
+        - {static} final double XP_PER_LEVEL = 100.0
+        - final int INACTIVITY_PENALTY_PER_DAY = -10
+        + GamificationService(HabitService, LifePointCalculator, ExperienceStrategyFactory)
+        + calculateHabitXP(Habit, User): double
+        + updateUserLifePoints(User, LocalDate): LifePointsDTO
+        + checkUpdateUserLevel(User): int
+        + checkAndHandleLevelDecrease(User): boolean
+        - calculateLifePointsDelta(User, LocalDate): int
+        - calculateInactivityPenalty(LocalDate, LocalDate): int
+        - calculateDifficultyMultiplier(List<Habit>): double
+        - calculateCompletedHabitsPoints(List<Habit>, LocalDate): int
+        - calculateLevel(double): int
+    }
+    
+    class HabitCompletionService {
+        - final HabitService habitService
+        - final HabitCompletionDAO completionDAO
+        - final GamificationService gamificationService
+        - final UserService userService
+        + HabitCompletionService(HabitService, HabitCompletionDAO, GamificationService, UserService)
+        + completeHabit(Long, Long): CompletionResultDTO
+        - calculateAndUpdateLevel(User): int
+        - calculateAndUpdateXP(Habit, User): double
+        - verifyNotAlreadyCompletedToday(Long, Long, LocalDate): void
+        - updateStreak(Habit, LocalDate): int
+    }
+    
+    class EventService {
+        - {static} final boolean EVENT_BONUS_ACTIVE = true
+        - {static} final double DEFAULT_EVENT_MULTIPLIER = 2.0
+        + isEventBonusActive(): boolean
+        + getEventMultiplier(): double
+    }
+    
+    abstract class PopupUIService {
+        # PopupConfig config
+        + PopupUIService(PopupConfig)
+        + animateAndShow(Stage): void
+        + showInfoPopup(String, String): void
+    }
+}
+
+package "ingsoftware.service.strategy" {
+
+}
+
+package "ingsoftware.dao" {
+    interface UserDAO
+    interface HabitDAO
+    interface EquipmentDAO
+    interface UserEquipmentDAO
+    interface HabitCompletionDAO
+}
+
+' Service dependencies
+UserService --> UserDAO : uses
+HabitService --> HabitDAO : uses
+EquipmentService --> EquipmentDAO : uses
+EquipmentService --> UserDAO : uses
+EquipmentService --> UserEquipmentDAO : uses
+HabitCompletionService --> HabitCompletionDAO : uses
+
+' Service to Service dependencies
+GamificationService --> HabitService : uses
+GamificationService --> "ingsoftware.service.strategy" : uses
+HabitCompletionService --> HabitService : uses
+HabitCompletionService --> GamificationService : uses
+HabitCompletionService --> UserService : uses
+
+' Strategy package dependencies
+"ingsoftware.service.strategy" --> EquipmentService : uses
+"ingsoftware.service.strategy" --> EventService : uses
+
+@enduml

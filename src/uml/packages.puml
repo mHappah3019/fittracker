@@ -1,0 +1,35 @@
+@startuml FitTracker Package Diagram
+
+skinparam packageStyle folder
+skinparam backgroundColor white
+skinparam arrowColor black
+skinparam packageBorderColor black
+
+left to right direction
+
+package "ingsoftware" {
+    package "model" {
+    }
+
+    package "dao" {
+    }
+
+    package "service" {
+    }
+
+    package "controller" {
+    }
+
+    package "exception" {
+    }
+}
+
+' Relazioni principali
+controller --> service : uses
+service --> dao : uses
+service --> model : manipulates
+dao --> model : persists
+controller --> model : displays
+service --> exception : throws
+
+@enduml

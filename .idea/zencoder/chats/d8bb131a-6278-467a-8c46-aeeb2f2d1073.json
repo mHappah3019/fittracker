@@ -1,0 +1,98 @@
+{
+    "checksum": "1dfdc8999d74545c8eb4bd8ba3e2b42008ce265518747cd063b2b09fe94344f5",
+    "data": {
+    "id": "d8bb131a-6278-467a-8c46-aeeb2f2d1073",
+    "createdAt": 1756301755827,
+    "updatedAt": 1756301758982,
+    "title": "Strategy and Decorator Diagrams",
+    "messages": [
+        {
+            "id": "21968470-73c8-4588-9382-88170ca970e1",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "potresti scrivere il codice PlantUML del diagramma con solo HabitCompletionService, GamificationService e il package strategy ? vorrei evidenziare il funzionamento del pattern Strategy + Decorator"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/uml/strategy_decorator.puml",
+                    "fsPath": "C:/Users/mirko/Desktop/fittracker/src/uml/strategy_decorator.puml",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "@startuml\nskinparam ArrowColor Black\n\npackage \"Strategy & Decorator Pattern\" {\n  interface GamificationStrategy {\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class BaseGamificationStrategy {\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class ExponentialExperienceStrategy {\n    -wrapped: GamificationStrategy\n    +ExponentialExperienceStrategy(wrapped: GamificationStrategy)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class EquipmentBoostedStrategy {\n    -wrapped: GamificationStrategy\n    -equipmentService: EquipmentService\n    +EquipmentBoostedStrategy(wrapped: GamificationStrategy, equipmentService: EquipmentService)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class EventBonusStrategy {\n    -wrapped: GamificationStrategy\n    BonusStrategy(wrapped: Gamification-eventService: EventService\n    +EventStrategy, eventService: EventService)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class ExperienceStrategyFactory {\n    -equipmentService: EquipmentService\n    -eventService: EventService\n    +createStrategy(): GamificationStrategy\n    -createBaseStrategy(): GamificationStrategy\n    -applyExponentialBonus(strategy: GamificationStrategy): GamificationStrategy\n    -applyEquipmentBonus(strategy: GamificationStrategy): GamificationStrategy\n    -applyEventBonusIfActive(strategy: GamificationStrategy): GamificationStrategy\n  }\n\n  class GamificationService {\n    -experienceStrategyFactory: ExperienceStrategyFactory\n    +calculateHabitXP(habit: Habit, user: User): double\n    +checkUpdateUserLevel(user: User): int\n  }\n\n  class HabitCompletionService {\n    -habitService: HabitService\n    -completionRepository: HabitCompletionRepository\n    -gamificationService: GamificationService\n    -userService: UserService\n    +completeHabit(habitId: Long, userId: Long): CompletionResultDTO\n  }\n\n  class HabitService {\n    -habitRepository: HabitRepository\n    -userService: UserService\n    +saveHabit(habitId: Long, builder: HabitBuilder): Habit\n    +findHabitOrThrow(habitId: Long): Habit\n  }\n\n  class UserService {\n    -userRepository: UserRepository\n    +findUserOrThrow(userId: Long): User\n    +saveUser(user: User): User\n  }\n\n  GamificationStrategy <|.. BaseGamificationStrategy\n  GamificationStrategy <|.. ExponentialExperienceStrategy\n  GamificationStrategy <|.. EquipmentBoostedStrategy\n  GamificationStrategy <|.. EventBonusStrategy\n\n  ExponentialExperienceStrategy o--> GamificationStrategy\n  EquipmentBoostedStrategy o--> GamificationStrategy\n  EventBonusStrategy o--> GamificationStrategy\n\n  ExperienceStrategyFactory ..> BaseGamificationStrategy : creates\n  ExperienceStrategyFactory ..> ExponentialExperienceStrategy : creates\n  ExperienceStrategyFactory ..> EquipmentBoostedStrategy : creates\n  ExperienceStrategyFactory ..> EventBonusStrategy : creates\n\n  GamificationService --> ExperienceStrategyFactory : uses\n\n  ' Frecce colorate per i servizi\n  HabitCompletionService --> GamificationService #Purple : uses\n  HabitCompletionService --> HabitService #Red : uses\n  HabitCompletionService --> UserService #Blue : uses\n\n  HabitService --> UserService #Green : uses\n}\n@enduml\n",
+                    "language": "puml"
+                },
+                "codebaseEnabled": true,
+                "usedRules": [
+                    "zen-rules://repo/repo"
+                ]
+            },
+            "createdAt": 1756301755837,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph"
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "potresti scrivere il codice PlantUML del diagramma con solo HabitCompletionService, GamificationService e il package strategy ? vorrei evidenziare il funzionamento del pattern Strategy + Decorator"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": [
+                {
+                    "name": "Repository Information Overview",
+                    "description": "Repository Information Overview",
+                    "uri": "zen-rules://repo/repo",
+                    "mimeType": "text/markdown",
+                    "content": "\n\n# Habit Tracker Information\n\n## Summary\nA gamified habit tracking application built with JavaFX and Spring Boot. The application helps users track their habits with a gamification approach, including features like equipment, life points, and habit completion tracking.\n\n## Structure\n- **src/main/java/ingsoftware**: Core application code\n  - **model**: Domain entities (User, Habit, Equipment, etc.)\n  - **service**: Business logic and services\n  - **controller**: JavaFX controllers for UI\n  - **repository**: Data access layer\n  - **config**: Application configuration\n  - **exception**: Custom exceptions\n- **src/main/resources**: Application resources and FXML files\n- **src/test**: Test classes mirroring the main structure\n\n## Language & Runtime\n**Language**: Java\n**Version**: Java 21 (with preview features enabled)\n**Build System**: Maven\n**Package Manager**: Maven\n**Framework**: Spring Boot 3.2.0 with JavaFX 21.0.7\n\n## Dependencies\n**Main Dependencies**:\n- Spring Boot Starter (core, data-jpa, web, validation)\n- JavaFX (controls, fxml) 21.0.7\n- SQLite JDBC 3.45.1.0\n- Hibernate Community Dialects 6.3.1.Final\n- JavaFX Weaver Spring Boot Starter 2.0.1\n- Jakarta Persistence API 3.1.0\n\n**Development Dependencies**:\n- Spring Boot Starter Test\n- TestFX JUnit5 4.0.18\n- H2 Database (runtime scope)\n\n## Build & Installation\n```bash\n# Compile the project\nmvn clean compile\n\n# Package the application\nmvn package\n\n# Run the application\nmvn spring-boot:run\n\n# Run with JavaFX plugin\nmvn javafx:run\n```\n\n## Database\n**Type**: SQLite\n**Configuration**: \n- URL: jdbc:sqlite:./fittracker.db\n- Hibernate DDL: update\n- Dialect: SQLiteDialect\n\n## Testing\n**Framework**: JUnit 5 with Spring Boot Test\n**Test Location**: src/test/java/ingsoftware\n**Configuration**: Maven Surefire Plugin with JavaFX-specific arguments\n**Run Command**:\n```bash\nmvn test\n```\n\n## Application Architecture\n**Pattern**: MVC with Spring Boot\n**Main Components**:\n- **Models**: Domain entities (User, Habit, Equipment)\n- **Services**: Business logic implementation\n- **Controllers**: JavaFX UI controllers\n- **Repositories**: Data access interfaces\n- **Main Application**: HabitTrackerApplication (JavaFX + Spring Boot)",
+                    "alwaysApply": true
+                }
+            ]
+        },
+        {
+            "id": "46e81209-0fdc-4b47-b66a-ec552630ab9f",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Certo, posso creare un diagramma PlantUML che si concentri solo su HabitCompletionService, GamificationService e il pattern Strategy/Decorator. Analizzerò il diagramma attuale e creerò una versione semplificata che evidenzi questi elementi specifici.\n\nBasandomi sul file PlantUML che hai aperto, ecco il codice PlantUML che mostra solo le parti richieste:\n\n```plantuml\n@startuml\nskinparam ArrowColor Black\n\npackage \"Strategy & Decorator Pattern\" {\n  interface GamificationStrategy {\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class BaseGamificationStrategy {\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class ExponentialExperienceStrategy {\n    -wrapped: GamificationStrategy\n    +ExponentialExperienceStrategy(wrapped: GamificationStrategy)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class EquipmentBoostedStrategy {\n    -wrapped: GamificationStrategy\n    -equipmentService: EquipmentService\n    +EquipmentBoostedStrategy(wrapped: GamificationStrategy, equipmentService: EquipmentService)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class EventBonusStrategy {\n    -wrapped: GamificationStrategy\n    +EventBonusStrategy(wrapped: GamificationStrategy, eventService: EventService)\n    +calculateExperience(baseExperience: double, user: User): double\n  }\n\n  class ExperienceStrategyFactory {\n    -equipmentService: EquipmentService\n    -eventService: EventService\n    +createStrategy(): GamificationStrategy\n    -createBaseStrategy(): GamificationStrategy\n    -applyExponentialBonus(strategy: GamificationStrategy): GamificationStrategy\n    -applyEquipmentBonus(strategy: GamificationStrategy): GamificationStrategy\n    -applyEventBonusIfActive(strategy: GamificationStrategy): GamificationStrategy\n  }\n\n  class GamificationService {\n    -experienceStrategyFactory: ExperienceStrategyFactory\n    +calculateHabitXP(habit: Habit, user: User): double\n    +checkUpdateUserLevel(user: User): int\n  }\n\n  class HabitCompletionService {\n    -habitService: HabitService\n    -completionRepository: HabitCompletionRepository\n    -gamificationService: GamificationService\n    -userService: UserService\n    +completeHabit(habitId: Long, userId: Long): CompletionResultDTO\n  }\n\n  GamificationStrategy <|.. BaseGamificationStrategy\n  GamificationStrategy <|.. ExponentialExperienceStrategy\n  GamificationStrategy <|.. EquipmentBoostedStrategy\n  GamificationStrategy <|.. EventBonusStrategy\n\n  ExponentialExperienceStrategy o--> GamificationStrategy : decorates >\n  EquipmentBoostedStrategy o--> GamificationStrategy : decorates >\n  EventBonusStrategy o--> GamificationStrategy : decorates >\n\n  ExperienceStrategyFactory ..> BaseGamificationStrategy : creates\n  ExperienceStrategyFactory ..> ExponentialExperienceStrategy : creates\n  ExperienceStrategyFactory ..> EquipmentBoostedStrategy : creates\n  ExperienceStrategyFactory ..> EventBonusStrategy : creates\n\n  GamificationService --> ExperienceStrategyFactory : uses\n\n  HabitCompletionService --> GamificationService : uses\n\n  note \"Strategy Pattern\" as N1\n  N1 .. GamificationStrategy\n\n  note \"Decorator Pattern\" as N2\n  N2 .. ExponentialExperienceStrategy\n  N2 .. EquipmentBoostedStrategy\n  N2 .. EventBonusStrategy\n}\n@enduml\n```\n\nHo apportato le seguenti modifiche rispetto al diagramma originale:\n\n1. Ho mantenuto solo le classi rilevanti per il pattern Strategy/Decorator e i servizi richiesti\n2. Ho corretto la definizione di EventBonusStrategy che aveva un errore di sintassi\n3. Ho aggiunto etichette \"decorates\" alle relazioni di composizione per evidenziare il pattern Decorator\n4. Ho aggiunto note esplicative che indicano dove si applicano i pattern Strategy e Decorator\n5. Ho rimosso le frecce colorate non necessarie per questa visualizzazione semplificata\n6. Ho mantenuto solo la relazione essenziale tra HabitCompletionService e GamificationService\n\nQuesto diagramma evidenzia chiaramente come il pattern Strategy è implementato attraverso l'interfaccia GamificationStrategy e come il pattern Decorator è applicato attraverso le varie strategie che \"avvolgono\" (wrap) altre strategie."
+                }
+            ],
+            "context": {
+                "author": "Ask agent",
+                "operationId": "9f9e2aea-2e82-4872-b231-81d278210cc2",
+                "usageStatistics": {
+                    "llmCallsUsedForAnswer": 1.0,
+                    "llmCallsUsedTotal": 134.0,
+                    "llmCallsLimit": 200.0,
+                    "limitRenewalMillisecondTimestamp": 1756306710010
+                }
+            },
+            "createdAt": 1756301758982,
+            "isInternal": false
+        }
+    ],
+    "isAgent": false,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isQnaAgent": true,
+    "isRepoInfoAgent": false,
+    "isClaudeCode": false,
+    "isZencoderCli": false,
+    "autoApply": true,
+    "model": "default"
+}
+}

@@ -1,0 +1,82 @@
+{
+    "checksum": "ea29ea20a0d162f1f3df6a9e5eca604e2f78973d3008c67577437f3832d88cf3",
+    "data": {
+    "id": "574ae4b2-882b-41a4-bcc1-4272879cf587",
+    "createdAt": 1756984480935,
+    "updatedAt": 1756984511155,
+    "title": "dove potrei implementare singleton nel mio prog...",
+    "messages": [
+        {
+            "id": "a301a1d5-cdf2-47c2-aa88-ef06e4f015f6",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "dove potrei implementare singleton nel mio progetto="
+                }
+            ],
+            "context": {
+                "codebaseEnabled": true,
+                "usedRules": [
+                    "zen-rules://repo/repo"
+                ]
+            },
+            "createdAt": 1756984480949,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "dove potrei implementare singleton nel mio progetto="
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": [
+                {
+                    "name": "Repository Information Overview",
+                    "description": "Repository Information Overview",
+                    "uri": "zen-rules://repo/repo",
+                    "mimeType": "text/markdown",
+                    "content": "\n\n# Habit Tracker Information\n\n## Summary\nA gamified habit tracking application built with JavaFX and Spring Boot. The application helps users track their habits with a gamification approach, including features like equipment, life points, and habit completion tracking.\n\n## Structure\n- **src/main/java/ingsoftware**: Core application code\n  - **model**: Domain entities (User, Habit, Equipment, etc.)\n  - **service**: Business logic and services\n  - **controller**: JavaFX controllers for UI\n  - **repository**: Data access layer\n  - **config**: Application configuration\n  - **exception**: Custom exceptions\n- **src/main/resources**: Application resources and FXML files\n- **src/test**: Test classes mirroring the main structure\n\n## Language & Runtime\n**Language**: Java\n**Version**: Java 21 (with preview features enabled)\n**Build System**: Maven\n**Package Manager**: Maven\n**Framework**: Spring Boot 3.2.0 with JavaFX 21.0.7\n\n## Dependencies\n**Main Dependencies**:\n- Spring Boot Starter (core, data-jpa, web, validation)\n- JavaFX (controls, fxml) 21.0.7\n- SQLite JDBC 3.45.1.0\n- Hibernate Community Dialects 6.3.1.Final\n- JavaFX Weaver Spring Boot Starter 2.0.1\n- Jakarta Persistence API 3.1.0\n\n**Development Dependencies**:\n- Spring Boot Starter Test\n- TestFX JUnit5 4.0.18\n- H2 Database (runtime scope)\n\n## Build & Installation\n```bash\n# Compile the project\nmvn clean compile\n\n# Package the application\nmvn package\n\n# Run the application\nmvn spring-boot:run\n\n# Run with JavaFX plugin\nmvn javafx:run\n```\n\n## Database\n**Type**: SQLite\n**Configuration**: \n- URL: jdbc:sqlite:./fittracker.db\n- Hibernate DDL: update\n- Dialect: SQLiteDialect\n\n## Testing\n**Framework**: JUnit 5 with Spring Boot Test\n**Test Location**: src/test/java/ingsoftware\n**Configuration**: Maven Surefire Plugin with JavaFX-specific arguments\n**Run Command**:\n```bash\nmvn test\n```\n\n## Application Architecture\n**Pattern**: MVC with Spring Boot\n**Main Components**:\n- **Models**: Domain entities (User, Habit, Equipment)\n- **Services**: Business logic implementation\n- **Controllers**: JavaFX UI controllers\n- **Repositories**: Data access interfaces\n- **Main Application**: HabitTrackerApplication (JavaFX + Spring Boot)",
+                    "alwaysApply": true
+                }
+            ]
+        },
+        {
+            "id": "2b286d88-7166-49b5-8b8b-9cd84f90f22d",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "Could not establish websocket connection. Please try again later.",
+                    "actions": [
+                        {
+                            "type": "externalAction",
+                            "title": "Regenerate",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1756984511155,
+            "isInternal": false
+        }
+    ],
+    "isAgent": false,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isQnaAgent": true,
+    "isRepoInfoAgent": false,
+    "isClaudeCode": false,
+    "isZencoderCli": false,
+    "autoApply": true,
+    "model": "default"
+}
+}

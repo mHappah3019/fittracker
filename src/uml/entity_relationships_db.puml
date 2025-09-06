@@ -1,0 +1,88 @@
+@startuml FitTracker Entity Relationship Diagram
+
+!define TABLE_BORDER_COLOR #073B4C
+!define ENTITY_COLOR #118AB2
+!define ATTRIBUTE_COLOR #073B4C
+!define RELATIONSHIP_COLOR #EF476F
+!define FK_COLOR #FFD166
+
+skinparam class {
+    BackgroundColor ENTITY_COLOR
+    BorderColor TABLE_BORDER_COLOR
+    AttributeFontColor ATTRIBUTE_COLOR
+    AttributeFontSize 12
+    AttributeIconSize 12
+    FontSize 14
+}
+
+skinparam arrow {
+    Color RELATIONSHIP_COLOR
+    FontColor RELATIONSHIP_COLOR
+    FontSize 12
+}
+
+entity "User" as user {
+    * id : Long <<PK>>
+    --
+    * username : String <<unique>>
+    * level : int
+    * xp : double
+    * lifePoints : int
+    * lastAccessDate : LocalDate
+}
+
+entity "Habit" as habit {
+    * id : Long <<PK>>
+    --
+    * name : String
+    description : String
+    * frequency : HabitFrequencyType
+    * difficulty : HabitDifficulty
+    * userId : Long <<FK>>
+    * createdAt : LocalDateTime
+    updatedAt : LocalDateTime
+    tags : Set<String>
+    lastCompletedDate : LocalDate
+    * currentStreak : int
+    * longestStreak : int
+}
+
+entity "Equipment" as equipment {
+    * id : Long <<PK>>
+    --
+    *name : String
+    description : String
+    *type : EquipmentType
+    *experienceMultiplier : double
+    *available : boolean
+}
+
+entity "UserEquipment" as userEquipment {
+    * id : Long <<PK>>
+    --
+    * userId : Long <<FK>>
+    * equipmentId : Long <<FK>>
+    * equipped : boolean
+    acquiredDate : LocalDateTime
+    equippedDate : LocalDateTime
+}
+
+entity "HabitCompletion" as habitCompletion {
+    * id : Long <<PK>>
+    --
+    * habitId : Long <<FK>>
+    * userId : Long <<FK>>
+    completionDate : LocalDate
+    * streak : int
+    notes : String
+}
+
+
+' Relazioni
+user "1" -- "0..*" habit : has >
+user "1" -- "0..*" userEquipment : references <
+equipment "1" -- "0..*" userEquipment : references <
+habit "1" -- "0..*" habitCompletion : is completed in >
+user "1" -- "0..*" habitCompletion : completes >
+
+@enduml

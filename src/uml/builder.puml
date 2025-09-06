@@ -1,0 +1,107 @@
+@startuml
+skinparam ArrowColor Black
+
+package "Builder Pattern" {
+  class Habit {
+    -id: Long
+    -name: String
+    -description: String
+    -frequency: HabitFrequencyType
+    -difficulty: HabitDifficulty
+    -userId: Long
+    -createdAt: LocalDateTime
+    -updatedAt: LocalDateTime
+    -tags: Set<String>
+    -lastCompletedDate: LocalDate
+    -currentStreak: int
+    -longestStreak: int
+  }
+
+  class HabitBuilder {
+    -id: Long
+    -userId: Long
+    -name: String
+    -description: String
+    -frequency: HabitFrequencyType
+    -difficulty: HabitDifficulty
+    -tags: List<String>
+    -createdAt: LocalDateTime
+    -updatedAt: LocalDateTime
+    +withId(id: Long): HabitBuilder
+    +withUserId(userId: Long): HabitBuilder
+    +withName(name: String): HabitBuilder
+    +withDescription(description: String): HabitBuilder
+    +withFrequency(frequency: HabitFrequencyType): HabitBuilder
+    +withDifficulty(difficulty: HabitDifficulty): HabitBuilder
+    +withTags(tags: List<String>): HabitBuilder
+    +withTag(tag: String): HabitBuilder
+    +withCreatedAt(createdAt: LocalDateTime): HabitBuilder
+    +withUpdatedAt(updatedAt: LocalDateTime): HabitBuilder
+    +build(): Habit
+    -validateRequired(): void
+    -validateBusinessRules(): void
+  }
+
+  class HabitCompletion {
+    -id: Long
+    -habitId: Long
+    -userId: Long
+    -completionDate: LocalDate
+    -streak: int
+    -notes: String
+
+  }
+
+  class HabitCompletionBuilder {
+    -habitId: Long
+    -userId: Long
+    -completionDate: LocalDate
+    -streak: Integer
+    -notes: String
+    +withHabitId(habitId: Long): HabitCompletionBuilder
+    +withUserId(userId: Long): HabitCompletionBuilder
+    +withCompletionDate(date: LocalDate): HabitCompletionBuilder
+    +withStreak(streak: int): HabitCompletionBuilder
+    +withNotes(notes: String): HabitCompletionBuilder
+    +build(): HabitCompletion
+    -validate(): void
+  }
+
+  class HabitService {
+    -habitDAO: HabitDAO
+    +saveHabit(habitId: Long, builder: HabitBuilder): void
+    +createHabit(builder: HabitBuilder): Habit
+    +updateHabit(habitId: Long, builder: HabitBuilder): Habit
+    +findAllByUserId(id: Long): List<Habit>
+    +findHabitOrThrow(habitId: Long): Habit
+    +saveHabit(habit: Habit): Habit
+    +deleteHabit(id: Long): void
+  }
+
+  class HabitCompletionService {
+    -habitService: HabitService
+    -completionDAO: HabitCompletionDAO
+    -gamificationService: GamificationService
+    -userService: UserService
+    +completeHabit(habitId: Long, userId: Long): CompletionResultDTO
+    -calculateAndUpdateLevel(user: User): int
+    -calculateAndUpdateXP(habit: Habit, user: User): double
+    -verifyNotAlreadyCompletedToday(userId: Long, habitId: Long, today: LocalDate): void
+    -updateHabitStreak(habit: Habit, today: LocalDate): int
+  }
+
+  ' Relazioni tra le classi
+  HabitBuilder ..> Habit : creates
+  HabitCompletionBuilder ..> HabitCompletion : creates
+
+  ' Relazioni tra i servizi
+  HabitService ..> HabitBuilder : uses
+  HabitCompletionService ..> HabitCompletionBuilder : uses
+
+  ' Altre relazioni
+  HabitCompletion ..> Habit : references
+  HabitCompletionService .r[hidden].> HabitService
+  HabitCompletionBuilder .r[hidden].> HabitBuilder
+  HabitCompletion .r[hidden].> Habit
+}
+@enduml
