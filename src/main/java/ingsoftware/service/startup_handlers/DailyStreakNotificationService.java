@@ -1,15 +1,11 @@
 package ingsoftware.service.startup_handlers;
 
-import ingsoftware.model.Habit;
 import ingsoftware.model.User;
-import ingsoftware.service.HabitService;
-import ingsoftware.service.PopupUIService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Handler that notifies users about their habit streaks.

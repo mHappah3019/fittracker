@@ -1,10 +1,5 @@
 package ingsoftware.exception;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.orm.jpa.JpaSystemException;
-
-import java.sql.SQLException;
-
 /**
  * Eccezione per errori di database (connessione, query, transazioni)
  */

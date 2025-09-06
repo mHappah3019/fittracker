@@ -3,7 +3,6 @@ package ingsoftware.integration;
 import ingsoftware.controller.CreateHabitController;
 import ingsoftware.dao.HabitDAO;
 import ingsoftware.dao.UserDAO;
-import ingsoftware.exception.DuplicateHabitException;
 import ingsoftware.model.Habit;
 import ingsoftware.model.User;
 import ingsoftware.model.builder.HabitBuilder;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
