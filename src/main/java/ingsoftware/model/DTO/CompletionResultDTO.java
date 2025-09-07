@@ -38,4 +38,7 @@ public class CompletionResultDTO {
         return completion.getStreak();
     }
 
+    public Long getHabitId() {
+        return completion.getHabitId();
+    }
 }

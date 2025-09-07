@@ -65,7 +65,66 @@ public class HabitListViewManager {
         habitListView.getItems().setAll(habits);
     }
 
-    static class HabitListCell extends ListCell<Habit> {
+
+
+    /**
+     * Aggiorna la visualizzazione di un'abitudine specifica usando solo l'ID.
+     * Utile quando si ha solo l'ID dell'abitudine.
+     */
+    public void updateHabitDisplay(Long habitId, HabitListCell.DisplayMode displayMode) {
+        if (habitId == null) return;
+        
+        // Trova l'abitudine nella lista usando l'ID
+        habitListView.getItems().stream()
+                .filter(h -> h.getId().equals(habitId))
+                .findFirst()
+                .ifPresent(foundHabit -> {
+                    // Trova l'indice dell'abitudine nella lista
+                    int index = habitListView.getItems().indexOf(foundHabit);
+                    if (index >= 0) {
+                        // Forza l'aggiornamento della cella specifica con i dati esistenti
+                        refreshCellAt(index, foundHabit, displayMode);
+                    }
+                });
+    }
+
+    /**
+     * Forza l'aggiornamento di una cella specifica.
+     */
+    private void refreshCellAt(int index, Habit updatedHabit, HabitListCell.DisplayMode displayMode) {
+        // Aggiorna l'elemento nella lista con i dati freschi
+        habitListView.getItems().set(index, updatedHabit);
+        
+        // Ottieni la cella visibile (se presente)
+        HabitListCell cell = getCellAt(index);
+        if (cell != null) {
+            // Aggiorna direttamente la visualizzazione della cella
+            cell.updateHabitDisplayPublic(updatedHabit, displayMode);
+        }
+    }
+
+    /**
+     * Ottiene la cella a un indice specifico, se visibile.
+     */
+    private HabitListCell getCellAt(int index) {
+        // Questo metodo funziona solo per le celle attualmente visibili
+        return (HabitListCell) habitListView.lookupAll(".list-cell")
+                .stream()
+                .filter(node -> node instanceof HabitListCell)
+                .map(node -> (HabitListCell) node)
+                .filter(cell -> cell.getIndex() == index)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static class HabitListCell extends ListCell<Habit> {
+        
+        public enum DisplayMode {
+            FULL,        // Mostra nome e streak
+            NAME_ONLY,   // Mostra solo il nome
+            STREAK_ONLY  // Aggiorna solo la streak
+        }
+        
         private PauseTransition streakAnimation;
         private HBox container;
         private Label nameLabel;
@@ -96,48 +155,85 @@ public class HabitListViewManager {
             super.updateItem(habit, empty);
 
             // Cancella l'animazione precedente se esiste
-            if (streakAnimation != null) {
-                streakAnimation.stop();
-            }
+            stopStreakAnimation();
 
             if (empty || habit == null) {
-                setText(null);
-                setGraphic(null);
-                setStyle("");
+                clearCell();
             } else {
-                // Imposta il nome dell'abitudine
-                nameLabel.setText(habit.getName());
-                
-                // Stile basato sullo stato (solo per il testo, non per lo sfondo)
-                String textStyle;
-                if (habit.isCompletedToday()) {
-                    textStyle = "-fx-text-fill: #4CAF50; -fx-font-weight: bold;";
-                } else {
-                    textStyle = "-fx-text-fill: #333333;";
+                updateHabitDisplay(habit, DisplayMode.NAME_ONLY);
+            }
+        }
+        
+        private void clearCell() {
+            setText(null);
+            setGraphic(null);
+            setStyle("");
+        }
+        
+        private void updateHabitDisplay(Habit habit, DisplayMode mode) {
+            updateHabitName(habit);
+            
+            switch (mode) {
+                case FULL -> updateStreakDisplay(habit);
+                case NAME_ONLY -> hideStreak();
+                case STREAK_ONLY -> {
+                    // Mantieni il nome esistente, aggiorna solo la streak
+                    updateStreakDisplay(habit);
                 }
-                nameLabel.setStyle(textStyle);
-                
-                // Gestisci la visualizzazione della streak
-                int currentStreak = habit.getCurrentStreak();
-                if (currentStreak > 0) {
-                    // Mostra la streak a destra
-                    streakLabel.setText("🔥 " + currentStreak + " giorni");
-                    streakLabel.setStyle("-fx-text-fill: #FF6B35; -fx-font-size: 12px;");
-                    streakLabel.setVisible(true);
-                    
-                    // Animazione che nasconde l'indicatore dopo 5 secondi
-                    streakAnimation = new PauseTransition(Duration.seconds(5));
-                    streakAnimation.setOnFinished(e -> {
-                        streakLabel.setVisible(false);
-                    });
-                    streakAnimation.play();
-                } else {
-                    streakLabel.setVisible(false);
-                }
-                
-                // Usa il container come grafica invece del testo
-                setText(null);
-                setGraphic(container);
+            }
+            
+            // Usa il container come grafica invece del testo
+            setText(null);
+            setGraphic(container);
+        }
+
+        /**
+         * Metodo pubblico per aggiornare la visualizzazione della cella.
+         * Utilizzato dal HabitListViewManager per aggiornamenti mirati.
+         */
+        public void updateHabitDisplayPublic(Habit habit, DisplayMode mode) {
+            updateHabitDisplay(habit, mode);
+        }
+        
+        private void updateHabitName(Habit habit) {
+            nameLabel.setText(habit.getName());
+            
+            // Stile basato sullo stato (solo per il testo, non per lo sfondo)
+            String textStyle = habit.isCompletedToday() 
+                ? "-fx-text-fill: #4CAF50; -fx-font-weight: bold;"
+                : "-fx-text-fill: #333333;";
+            nameLabel.setStyle(textStyle);
+        }
+        
+        private void updateStreakDisplay(Habit habit) {
+            int currentStreak = habit.getCurrentStreak();
+            
+            if (currentStreak > 1) {
+                showStreakWithAnimation(currentStreak);
+            } else {
+                hideStreak();
+            }
+        }
+        
+        private void showStreakWithAnimation(int streakCount) {
+            // Mostra la streak a destra
+            streakLabel.setText("🔥 " + streakCount + " giorni");
+            streakLabel.setStyle("-fx-text-fill: #FF6B35; -fx-font-size: 12px;");
+            streakLabel.setVisible(true);
+            
+            // Animazione che nasconde l'indicatore dopo 5 secondi
+            streakAnimation = new PauseTransition(Duration.seconds(5));
+            streakAnimation.setOnFinished(e -> hideStreak());
+            streakAnimation.play();
+        }
+        
+        private void hideStreak() {
+            streakLabel.setVisible(false);
+        }
+        
+        private void stopStreakAnimation() {
+            if (streakAnimation != null) {
+                streakAnimation.stop();
             }
         }
     }

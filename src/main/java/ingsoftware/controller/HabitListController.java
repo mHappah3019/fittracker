@@ -6,6 +6,7 @@ import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.model.Habit;
 import ingsoftware.service.*;
 import ingsoftware.service.events.HabitCompletionEvent;
+import ingsoftware.service.events.HabitDisplayUpdateEvent;
 import ingsoftware.service.mediator.PostCompletionMediatorImpl;
 import ingsoftware.util.AlertHelper;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -167,4 +169,19 @@ public class HabitListController {
     private void showWarningMessage(String message) {
         AlertHelper.showWarningAlert(message);
     }
+
+    /**
+     * Gestisce gli eventi di aggiornamento della visualizzazione delle abitudini.
+     * Permette ad altri servizi di richiedere aggiornamenti mirati della UI.
+     */
+    @EventListener
+    public void handleHabitDisplayUpdate(HabitDisplayUpdateEvent event) {
+        if (listViewManager != null) {
+            // Esegui l'aggiornamento sul thread JavaFX
+            javafx.application.Platform.runLater(() -> {
+                listViewManager.updateHabitDisplay(event.getHabitId(), event.getDisplayMode());
+
+            });
+    }
+}
 }

@@ -1,7 +1,9 @@
 package ingsoftware.service.mediator;
 
+import ingsoftware.controller.strictly_view.HabitListViewManager;
 import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.service.post_completion.*;
+import ingsoftware.service.startup_handlers.DailyStreakNotificationService;
 import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +22,16 @@ public class PostCompletionMediatorImpl implements PostCompletionMediator {
 
     private final AchievementService achievementSvc;
     private final AnalyticsLoggerService analyticsSvc;
+    private final DailyStreakNotificationService dailyStreakNotificationService;
 
     public PostCompletionMediatorImpl(
             CompletionPopupUIService popupUI,
             AchievementService achievementSvc,
-            AnalyticsLoggerService analyticsSvc) {
+            AnalyticsLoggerService analyticsSvc, DailyStreakNotificationService dailyStreakNotificationService) {
         this.popupUISvc = popupUI;
         this.achievementSvc = achievementSvc;
         this.analyticsSvc = analyticsSvc;
+        this.dailyStreakNotificationService = dailyStreakNotificationService;
     }
 
     /** Metodo unico chiamato dal controller dopo la business-logic */
@@ -46,6 +50,7 @@ public class PostCompletionMediatorImpl implements PostCompletionMediator {
             try {
                 // Esegui tutti i servizi in sequenza o parallelo interno
                 achievementSvc.checkForNewBadges(completion);
+                dailyStreakNotificationService.updateHabitDisplay(completion.getHabitId(), HabitListViewManager.HabitListCell.DisplayMode.FULL);
                 analyticsSvc.logEvent("HabitCompleted", completion);
             } catch(Exception e) {
                 logger.error("Errore nel post-completamento: {}", e.getMessage());

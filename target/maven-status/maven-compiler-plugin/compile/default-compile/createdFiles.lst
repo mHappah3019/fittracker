@@ -7,6 +7,7 @@ ingsoftware\dao\UserEquipmentDAO.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
 ingsoftware\service\mediator\PostCompletionMediatorImpl.class
+ingsoftware\service\events\HabitDisplayUpdateEvent.class
 ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell.class
 ingsoftware\HabitTrackerLauncher.class
 ingsoftware\model\enum_helpers\HabitDifficulty.class
@@ -37,6 +38,7 @@ ingsoftware\service\strategy\BaseGamificationStrategy.class
 ingsoftware\service\strategy\EquipmentBoostedStrategy.class
 ingsoftware\controller\strictly_view\EquipmentRowManager.class
 ingsoftware\service\strategy\EventBonusStrategy.class
+ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell$DisplayMode.class
 ingsoftware\exception\EquipmentNotFoundException.class
 ingsoftware\dao\HabitDAO.class
 ingsoftware\model\DTO\LifePointsDTO.class
