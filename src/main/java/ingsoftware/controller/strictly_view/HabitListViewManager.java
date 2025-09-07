@@ -208,7 +208,7 @@ public class HabitListViewManager {
         private void updateStreakDisplay(Habit habit) {
             int currentStreak = habit.getCurrentStreak();
             
-            if (currentStreak > 1) {
+            if (currentStreak > 0) {
                 showStreakWithAnimation(currentStreak);
             } else {
                 hideStreak();

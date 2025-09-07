@@ -180,8 +180,7 @@ public class HabitListController {
             // Esegui l'aggiornamento sul thread JavaFX
             javafx.application.Platform.runLater(() -> {
                 listViewManager.updateHabitDisplay(event.getHabitId(), event.getDisplayMode());
-
             });
+        }
     }
-}
 }
