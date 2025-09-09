@@ -101,9 +101,14 @@ public class HabitListController {
         try {
             // Esegue il completamento dell'abitudine
             CompletionResultDTO completion = habitCompletionService.completeHabit(selected.getId(), currentUserId);
+
+            // Aggiornamento ottimistico del modello presente nella ListView
+            selected.setLastCompletedDate(java.time.LocalDate.now());
+            selected.setCurrentStreak(completion.getStreak());
+            // Forza aggiornamento della cella per riflettere subito il colore e la streak
+            listViewManager.updateHabitDisplay(selected.getId(), HabitListViewManager.HabitListCell.DisplayMode.FULL);
             
-            // Aggiorna UI con i dati freschi
-            //TODO
+            // Aggiorna UI con i dati freschi (se vuoi ricaricare tutto in seguito)
             // refreshHabitList();
             
             // Elaborazioni aggiuntive (rewards, statistiche, etc.)
