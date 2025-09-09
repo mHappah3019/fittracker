@@ -103,7 +103,8 @@ public class HabitListController {
             CompletionResultDTO completion = habitCompletionService.completeHabit(selected.getId(), currentUserId);
             
             // Aggiorna UI con i dati freschi
-            refreshHabitList();
+            //TODO
+            // refreshHabitList();
             
             // Elaborazioni aggiuntive (rewards, statistiche, etc.)
             postMediator.handlePostCompletion(completion);

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@FxmlView("/ingsoftware/HabitEditView.fxml") // <-- Collegato alla sua vista specifica
+@FxmlView("/ingsoftware/HabitEditView.fxml")
 public class EditHabitController extends AbstractHabitFormController {
 
     private static final Logger logger = LoggerFactory.getLogger(EditHabitController.class);
@@ -60,7 +60,7 @@ public class EditHabitController extends AbstractHabitFormController {
             return;
         }
         
-        // Chiedi conferma all'utente
+        // Asks for confirmation
         boolean confirmed = AlertHelper.showConfirmationAlert(
             "Conferma eliminazione", 
             "Sei sicuro di voler eliminare l'abitudine '" + habitToEdit.getName() + "'?\nQuesta azione non può essere annullata."

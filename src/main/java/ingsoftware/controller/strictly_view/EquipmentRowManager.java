@@ -30,30 +30,15 @@ public class EquipmentRowManager {
         this.preview = new ImageView();
         this.container = new HBox(10, slotLabel, choiceBox, preview);
 
-        setupChoiceBox();
         styleComponents();
     }
 
     private ChoiceBox<Equipment> createChoiceBox(ObservableList<Equipment> items) {
         ChoiceBox<Equipment> cb = new ChoiceBox<>(items);
-        // Qui si potrebbe aggiungere un StringConverter personalizzato
-        // cb.setConverter(new EquipmentStringConverter());
         return cb;
     }
 
-    private void setupChoiceBox() {
-        choiceBox.getSelectionModel().selectedItemProperty().addListener((_, _, _) -> {
-            //updatePreview(selected);
-        });
-    }
 
-    private void updatePreview(Equipment equipment) {
-        if (equipment != null && !equipment.isNoneOption() && equipment.getIconPath() != null) {
-            preview.setImage(new Image(equipment.getIconPath()));
-        } else {
-            preview.setImage(null);
-        }
-    }
 
     private void styleComponents() {
         slotLabel.setMinWidth(80);

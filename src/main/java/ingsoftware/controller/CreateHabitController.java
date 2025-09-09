@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@FxmlView("/ingsoftware/HabitCreateView.fxml") // <-- Collegato alla sua vista specifica
+@FxmlView("/ingsoftware/HabitCreateView.fxml")
 public class CreateHabitController extends AbstractHabitFormController {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractHabitFormController.class);
