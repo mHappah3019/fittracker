@@ -21,7 +21,6 @@ public class EquipmentDAOImpl extends AbstractJpaDAO<Equipment, Long> implements
 
     @Override
     public List<Equipment> findByAvailableTrue() {
-        // Query JPQL esplicita
         TypedQuery<Equipment> query = entityManager.createQuery(
                 "SELECT e FROM Equipment e WHERE e.available = true",
                 Equipment.class);
@@ -30,7 +29,6 @@ public class EquipmentDAOImpl extends AbstractJpaDAO<Equipment, Long> implements
 
     @Override
     public List<Equipment> findByTypeAndAvailableTrue(EquipmentType type) {
-        // Query JPQL esplicita
         TypedQuery<Equipment> query = entityManager.createQuery(
                 "SELECT e FROM Equipment e WHERE e.type = :type AND e.available = true",
                 Equipment.class);

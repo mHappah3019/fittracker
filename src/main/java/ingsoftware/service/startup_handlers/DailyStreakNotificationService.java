@@ -1,9 +1,9 @@
 package ingsoftware.service.startup_handlers;
 
 import ingsoftware.controller.strictly_view.HabitListViewManager;
-import ingsoftware.model.Habit;
+
 import ingsoftware.model.User;
-import ingsoftware.service.events.HabitDisplayUpdateEvent;
+import ingsoftware.service.events.HabitCompletionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -53,8 +53,8 @@ public class DailyStreakNotificationService {
         logger.debug("Richiesta aggiornamento visualizzazione per habitId: {} con mode: {}", 
                     habitId, displayMode);
 
-        // Pubblica l'evento per aggiornare la UI
-        HabitDisplayUpdateEvent event = new HabitDisplayUpdateEvent(this, habitId, displayMode);
+        // Pubblica un HabitCompletionEvent che trasporta anche le info per il refresh UI
+        HabitCompletionEvent event = new HabitCompletionEvent(this, habitId, displayMode);
         eventPublisher.publishEvent(event);
     }
 }

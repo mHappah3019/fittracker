@@ -48,7 +48,6 @@ C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\model\User.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\model\UserEquipment.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\EquipmentService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\events\HabitCompletionEvent.java
-C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\events\HabitDisplayUpdateEvent.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\EventService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\GamificationService.java
 C:\Users\mirko\Desktop\fittracker\src\main\java\ingsoftware\service\HabitCompletionService.java

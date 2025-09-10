@@ -54,24 +54,6 @@ public class EquipmentService {
                 ));
     }
 
-    // Finds all equipment currently equipped by a specific user
-    // Returns map of equipment types to their equipped equipment
-    public Map<EquipmentType, Equipment> findAllEquippedByUser(Long userId) {
-        List<UserEquipment> equippedUserEquipments = userEquipmentDAO.findByUserIdAndEquippedTrue(userId);
-
-        // Use Stream to process the list and handle Optional cleanly
-        // Use EnumMap for efficiency with enum keys
-        return equippedUserEquipments.stream()
-                .map(ue -> equipmentDAO.findById(ue.getEquipmentId()).orElse(null)) // Load equipment by ID
-                .filter(Objects::nonNull) // Filter out equipment not found
-                .filter(e -> e.getType().isPresent()) // Filter only equipment that has a type
-                .collect(Collectors.toMap(
-                        e -> e.getType().get(), // Extract type from Optional to use as key
-                        e -> e,                 // Use equipment itself as value
-                        (existing, _) -> existing, // If duplicates by type, keep the first found
-                        () -> new EnumMap<>(EquipmentType.class) // Specify result map as EnumMap
-                ));
-    }
 
     // Finds equipment equipped by a user for a specific equipment type
     // Returns Optional containing the equipped equipment, if any

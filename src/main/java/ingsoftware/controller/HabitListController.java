@@ -6,7 +6,6 @@ import ingsoftware.model.DTO.CompletionResultDTO;
 import ingsoftware.model.Habit;
 import ingsoftware.service.*;
 import ingsoftware.service.events.HabitCompletionEvent;
-import ingsoftware.service.events.HabitDisplayUpdateEvent;
 import ingsoftware.service.mediator.PostCompletionMediatorImpl;
 import ingsoftware.util.AlertHelper;
 import javafx.fxml.FXML;
@@ -105,11 +104,7 @@ public class HabitListController {
             // Aggiornamento ottimistico del modello presente nella ListView
             selected.setLastCompletedDate(java.time.LocalDate.now());
             selected.setCurrentStreak(completion.getStreak());
-            // Forza aggiornamento della cella per riflettere subito il colore e la streak
-            listViewManager.updateHabitDisplay(selected.getId(), HabitListViewManager.HabitListCell.DisplayMode.FULL);
-            
-            // Aggiorna UI con i dati freschi (se vuoi ricaricare tutto in seguito)
-            // refreshHabitList();
+
             
             // Elaborazioni aggiuntive (rewards, statistiche, etc.)
             postMediator.handlePostCompletion(completion);
@@ -181,7 +176,7 @@ public class HabitListController {
      * Permette ad altri servizi di richiedere aggiornamenti mirati della UI.
      */
     @EventListener
-    public void handleHabitDisplayUpdate(HabitDisplayUpdateEvent event) {
+    public void handleHabitDisplayUpdate(HabitCompletionEvent event) {
         if (listViewManager != null) {
             // Esegui l'aggiornamento sul thread JavaFX
             javafx.application.Platform.runLater(() -> {

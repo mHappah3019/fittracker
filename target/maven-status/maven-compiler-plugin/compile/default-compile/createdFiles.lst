@@ -7,7 +7,6 @@ ingsoftware\dao\UserEquipmentDAO.class
 ingsoftware\service\jobs\MidnightRolloverJob.class
 ingsoftware\exception\DatabaseException.class
 ingsoftware\service\mediator\PostCompletionMediatorImpl.class
-ingsoftware\service\events\HabitDisplayUpdateEvent.class
 ingsoftware\controller\strictly_view\HabitListViewManager$HabitListCell.class
 ingsoftware\HabitTrackerLauncher.class
 ingsoftware\model\enum_helpers\HabitDifficulty.class

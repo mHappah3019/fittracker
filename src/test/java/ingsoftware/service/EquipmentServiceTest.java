@@ -90,43 +90,6 @@ class EquipmentServiceTest {
     }
 
     // ===========================================
-    // TEST PER findAllEquippedByUser()
-    // ===========================================
-
-    @Test
-    void testFindAllEquippedByUser_UserHasEquipment_ReturnsMap() {
-        // Arrange
-        List<UserEquipment> userEquipments = Arrays.asList(userEquipment);
-        when(userEquipmentDAO.findByUserIdAndEquippedTrue(testUserId)).thenReturn(userEquipments);
-        when(equipmentDAO.findById(weaponEquipment.getId())).thenReturn(Optional.of(weaponEquipment));
-
-        // Act
-        Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(testUserId);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertEquals(1, result.size(), "Dovrebbe contenere un equipaggiamento");
-        assertTrue(result.containsKey(EquipmentType.WEAPON), "Dovrebbe contenere un'arma");
-        assertEquals(weaponEquipment, result.get(EquipmentType.WEAPON));
-        
-        verify(userEquipmentDAO).findByUserIdAndEquippedTrue(testUserId);
-        verify(equipmentDAO).findById(weaponEquipment.getId());
-    }
-
-    @Test
-    void testFindAllEquippedByUser_UserHasNoEquipment_ReturnsEmptyMap() {
-        // Arrange
-        when(userEquipmentDAO.findByUserIdAndEquippedTrue(testUserId)).thenReturn(Collections.emptyList());
-
-        // Act
-        Map<EquipmentType, Equipment> result = equipmentService.findAllEquippedByUser(testUserId);
-
-        // Assert
-        assertNotNull(result, "Il risultato non dovrebbe essere null");
-        assertTrue(result.isEmpty(), "La mappa dovrebbe essere vuota");
-    }
-
-    // ===========================================
     // TEST PER findEquippedByUserIdAndType()
     // ===========================================
 
